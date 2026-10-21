@@ -1,31 +1,64 @@
 # cb-peoplesafe2027
 
-Standalone base WordPress theme. Check it out, rename it, build on it — this
-is a one-time-checkout base, not a live dependency: fixes made here aren't
-intended to sync back into projects already forked from it.
+Theme for peoplesafe.com: Peoplesafe and OKAlone consolidated into one WordPress
+install, with three regions (UK, US, AU) served by Polylang Pro. It was forked
+from `cb-skeleton2026` and shares its CSS/JS/build system; blocks and site
+settings use native block.json/edit.js blocks and a plain Settings API page
+instead of ACF. See "Adding a block" below.
 
-Forked from `cb-skeleton2026`, sharing its entire CSS/JS/build system —
-the only difference is blocks and site settings use native block.json/edit.js
-blocks and a plain Settings API page instead of ACF. See that skeleton's own
-docs if a project specifically needs ACF; see this file's "Adding a block"
-section below for how blocks work here.
+## Regions
 
-## Starting a new project
+One install, one language per region: `en_GB` at `/uk/` (default), `en_US` at
+`/us/`, `en_AU` at `/au/`. The site root `/` is a language-neutral hub where
+visitors choose a region. The code is in `inc/regions.php` and `inc/regions/`,
+and does nothing when Polylang is not active.
 
-```
-git clone git@github.com:ChillibyteUK/cb-peoplesafe2027.git my-new-project
-cd my-new-project
-./setup.sh
-```
+| Module | Does |
+|---|---|
+| `hreflang.php` | adds `x-default` (the site root) to every page with alternates |
+| `mismatch.php` | a slug that exists in another region is a 404 |
+| `routing.php` | merged post type paths, landing pages, front page, one canonical URL |
+| `menu.php` | one menu, resolved to the visitor's region |
+| `root.php` | serves the Root hub at `/` |
+| `language-switcher.php` | the header switcher (unstyled) |
 
-`setup.sh` prompts for a theme name, suggests a slug from it (press enter to
-accept, or type your own — names and slugs often want to diverge), then
-renames every `cb-peoplesafe2027` / `CB Peoplesafe 2027` / `cb_peoplesafe2027_` /
-`CB_Peoplesafe_2027_` reference across the whole repo to match, and resets git to a
-single fresh commit (no skeleton commit history, no GitHub repo created —
-that part's manual: `gh repo create ChillibyteUK/{slug} --public --source=.
---push` when you're ready). Refuses to run on a dirty tree or an
-already-renamed project.
+URL shape: `/uk/guides|whitepapers|brochures|infographics|video/{slug}/`,
+`/uk/news/{slug}/` and `/uk/blogs/{slug}/`, landing pages at `/uk/{slug}/`,
+taxonomies under `/jurisdiction/`. Decisions: DEC-023 to DEC-027 in the project
+tracker.
+
+### Needs the cbp-peoplesafe plugin
+
+Polylang decides the `/` to `/uk/` redirect before the theme loads, and the Root
+hub content type has to exist whatever the theme. Both are in the
+`cbp-peoplesafe` plugin (`ChillibyteUK/cbp-peoplesafe`). Deploy and activate it
+with the theme.
+
+### Polylang Pro settings
+
+- Languages: UK (`en_GB`, default), US (`en_US`), AU (`en_AU`); directory URLs;
+  default language not hidden; remove `/language/`.
+- Share slugs and Translate slugs on (Pro, on by default).
+- Set a post's language **before** its slug, or slugs are not shared.
+- Tick custom taxonomies translatable **before** creating terms, or the terms
+  have no language and duplicates appear.
+- Set the front page to the UK home; the theme normalises its region URLs.
+
+### Set-up order on a new site
+
+1. Install Polylang Pro, create the three languages with the settings above.
+2. Activate this theme and the `cbp-peoplesafe` plugin.
+3. Add a Root hub item (wp-admin, Root hub) and publish it. No WP-CLI is
+   needed. Settings, Regions picks which one shows when there are several.
+4. Save Settings, Permalinks once.
+5. Assign the menu to the Primary location in the default region.
+
+### Testing
+
+The Polylang prototype checks (29 in all; phase 2 is `phase2.py`) live on the
+test install as a `proto-types.php` must-use plugin and `proto-tests/`. They are
+a test harness and are **not** deployed. Keep test-only code out of the theme;
+code that carries over (filters, routing) belongs here.
 
 ## This is Bootstrap-*named*, not Bootstrap
 

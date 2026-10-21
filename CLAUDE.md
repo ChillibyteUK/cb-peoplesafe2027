@@ -158,6 +158,9 @@ inc/
   head-tags.php          Font preload (fonts/*.woff2 glob) + GA/GTM (logged-out only) + Google/Bing verification, reading from the options page
   block-usage.php        [block_usage_table] shortcode — QA utility, lists every block against the published pages/posts using it
   utilities.php          Reusable, project-agnostic functions (parse_phone, pluralise, estimate_reading_time_in_minutes, get_icon/get_icon_choices) — safe to lift verbatim into any project on this skeleton. Project-specific helpers go in inc/helpers.php instead, created only when needed, not scaffolded here.
+  regions.php            Multi-region support on Polylang Pro (peoplesafe.com project): loads inc/regions/*. Does nothing without Polylang
+  regions/               hreflang.php (x-default on every page), mismatch.php (another region's slug is a 404), routing.php (merged post type paths, landing pages, front page, redirects to the one right URL), menu.php (one menu, resolved per region), root.php (language-neutral root hub), language-switcher.php (basic switcher used in header.php)
+                        Needs the cbp-peoplesafe plugin (work/plugins/cbp-peoplesafe) active: Polylang's redirect from the site root is decided before the theme loads. Deployment order is in the project build specification ("Deployment: theme and plugin").
 header.php / footer.php / index.php / page.php / single.php / 404.php
                         Deliberately minimal — most real page layouts are built from blocks, not these
 blocks/                 One directory per block (add_block.sh scaffolds here)

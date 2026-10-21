@@ -43,6 +43,8 @@
 			);
 			?>
 		</div>
+
+		<?php cb_peoplesafe2027_language_switcher(); ?>
 	</nav>
 </header>
 <!-- HEADER-NAV:END -->

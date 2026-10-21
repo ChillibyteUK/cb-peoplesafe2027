@@ -22,7 +22,7 @@ define( 'CB_PEOPLESAFE2027_DIR', get_template_directory() );
 
 require_once CB_PEOPLESAFE2027_DIR . '/inc/setup.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/enqueue.php';
-require_once CB_PEOPLESAFE2027_DIR . '/inc/class-cb-peoplesafe2027-nav-walker.php';
+require_once CB_PEOPLESAFE2027_DIR . '/inc/class-cb-peoplesafe-2027-nav-walker.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/blocks.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/editor.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/options.php';
@@ -35,3 +35,4 @@ require_once CB_PEOPLESAFE2027_DIR . '/inc/taxonomies.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/security.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/toc.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/footnotes.php';
+require_once CB_PEOPLESAFE2027_DIR . '/inc/regions.php';
