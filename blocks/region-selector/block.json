@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/region-selector",
+	"title": "Region selector",
+	"category": "cb-peoplesafe2027",
+	"description": "Links to each region's home page. Used on the Root hub, at the site root.",
+	"icon": "admin-site-alt3",
+	"attributes": {
+		"heading": {
+			"type": "string",
+			"default": "Choose your region"
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"autoRegister": true
+	},
+	"render": "file:./render.php"
+}

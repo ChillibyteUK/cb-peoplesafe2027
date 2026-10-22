@@ -14,11 +14,11 @@
 }
 
 .accordion-item {
-  border-bottom: 1px solid var(--col-grey-200);
+  border-bottom: 1px solid var(--col-border);
 }
 
 .accordion-item:first-child {
-  border-top: 1px solid var(--col-grey-200);
+  border-top: 1px solid var(--col-border);
 }
 
 .accordion-header {

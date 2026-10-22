@@ -24,7 +24,7 @@
 	align-items: center;
 	gap: var(--space-1);
 	padding: var(--space-1) var(--space-2);
-	border: 1px solid var(--col-grey-300);
+	border: 1px solid var(--col-border);
 	border-radius: var(--radius-sm);
 	background: none;
 	cursor: pointer;
@@ -43,8 +43,8 @@
 	left: 0;
 	right: 0;
 	background-color: var(--col-body-bg);
-	border-top: 1px solid var(--col-grey-300);
-	box-shadow: var(--shadow-lg);
+	border-top: 1px solid var(--col-border);
+	box-shadow: var(--shadow-out);
 	padding: var(--space-3);
 	max-height: calc(100vh - 100%);
 	overflow-y: auto;
@@ -68,7 +68,7 @@
 
 	&.active,
 	&[aria-current="page"] {
-		font-weight: var(--fw-600);
+		font-weight: var(--fw-bold);
 	}
 }
 
@@ -135,9 +135,9 @@
 		margin: 0;
 		padding: var(--space-2);
 		background-color: var(--col-body-bg);
-		border: 1px solid var(--col-grey-300);
+		border: 1px solid var(--col-border);
 		border-radius: var(--radius-sm);
-		box-shadow: var(--shadow-lg);
+		box-shadow: var(--shadow-out);
 		z-index: 10;
 	}
 }

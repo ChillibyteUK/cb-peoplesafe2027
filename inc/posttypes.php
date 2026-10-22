@@ -2,8 +2,9 @@
 /**
  * Custom Post Types Registration
  *
- * Duplicate one of the register_post_type() calls below (commented out) as
- * a starting point for a new post type — nothing is registered by default.
+ * The project's post types are registered from the $types table in
+ * cb_peoplesafe2027_register_post_types(). Add a row there for a new type, or
+ * duplicate the commented register_post_type() call for one that needs more.
  *
  * @package cb-peoplesafe2027
  */
@@ -49,6 +50,132 @@ function cb_peoplesafe2027_register_post_types() {
 		)
 	);
 	*/
+
+	/*
+	 * Project post types (DEC-012). Paths keep each current type's base with the
+	 * region in front (DEC-026): the region prefix comes from Polylang, the base
+	 * from the rewrite slug here, or from inc/regions/routing.php where rewrite
+	 * is false. Types that routing.php builds paths for: resource, landing_page.
+	 */
+	$types = array(
+		'product'      => array(
+			'plural'  => 'Products',
+			'single'  => 'Product',
+			'icon'    => 'dashicons-products',
+			'rewrite' => array(
+				'slug'       => 'products',
+				'with_front' => false,
+			),
+			'archive' => true,
+			'taxes'   => array( 'product_type' ),
+		),
+		'case_study'   => array(
+			'plural'  => 'Case studies',
+			'single'  => 'Case study',
+			'icon'    => 'dashicons-awards',
+			'rewrite' => array(
+				'slug'       => 'case-studies',
+				'with_front' => false,
+			),
+			'archive' => true,
+			'taxes'   => array( 'sector', 'case_study_type' ),
+		),
+		'resource'     => array(
+			'plural'   => 'Resources',
+			'single'   => 'Resource',
+			'icon'     => 'dashicons-media-document',
+			'rewrite'  => false, // Paths by type: routing.php.
+			'archive'  => false,
+			'taxes'    => array( 'resource_type' ),
+			'supports' => array( 'title', 'editor', 'excerpt', 'thumbnail', 'page-attributes' ),
+		),
+		'legislation'  => array(
+			'plural'  => 'Legislation',
+			'single'  => 'Legislation',
+			'icon'    => 'dashicons-book-alt',
+			'rewrite' => array(
+				'slug'       => 'legislation',
+				'with_front' => false,
+			),
+			'archive' => true,
+			'taxes'   => array( 'jurisdiction' ),
+		),
+		'partner'      => array(
+			'plural'  => 'Partners',
+			'single'  => 'Partner',
+			'icon'    => 'dashicons-groups',
+			'rewrite' => array(
+				'slug'       => 'partnerships',
+				'with_front' => false,
+			),
+			'archive' => true,
+			'taxes'   => array( 'partner_type' ),
+		),
+		'career'       => array(
+			'plural'  => 'Careers',
+			'single'  => 'Career',
+			'icon'    => 'dashicons-id',
+			'rewrite' => array(
+				'slug'       => 'careers',
+				'with_front' => false,
+			),
+			'archive' => false, // /careers/ is an ordinary page with a job list.
+			'taxes'   => array( 'career_type' ),
+		),
+		'landing_page' => array(
+			'plural'   => 'Landing pages',
+			'single'   => 'Landing page',
+			'icon'     => 'dashicons-megaphone',
+			'rewrite'  => false, // Same level as pages: routing.php.
+			'archive'  => false,
+			'taxes'    => array( 'landing_type' ),
+			'supports' => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
+		),
+		'person'       => array(
+			'plural'   => 'People',
+			'single'   => 'Person',
+			'icon'     => 'dashicons-admin-users',
+			'rewrite'  => false,
+			'archive'  => false,
+			'public'   => false, // Attribution only: no URLs, no archive (DEC-014).
+			'taxes'    => array( 'team' ),
+			'supports' => array( 'title', 'thumbnail' ),
+		),
+	);
+
+	$position = 21;
+
+	foreach ( $types as $name => $type ) {
+		$public = isset( $type['public'] ) ? $type['public'] : true;
+
+		register_post_type(
+			$name,
+			array(
+				'labels'        => array(
+					'name'               => $type['plural'],
+					'singular_name'      => $type['single'],
+					'add_new_item'       => 'Add ' . $type['single'],
+					'edit_item'          => 'Edit ' . $type['single'],
+					'new_item'           => 'New ' . $type['single'],
+					'view_item'          => 'View ' . $type['single'],
+					'search_items'       => 'Search ' . strtolower( $type['plural'] ),
+					'not_found'          => 'No ' . strtolower( $type['plural'] ) . ' found',
+					'not_found_in_trash' => 'No ' . strtolower( $type['plural'] ) . ' in trash',
+				),
+				'public'        => $public,
+				'show_ui'       => true,
+				'show_in_menu'  => true,
+				'show_in_rest'  => true,
+				'has_archive'   => $type['archive'],
+				'rewrite'       => $type['rewrite'],
+				'query_var'     => $public,
+				'menu_position' => $position++,
+				'menu_icon'     => $type['icon'],
+				'supports'      => isset( $type['supports'] ) ? $type['supports'] : array( 'title', 'editor', 'excerpt', 'thumbnail' ),
+				'taxonomies'    => $type['taxes'],
+			)
+		);
+	}
 
 }
 add_action( 'init', 'cb_peoplesafe2027_register_post_types' );

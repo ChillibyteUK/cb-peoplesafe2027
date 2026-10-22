@@ -27,6 +27,31 @@ URL shape: `/uk/guides|whitepapers|brochures|infographics|video/{slug}/`,
 taxonomies under `/jurisdiction/`. Decisions: DEC-023 to DEC-027 in the project
 tracker.
 
+### Post types and taxonomies
+
+Registered in `inc/posttypes.php` and `inc/taxonomies.php` from one table each
+(add a row for a new one): Products, Case studies, Resources, Legislation,
+Partners, Careers, Landing pages and People (non-public), with their taxonomies
+(`resource_type`, `jurisdiction` and the filters). Resources and Landing pages
+register with `rewrite => false` because `routing.php` builds their paths.
+Everything translatable is ticked in Polylang (not People, so one person serves
+every region). Terms for News, the resource types, User story and the landing
+types are seeded once per region from the CLI, not by the theme.
+
+A post's slug is shared across regions only if its language is set first, so
+set the language before the slug when creating one by script.
+
+### Design tokens
+
+`src/css/tokens.css` is the one place for colour, type, spacing, radius, shadow,
+motion, z-index, button and layout values: use a token, never a literal.
+`html` is 18px, so 1rem = 18px (16px small text is `--fs-small`). Breakpoints
+are in `src/build/tokens.config.js`: sm 576, md 768, lg 992, xl 1240, xxl 1400.
+All gradients share `--gradient-angle` (-30deg). `npm run generate-theme-json`
+turns the literal `--col-*` colours and `--fs-*` sizes into the editor palette.
+The agreed set and the reasoning are in `style-token-proposal.md` (project
+folder, outside the theme).
+
 ### Needs the cbp-peoplesafe plugin
 
 Polylang decides the `/` to `/uk/` redirect before the theme loads, and the Root

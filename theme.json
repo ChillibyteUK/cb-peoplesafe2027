@@ -18,33 +18,109 @@
           "origin": "theme"
         },
         {
-          "name": "grey-100",
-          "slug": "grey-100",
-          "color": "#f5f5f5",
+          "name": "greyish",
+          "slug": "greyish",
+          "color": "#343432",
           "origin": "theme"
         },
         {
-          "name": "grey-300",
-          "slug": "grey-300",
-          "color": "#d9d9d9",
+          "name": "neutral",
+          "slug": "neutral",
+          "color": "#f1f7f8",
           "origin": "theme"
         },
         {
-          "name": "grey-700",
-          "slug": "grey-700",
-          "color": "#4a4a4a",
+          "name": "surface",
+          "slug": "surface",
+          "color": "#fafafa",
           "origin": "theme"
         },
         {
-          "name": "blue-700",
-          "slug": "blue-700",
-          "color": "#1d4ed8",
+          "name": "border",
+          "slug": "border",
+          "color": "#cccccc",
+          "origin": "theme"
+        },
+        {
+          "name": "blue-200",
+          "slug": "blue-200",
+          "color": "#d5e1e5",
+          "origin": "theme"
+        },
+        {
+          "name": "yellow-400",
+          "slug": "yellow-400",
+          "color": "#ffb422",
+          "origin": "theme"
+        },
+        {
+          "name": "orange-400",
+          "slug": "orange-400",
+          "color": "#df4305",
+          "origin": "theme"
+        },
+        {
+          "name": "pink-400",
+          "slug": "pink-400",
+          "color": "#de007d",
+          "origin": "theme"
+        },
+        {
+          "name": "blue-400",
+          "slug": "blue-400",
+          "color": "#0484a0",
+          "origin": "theme"
+        },
+        {
+          "name": "teal-400",
+          "slug": "teal-400",
+          "color": "#06bea9",
+          "origin": "theme"
+        },
+        {
+          "name": "navy-400",
+          "slug": "navy-400",
+          "color": "#043950",
+          "origin": "theme"
+        },
+        {
+          "name": "yellow-100",
+          "slug": "yellow-100",
+          "color": "#ffe4bd",
+          "origin": "theme"
+        },
+        {
+          "name": "orange-100",
+          "slug": "orange-100",
+          "color": "#fdc9b4",
+          "origin": "theme"
+        },
+        {
+          "name": "pink-100",
+          "slug": "pink-100",
+          "color": "#ffaddc",
+          "origin": "theme"
+        },
+        {
+          "name": "teal-100",
+          "slug": "teal-100",
+          "color": "#66f9e8",
           "origin": "theme"
         }
       ]
     },
     "typography": {
       "fontSizes": [
+        {
+          "name": "tiny",
+          "slug": "tiny",
+          "size": "0.667rem"
+        },
+        {
+          "name": "small",
+          "slug": "small",
+          "size": "0.889rem"
+        },
         {
           "name": "base",
           "slug": "base",
@@ -53,27 +129,27 @@
         {
           "name": "h1",
           "slug": "h1",
-          "size": "clamp(2rem, 1.6rem + 2vw, 3rem)"
+          "size": "clamp(2.25rem, 10vw, 3rem)"
         },
         {
           "name": "h2",
           "slug": "h2",
-          "size": "clamp(1.6rem, 1.35rem + 1.25vw, 2.25rem)"
+          "size": "clamp(1.5rem, 10vw, 2rem)"
         },
         {
           "name": "h3",
           "slug": "h3",
-          "size": "clamp(1.3rem, 1.15rem + 0.75vw, 1.75rem)"
+          "size": "clamp(1.2rem, 10vw, 1.5rem)"
         },
         {
           "name": "h4",
           "slug": "h4",
-          "size": "1.25rem"
+          "size": "clamp(1.1rem, 10vw, 1.2rem)"
         },
         {
           "name": "h5",
           "slug": "h5",
-          "size": "1.1rem"
+          "size": "1rem"
         },
         {
           "name": "h6",
@@ -81,9 +157,24 @@
           "size": "1rem"
         },
         {
-          "name": "small",
-          "slug": "small",
-          "size": "0.875rem"
+          "name": "title-sm",
+          "slug": "title-sm",
+          "size": "1.333rem"
+        },
+        {
+          "name": "title-md",
+          "slug": "title-md",
+          "size": "2.222rem"
+        },
+        {
+          "name": "title-lg",
+          "slug": "title-lg",
+          "size": "3.111rem"
+        },
+        {
+          "name": "display",
+          "slug": "display",
+          "size": "clamp(56px, calc(56px + (1vw - 7.68px) * 1.3889), 72px)"
         }
       ]
     }

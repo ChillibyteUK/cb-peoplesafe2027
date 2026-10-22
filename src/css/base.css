@@ -7,6 +7,8 @@
 }
 
 html {
+	/* 1rem = 18px (body copy). Tokens in tokens.css are written for this root. */
+	font-size: 18px;
 	-webkit-text-size-adjust: 100%;
 }
 
@@ -14,7 +16,7 @@ body {
 	margin: 0;
 	font-family: var(--font-family-base);
 	font-size: var(--fs-base);
-	font-weight: var(--fw-400);
+	font-weight: var(--fw-light);
 	line-height: var(--line-height-base);
 	color: var(--col-body);
 	background-color: var(--col-body-bg);
@@ -77,18 +79,12 @@ video {
 	display: block;
 }
 
-/*
- * Bootstrap-derived project themes get this from `.figure-caption` — this
- * skeleton has no Bootstrap to extend, so it's a plain reset instead.
- * `color` is Bootstrap's own $gray-600 default, not one of this project's
- * tokens (deliberately a literal, not a token, since a project's own
- * --col-muted-equivalent value will vary).
- */
+/* Captions: small and muted. */
 figcaption {
 	margin-top: 0.5em;
-	font-size: 0.875rem;
+	font-size: var(--fs-small);
 	line-height: var(--line-height-base);
-	color: #6c757d;
+	color: var(--col-body-muted);
 }
 
 ul,

@@ -5,43 +5,80 @@
  * an @media condition, so breakpoints live in src/build/tokens.config.js instead,
  * and generate-utilities.js is what turns them into actual responsive CSS. Keep
  * that file as the only place breakpoint pixel values are written down.
+ *
+ * One token per role: use these in block and theme CSS, never a literal hex,
+ * radius, shadow or transition. Add to this file when a role is missing.
+ *
+ * The root font size is 18px (see base.css), so 1rem = 18px. Sizes below are
+ * rem unless noted. 16px = 0.889rem, 12px = 0.667rem.
  */
 
 :root {
-  /* Colour palette — rename/replace per project, keep the slug shape */
+  /* Colour palette — literal colours only; these become the block editor palette */
   --col-white: #ffffff;
   --col-black: #000000;
-  --col-grey-100: #f5f5f5;
-  --col-grey-300: #d9d9d9;
-  --col-grey-700: #4a4a4a;
-  --col-blue-700: #1d4ed8;
+  --col-greyish: #343432;
+  --col-neutral: #f1f7f8;
+  --col-surface: #fafafa;
+  --col-border: #cccccc;
+  --col-blue-200: #d5e1e5;
+  --col-yellow-400: #ffb422;
+  --col-orange-400: #df4305;
+  --col-pink-400: #de007d;
+  --col-blue-400: #0484a0;
+  --col-teal-400: #06bea9;
+  --col-navy-400: #043950;
 
-  --col-primary: var(--col-blue-700);
+  /* Tints — carried over from the earlier palette; remove at the end if unused */
+  --col-yellow-100: #ffe4bd;
+  --col-orange-100: #fdc9b4;
+  --col-pink-100: #ffaddc;
+  --col-teal-100: #66f9e8;
+
+  /* Colour roles (aliases, not in the editor palette) */
+  --col-primary: var(--col-yellow-400);
   --col-body: var(--col-black);
+  --col-body-muted: var(--col-greyish);
   --col-body-bg: var(--col-white);
 
-  /* Type scale */
-  --font-family-base: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --fs-base: 1rem;
-  --fs-h1: clamp(2rem, 1.6rem + 2vw, 3rem);
-  --fs-h2: clamp(1.6rem, 1.35rem + 1.25vw, 2.25rem);
-  --fs-h3: clamp(1.3rem, 1.15rem + 0.75vw, 1.75rem);
-  --fs-h4: 1.25rem;
-  --fs-h5: 1.1rem;
+  /* Overlays */
+  --overlay: rgb(0 0 0 / 0.5);
+  --overlay-strong: rgb(0 0 0 / 0.9);
+
+  /* Gradients: one angle for all of them */
+  --gradient-angle: -30deg;
+  --gradient-orange: linear-gradient(var(--gradient-angle), var(--col-yellow-400) 0%, var(--col-orange-400) 100%);
+  --gradient-pink: linear-gradient(var(--gradient-angle), var(--col-orange-400) 0%, var(--col-pink-400) 100%);
+  --gradient-blue: linear-gradient(var(--gradient-angle), var(--col-blue-400) 0%, var(--col-teal-400) 100%);
+
+  /* Type */
+  --font-family-base: "Basis Grotesque Pro", sans-serif;
+  --fs-tiny: 0.667rem; /* 12px */
+  --fs-small: 0.889rem; /* 16px: small text, buttons in dense UI */
+  --fs-base: 1rem; /* 18px: body copy */
+  --fs-h1: clamp(2.25rem, 10vw, 3rem); /* 40.5 to 54px */
+  --fs-h2: clamp(1.5rem, 10vw, 2rem); /* 27 to 36px */
+  --fs-h3: clamp(1.2rem, 10vw, 1.5rem); /* 21.6 to 27px */
+  --fs-h4: clamp(1.1rem, 10vw, 1.2rem); /* 19.8 to 21.6px */
+  --fs-h5: 1rem;
   --fs-h6: 1rem;
-  --fs-small: 0.875rem;
+  --fs-title-sm: 1.333rem; /* 24px */
+  --fs-title-md: 2.222rem; /* 40px */
+  --fs-title-lg: 3.111rem; /* 56px */
+  --fs-display: clamp(56px, calc(56px + (1vw - 7.68px) * 1.3889), 72px); /* hero title; px so the root size does not scale it */
+
+  --fw-300: 300;
   --fw-400: 400;
-  --fw-600: 600;
   --fw-700: 700;
 
   /* Semantic aliases — generate-utilities.js emits a matching .fw-* class
 	   for every custom property here, so these are free utility classes too
-	   (.fw-normal, .fw-semibold, .fw-bold), not just tokens for use in CSS. */
+	   (.fw-light, .fw-normal, .fw-bold), not just tokens for use in CSS. */
+  --fw-light: var(--fw-300);
   --fw-normal: var(--fw-400);
-  --fw-semibold: var(--fw-600);
   --fw-bold: var(--fw-700);
 
-  --line-height-base: 1.5;
+  --line-height-base: 1.3;
   --line-height-heading: 1.2;
 
   /* Spacing scale — used by both hand-authored CSS and the utility generator */
@@ -50,18 +87,52 @@
   --space-2: 0.5rem;
   --space-3: 1rem;
   --space-4: 1.5rem;
-  --space-5: 3rem;
-  --space-6: 5rem;
+  --space-5: 2rem;
+  --space-6: 3rem;
+  --space-7: 5rem;
 
-  /* Radii / shadows / motion */
+  /* Radii */
   --radius-sm: 0.25rem;
-  --radius-lg: 0.5rem;
-  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.08);
-  --shadow-lg: 0 8px 24px rgb(0 0 0 / 0.12);
-  --transition: 150ms ease-in-out;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-pill: 100vw;
+  --radius-circle: 50%;
+
+  /* Shadows */
+  --shadow-out: rgb(0 0 0 / 0.1) 0 20px 25px -5px, rgb(0 0 0 / 0.04) 0 10px 10px -5px;
+  --shadow-in: rgb(0 0 0 / 0.1) 0 4px 6px -1px, rgb(0 0 0 / 0.06) 0 2px 4px -1px;
+  --shadow-card: rgb(0 0 0 / 0.16) 0 3px 6px, rgb(0 0 0 / 0.23) 0 3px 6px;
+  --shadow-card-hover: rgb(0 0 0 / 0.19) 0 10px 20px, rgb(0 0 0 / 0.23) 0 6px 6px;
+  --shadow-button-hover: rgb(60 64 67 / 0.3) 0 4px 4px 0, rgb(60 64 67 / 0.15) 0 2px 6px 2px;
+  --shadow-lift: rgb(0 0 0 / 0.25) 0 14px 28px, rgb(0 0 0 / 0.22) 0 10px 10px;
+
+  /* Motion */
+  --transition: 250ms ease-in-out;
+  --transition-fast: 150ms ease-in-out;
+  --transition-slow: 400ms ease-in-out;
+
+  /* Borders */
+  --border-width: 2px;
+  --border-width-thick: 4px;
+
+  /* Stacking */
+  --z-below: -1;
+  --z-base: 0;
+  --z-raised: 1;
+  --z-nav: 100;
+  --z-overlay: 999;
+  --z-modal: 9999;
+
+  /* Buttons */
+  --button-padding-block: var(--space-2);
+  --button-padding-inline: var(--space-3);
+  --button-border: var(--border-width);
+  --button-radius: var(--radius-sm);
+  --button-font-size: var(--fs-base);
 
   /* Layout */
-  --container-max-width: 1320px;
+  --container-max-width: 1180px;
   --container-padding: var(--space-3);
   --grid-columns: 12;
   --grid-gutter: var(--space-3);
@@ -71,7 +142,7 @@
 	   a new class per layout. Smaller value = more columns fit. */
   --grid-min: 16rem;
 
-  --nav-height: 4rem;
+  --nav-height: 70px;
 }
 
 /* Base element reset — the "reboot" equivalent. Deliberately small. */
@@ -83,6 +154,8 @@
 }
 
 html {
+	/* 1rem = 18px (body copy). Tokens in tokens.css are written for this root. */
+	font-size: 18px;
 	-webkit-text-size-adjust: 100%;
 }
 
@@ -90,7 +163,7 @@ body {
 	margin: 0;
 	font-family: var(--font-family-base);
 	font-size: var(--fs-base);
-	font-weight: var(--fw-400);
+	font-weight: var(--fw-light);
 	line-height: var(--line-height-base);
 	color: var(--col-body);
 	background-color: var(--col-body-bg);
@@ -153,18 +226,12 @@ video {
 	display: block;
 }
 
-/*
- * Bootstrap-derived project themes get this from `.figure-caption` — this
- * skeleton has no Bootstrap to extend, so it's a plain reset instead.
- * `color` is Bootstrap's own $gray-600 default, not one of this project's
- * tokens (deliberately a literal, not a token, since a project's own
- * --col-muted-equivalent value will vary).
- */
+/* Captions: small and muted. */
 figcaption {
 	margin-top: 0.5em;
-	font-size: 0.875rem;
+	font-size: var(--fs-small);
 	line-height: var(--line-height-base);
-	color: #6c757d;
+	color: var(--col-body-muted);
 }
 
 ul,
@@ -182,6 +249,35 @@ ol {
 	clip: rect(0, 0, 0, 0) !important;
 	white-space: nowrap !important;
 	border: 0 !important;
+}
+
+/* Basis Grotesque Pro. Files are in /fonts; the woff2 files are preloaded by inc/head-tags.php. */
+
+@font-face {
+	font-family: "Basis Grotesque Pro";
+	src: url("../fonts/BasisGrotesquePro-Light.woff2") format("woff2"),
+		url("../fonts/BasisGrotesquePro-Light.woff") format("woff");
+	font-weight: 300;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Basis Grotesque Pro";
+	src: url("../fonts/BasisGrotesquePro-Regular.woff2") format("woff2"),
+		url("../fonts/BasisGrotesquePro-Regular.woff") format("woff");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Basis Grotesque Pro";
+	src: url("../fonts/BasisGrotesquePro-Bold.woff2") format("woff2"),
+		url("../fonts/BasisGrotesquePro-Bold.woff") format("woff");
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
 }
 
 /*
@@ -328,7 +424,7 @@ ol {
 	align-items: center;
 	gap: var(--space-1);
 	padding: var(--space-1) var(--space-2);
-	border: 1px solid var(--col-grey-300);
+	border: 1px solid var(--col-border);
 	border-radius: var(--radius-sm);
 	background: none;
 	cursor: pointer;
@@ -347,8 +443,8 @@ ol {
 	left: 0;
 	right: 0;
 	background-color: var(--col-body-bg);
-	border-top: 1px solid var(--col-grey-300);
-	box-shadow: var(--shadow-lg);
+	border-top: 1px solid var(--col-border);
+	box-shadow: var(--shadow-out);
 	padding: var(--space-3);
 	max-height: calc(100vh - 100%);
 	overflow-y: auto;
@@ -372,7 +468,7 @@ ol {
 }
 
 .nav-link.active,.nav-link[aria-current="page"] {
-		font-weight: var(--fw-600);
+		font-weight: var(--fw-bold);
 	}
 
 /* Submenus — nested, always visible on mobile; shown via click as a
@@ -438,9 +534,9 @@ ol {
 		margin: 0;
 		padding: var(--space-2);
 		background-color: var(--col-body-bg);
-		border: 1px solid var(--col-grey-300);
+		border: 1px solid var(--col-border);
 		border-radius: var(--radius-sm);
-		box-shadow: var(--shadow-lg);
+		box-shadow: var(--shadow-out);
 		z-index: 10;
 	}
 }
@@ -474,7 +570,7 @@ select {
 	display: block;
 	width: 100%;
 	padding: var(--space-2);
-	border: 1px solid var(--col-grey-300);
+	border: 1px solid var(--col-border);
 	border-radius: var(--radius-sm);
 	background-color: var(--col-white);
 	color: var(--col-body);
@@ -522,11 +618,11 @@ select {
 .text-start { text-align: left; }
 .text-center { text-align: center; }
 .text-end { text-align: right; }
+.fw-300 { font-weight: var(--fw-300); }
 .fw-400 { font-weight: var(--fw-400); }
-.fw-600 { font-weight: var(--fw-600); }
 .fw-700 { font-weight: var(--fw-700); }
+.fw-light { font-weight: var(--fw-light); }
 .fw-normal { font-weight: var(--fw-normal); }
-.fw-semibold { font-weight: var(--fw-semibold); }
 .fw-bold { font-weight: var(--fw-bold); }
 .w-25 { width: 25%; }
 .w-50 { width: 50%; }
@@ -540,6 +636,7 @@ select {
 .gap-4 { --gap-size: var(--space-4); gap: var(--space-4); }
 .gap-5 { --gap-size: var(--space-5); gap: var(--space-5); }
 .gap-6 { --gap-size: var(--space-6); gap: var(--space-6); }
+.gap-7 { --gap-size: var(--space-7); gap: var(--space-7); }
 .col-1 { grid-column: span 1; }
 .col-2 { grid-column: span 2; }
 .col-3 { grid-column: span 3; }
@@ -661,6 +758,20 @@ select {
 .px-6 { padding-left: var(--space-6); padding-right: var(--space-6); }
 .my-6 { margin-top: var(--space-6); margin-bottom: var(--space-6); }
 .py-6 { padding-top: var(--space-6); padding-bottom: var(--space-6); }
+.m-7 { margin-top: var(--space-7); margin-right: var(--space-7); margin-bottom: var(--space-7); margin-left: var(--space-7); }
+.p-7 { padding-top: var(--space-7); padding-right: var(--space-7); padding-bottom: var(--space-7); padding-left: var(--space-7); }
+.mt-7 { margin-top: var(--space-7); }
+.pt-7 { padding-top: var(--space-7); }
+.mb-7 { margin-bottom: var(--space-7); }
+.pb-7 { padding-bottom: var(--space-7); }
+.ms-7 { margin-left: var(--space-7); }
+.ps-7 { padding-left: var(--space-7); }
+.me-7 { margin-right: var(--space-7); }
+.pe-7 { padding-right: var(--space-7); }
+.mx-7 { margin-left: var(--space-7); margin-right: var(--space-7); }
+.px-7 { padding-left: var(--space-7); padding-right: var(--space-7); }
+.my-7 { margin-top: var(--space-7); margin-bottom: var(--space-7); }
+.py-7 { padding-top: var(--space-7); padding-bottom: var(--space-7); }
 .m-auto { margin-top: auto; margin-right: auto; margin-bottom: auto; margin-left: auto; }
 .mt-auto { margin-top: auto; }
 .mb-auto { margin-bottom: auto; }
@@ -699,6 +810,7 @@ select {
 	.gap-sm-4 { --gap-size: var(--space-4); gap: var(--space-4); }
 	.gap-sm-5 { --gap-size: var(--space-5); gap: var(--space-5); }
 	.gap-sm-6 { --gap-size: var(--space-6); gap: var(--space-6); }
+	.gap-sm-7 { --gap-size: var(--space-7); gap: var(--space-7); }
 	.col-sm-1 { grid-column: span 1; }
 	.col-sm-2 { grid-column: span 2; }
 	.col-sm-3 { grid-column: span 3; }
@@ -820,6 +932,20 @@ select {
 	.px-sm-6 { padding-left: var(--space-6); padding-right: var(--space-6); }
 	.my-sm-6 { margin-top: var(--space-6); margin-bottom: var(--space-6); }
 	.py-sm-6 { padding-top: var(--space-6); padding-bottom: var(--space-6); }
+	.m-sm-7 { margin-top: var(--space-7); margin-right: var(--space-7); margin-bottom: var(--space-7); margin-left: var(--space-7); }
+	.p-sm-7 { padding-top: var(--space-7); padding-right: var(--space-7); padding-bottom: var(--space-7); padding-left: var(--space-7); }
+	.mt-sm-7 { margin-top: var(--space-7); }
+	.pt-sm-7 { padding-top: var(--space-7); }
+	.mb-sm-7 { margin-bottom: var(--space-7); }
+	.pb-sm-7 { padding-bottom: var(--space-7); }
+	.ms-sm-7 { margin-left: var(--space-7); }
+	.ps-sm-7 { padding-left: var(--space-7); }
+	.me-sm-7 { margin-right: var(--space-7); }
+	.pe-sm-7 { padding-right: var(--space-7); }
+	.mx-sm-7 { margin-left: var(--space-7); margin-right: var(--space-7); }
+	.px-sm-7 { padding-left: var(--space-7); padding-right: var(--space-7); }
+	.my-sm-7 { margin-top: var(--space-7); margin-bottom: var(--space-7); }
+	.py-sm-7 { padding-top: var(--space-7); padding-bottom: var(--space-7); }
 	.m-sm-auto { margin-top: auto; margin-right: auto; margin-bottom: auto; margin-left: auto; }
 	.mt-sm-auto { margin-top: auto; }
 	.mb-sm-auto { margin-bottom: auto; }
@@ -859,6 +985,7 @@ select {
 	.gap-md-4 { --gap-size: var(--space-4); gap: var(--space-4); }
 	.gap-md-5 { --gap-size: var(--space-5); gap: var(--space-5); }
 	.gap-md-6 { --gap-size: var(--space-6); gap: var(--space-6); }
+	.gap-md-7 { --gap-size: var(--space-7); gap: var(--space-7); }
 	.col-md-1 { grid-column: span 1; }
 	.col-md-2 { grid-column: span 2; }
 	.col-md-3 { grid-column: span 3; }
@@ -980,6 +1107,20 @@ select {
 	.px-md-6 { padding-left: var(--space-6); padding-right: var(--space-6); }
 	.my-md-6 { margin-top: var(--space-6); margin-bottom: var(--space-6); }
 	.py-md-6 { padding-top: var(--space-6); padding-bottom: var(--space-6); }
+	.m-md-7 { margin-top: var(--space-7); margin-right: var(--space-7); margin-bottom: var(--space-7); margin-left: var(--space-7); }
+	.p-md-7 { padding-top: var(--space-7); padding-right: var(--space-7); padding-bottom: var(--space-7); padding-left: var(--space-7); }
+	.mt-md-7 { margin-top: var(--space-7); }
+	.pt-md-7 { padding-top: var(--space-7); }
+	.mb-md-7 { margin-bottom: var(--space-7); }
+	.pb-md-7 { padding-bottom: var(--space-7); }
+	.ms-md-7 { margin-left: var(--space-7); }
+	.ps-md-7 { padding-left: var(--space-7); }
+	.me-md-7 { margin-right: var(--space-7); }
+	.pe-md-7 { padding-right: var(--space-7); }
+	.mx-md-7 { margin-left: var(--space-7); margin-right: var(--space-7); }
+	.px-md-7 { padding-left: var(--space-7); padding-right: var(--space-7); }
+	.my-md-7 { margin-top: var(--space-7); margin-bottom: var(--space-7); }
+	.py-md-7 { padding-top: var(--space-7); padding-bottom: var(--space-7); }
 	.m-md-auto { margin-top: auto; margin-right: auto; margin-bottom: auto; margin-left: auto; }
 	.mt-md-auto { margin-top: auto; }
 	.mb-md-auto { margin-bottom: auto; }
@@ -1019,6 +1160,7 @@ select {
 	.gap-lg-4 { --gap-size: var(--space-4); gap: var(--space-4); }
 	.gap-lg-5 { --gap-size: var(--space-5); gap: var(--space-5); }
 	.gap-lg-6 { --gap-size: var(--space-6); gap: var(--space-6); }
+	.gap-lg-7 { --gap-size: var(--space-7); gap: var(--space-7); }
 	.col-lg-1 { grid-column: span 1; }
 	.col-lg-2 { grid-column: span 2; }
 	.col-lg-3 { grid-column: span 3; }
@@ -1140,6 +1282,20 @@ select {
 	.px-lg-6 { padding-left: var(--space-6); padding-right: var(--space-6); }
 	.my-lg-6 { margin-top: var(--space-6); margin-bottom: var(--space-6); }
 	.py-lg-6 { padding-top: var(--space-6); padding-bottom: var(--space-6); }
+	.m-lg-7 { margin-top: var(--space-7); margin-right: var(--space-7); margin-bottom: var(--space-7); margin-left: var(--space-7); }
+	.p-lg-7 { padding-top: var(--space-7); padding-right: var(--space-7); padding-bottom: var(--space-7); padding-left: var(--space-7); }
+	.mt-lg-7 { margin-top: var(--space-7); }
+	.pt-lg-7 { padding-top: var(--space-7); }
+	.mb-lg-7 { margin-bottom: var(--space-7); }
+	.pb-lg-7 { padding-bottom: var(--space-7); }
+	.ms-lg-7 { margin-left: var(--space-7); }
+	.ps-lg-7 { padding-left: var(--space-7); }
+	.me-lg-7 { margin-right: var(--space-7); }
+	.pe-lg-7 { padding-right: var(--space-7); }
+	.mx-lg-7 { margin-left: var(--space-7); margin-right: var(--space-7); }
+	.px-lg-7 { padding-left: var(--space-7); padding-right: var(--space-7); }
+	.my-lg-7 { margin-top: var(--space-7); margin-bottom: var(--space-7); }
+	.py-lg-7 { padding-top: var(--space-7); padding-bottom: var(--space-7); }
 	.m-lg-auto { margin-top: auto; margin-right: auto; margin-bottom: auto; margin-left: auto; }
 	.mt-lg-auto { margin-top: auto; }
 	.mb-lg-auto { margin-bottom: auto; }
@@ -1149,7 +1305,7 @@ select {
 	.my-lg-auto { margin-top: auto; margin-bottom: auto; }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1240px) {
 	.d-xl-block { display: block; }
 	.d-xl-flex { display: flex; }
 	.d-xl-inline-flex { display: inline-flex; }
@@ -1179,6 +1335,7 @@ select {
 	.gap-xl-4 { --gap-size: var(--space-4); gap: var(--space-4); }
 	.gap-xl-5 { --gap-size: var(--space-5); gap: var(--space-5); }
 	.gap-xl-6 { --gap-size: var(--space-6); gap: var(--space-6); }
+	.gap-xl-7 { --gap-size: var(--space-7); gap: var(--space-7); }
 	.col-xl-1 { grid-column: span 1; }
 	.col-xl-2 { grid-column: span 2; }
 	.col-xl-3 { grid-column: span 3; }
@@ -1300,6 +1457,20 @@ select {
 	.px-xl-6 { padding-left: var(--space-6); padding-right: var(--space-6); }
 	.my-xl-6 { margin-top: var(--space-6); margin-bottom: var(--space-6); }
 	.py-xl-6 { padding-top: var(--space-6); padding-bottom: var(--space-6); }
+	.m-xl-7 { margin-top: var(--space-7); margin-right: var(--space-7); margin-bottom: var(--space-7); margin-left: var(--space-7); }
+	.p-xl-7 { padding-top: var(--space-7); padding-right: var(--space-7); padding-bottom: var(--space-7); padding-left: var(--space-7); }
+	.mt-xl-7 { margin-top: var(--space-7); }
+	.pt-xl-7 { padding-top: var(--space-7); }
+	.mb-xl-7 { margin-bottom: var(--space-7); }
+	.pb-xl-7 { padding-bottom: var(--space-7); }
+	.ms-xl-7 { margin-left: var(--space-7); }
+	.ps-xl-7 { padding-left: var(--space-7); }
+	.me-xl-7 { margin-right: var(--space-7); }
+	.pe-xl-7 { padding-right: var(--space-7); }
+	.mx-xl-7 { margin-left: var(--space-7); margin-right: var(--space-7); }
+	.px-xl-7 { padding-left: var(--space-7); padding-right: var(--space-7); }
+	.my-xl-7 { margin-top: var(--space-7); margin-bottom: var(--space-7); }
+	.py-xl-7 { padding-top: var(--space-7); padding-bottom: var(--space-7); }
 	.m-xl-auto { margin-top: auto; margin-right: auto; margin-bottom: auto; margin-left: auto; }
 	.mt-xl-auto { margin-top: auto; }
 	.mb-xl-auto { margin-bottom: auto; }
@@ -1339,6 +1510,7 @@ select {
 	.gap-xxl-4 { --gap-size: var(--space-4); gap: var(--space-4); }
 	.gap-xxl-5 { --gap-size: var(--space-5); gap: var(--space-5); }
 	.gap-xxl-6 { --gap-size: var(--space-6); gap: var(--space-6); }
+	.gap-xxl-7 { --gap-size: var(--space-7); gap: var(--space-7); }
 	.col-xxl-1 { grid-column: span 1; }
 	.col-xxl-2 { grid-column: span 2; }
 	.col-xxl-3 { grid-column: span 3; }
@@ -1460,6 +1632,20 @@ select {
 	.px-xxl-6 { padding-left: var(--space-6); padding-right: var(--space-6); }
 	.my-xxl-6 { margin-top: var(--space-6); margin-bottom: var(--space-6); }
 	.py-xxl-6 { padding-top: var(--space-6); padding-bottom: var(--space-6); }
+	.m-xxl-7 { margin-top: var(--space-7); margin-right: var(--space-7); margin-bottom: var(--space-7); margin-left: var(--space-7); }
+	.p-xxl-7 { padding-top: var(--space-7); padding-right: var(--space-7); padding-bottom: var(--space-7); padding-left: var(--space-7); }
+	.mt-xxl-7 { margin-top: var(--space-7); }
+	.pt-xxl-7 { padding-top: var(--space-7); }
+	.mb-xxl-7 { margin-bottom: var(--space-7); }
+	.pb-xxl-7 { padding-bottom: var(--space-7); }
+	.ms-xxl-7 { margin-left: var(--space-7); }
+	.ps-xxl-7 { padding-left: var(--space-7); }
+	.me-xxl-7 { margin-right: var(--space-7); }
+	.pe-xxl-7 { padding-right: var(--space-7); }
+	.mx-xxl-7 { margin-left: var(--space-7); margin-right: var(--space-7); }
+	.px-xxl-7 { padding-left: var(--space-7); padding-right: var(--space-7); }
+	.my-xxl-7 { margin-top: var(--space-7); margin-bottom: var(--space-7); }
+	.py-xxl-7 { padding-top: var(--space-7); padding-bottom: var(--space-7); }
 	.m-xxl-auto { margin-top: auto; margin-right: auto; margin-bottom: auto; margin-left: auto; }
 	.mt-xxl-auto { margin-top: auto; }
 	.mb-xxl-auto { margin-bottom: auto; }

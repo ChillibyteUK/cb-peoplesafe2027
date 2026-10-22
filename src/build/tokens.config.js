@@ -17,7 +17,7 @@ const breakpoints = {
 	sm: 576,
 	md: 768,
 	lg: 992,
-	xl: 1200,
+	xl: 1240,
 	xxl: 1400,
 };
 
@@ -78,6 +78,6 @@ const utilities = {
 };
 
 // Spacing utilities (gap, margin, padding) driven off the tokens.css spacing scale.
-const spacingScale = [0, 1, 2, 3, 4, 5, 6];
+const spacingScale = [0, 1, 2, 3, 4, 5, 6, 7];
 
 module.exports = { breakpoints, gridColumns, utilities, spacingScale };

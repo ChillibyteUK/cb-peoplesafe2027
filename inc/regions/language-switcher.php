@@ -53,6 +53,38 @@ function cb_peoplesafe2027_language_switcher_items() {
 }
 
 /**
+ * Regions for the Root hub's region selector block: each links to that
+ * region's home page, whatever the current page is.
+ *
+ * @return array[] Each entry has slug, name, locale and url.
+ */
+function cb_peoplesafe2027_region_selector_items() {
+	$items = array();
+
+	foreach ( cb_peoplesafe2027_region_slugs() as $slug ) {
+		$language = PLL()->model->get_language( $slug );
+
+		if ( ! $language ) {
+			continue;
+		}
+
+		$items[] = array(
+			'slug'   => $slug,
+			'name'   => $language->name,
+			'locale' => str_replace( '_', '-', $language->locale ),
+			'url'    => cb_peoplesafe2027_region_url( $slug ),
+		);
+	}
+
+	/**
+	 * Filter the region selector entries.
+	 *
+	 * @param array[] $items Entries.
+	 */
+	return (array) apply_filters( 'cb_peoplesafe2027_region_selector_items', $items );
+}
+
+/**
  * Print the region switcher.
  *
  * @return void
