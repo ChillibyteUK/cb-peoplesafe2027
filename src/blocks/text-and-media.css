@@ -1,0 +1,258 @@
+/*
+ * Text and media. Text beside an image or a video, half and half or with the
+ * text wider. Below md the media comes first, then the text. A video is a
+ * poster behind a play button (src/js/video-facade.js swaps in the player).
+ */
+
+.text-and-media {
+	padding-block: var(--block-padding);
+}
+
+.text-and-media__grid {
+	display: grid;
+	gap: var(--space-4);
+	align-items: center;
+}
+
+.text-and-media__media {
+	order: -1;
+}
+
+.text-and-media__pretitle {
+	margin-bottom: var(--space-2);
+	color: var(--col-blue-400);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-bold);
+}
+
+.text-and-media__title {
+	text-wrap: balance;
+}
+
+.text-and-media__text > :last-child,
+.text-and-media__text > .container:last-child > :last-child {
+	margin-bottom: 0;
+}
+
+/* Core paragraphs and lists are each wrapped in a .container by the theme; inside this block they sit in its own column. */
+.text-and-media__text .container {
+	max-width: none;
+	margin: 0;
+	padding-inline: 0;
+}
+
+.text-and-media__text {
+	margin-bottom: var(--space-4);
+}
+
+.text-and-media__image {
+	display: block;
+	width: 100%;
+	height: auto;
+	margin-inline: auto;
+	border-radius: var(--radius-lg);
+	background-color: var(--col-white);
+	box-shadow: var(--shadow-out);
+}
+
+.text-and-media__below {
+	margin-top: var(--space-4);
+	text-align: right;
+}
+
+.text-and-media__transcript {
+	margin-top: var(--space-4);
+}
+
+.text-and-media__transcript summary {
+	cursor: pointer;
+	font-size: var(--fs-h4);
+	font-weight: var(--fw-bold);
+}
+
+.text-and-media__transcript-body {
+	padding-top: var(--space-2);
+}
+
+@media (min-width: 768px) {
+	.text-and-media__grid {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.text-and-media--wide-text .text-and-media__grid {
+		grid-template-columns: 2fr 1fr;
+	}
+
+	.text-and-media--text-only .text-and-media__grid {
+		grid-template-columns: 1fr;
+	}
+
+	.text-and-media__media {
+		order: 0;
+	}
+
+	.text-and-media--media-left .text-and-media__media {
+		order: -1;
+	}
+
+	.text-and-media--media-right .text-and-media__media {
+		order: 1;
+	}
+
+	/* With the media on the left the columns swap, so the narrow one stays the media. */
+	.text-and-media--wide-text.text-and-media--media-left .text-and-media__grid {
+		grid-template-columns: 1fr 2fr;
+	}
+}
+
+/*
+ * Stacked: the title, text and buttons centred, with the media below them,
+ * centred and 640px wide at most. The video keeps its rounded corners and shadow.
+ */
+.text-and-media--stacked .text-and-media__grid {
+	grid-template-columns: 1fr;
+	text-align: center;
+}
+
+.text-and-media--stacked .text-and-media__media {
+	order: 1;
+	width: 100%;
+	max-width: 35.5rem; /* 640px, as on the live site */
+	margin-inline: auto;
+}
+
+.text-and-media--stacked .button-group {
+	justify-content: center;
+}
+
+/* Video behind a play button. */
+.video-facade,
+.video-facade__frame {
+	display: block;
+	width: 100%;
+	aspect-ratio: 16 / 9;
+	border: 0;
+	border-radius: var(--radius-lg);
+}
+
+.video-facade {
+	box-shadow: var(--shadow-out);
+	position: relative;
+	padding: 0;
+	overflow: hidden;
+	background-color: var(--col-navy-400);
+	cursor: pointer;
+}
+
+.video-facade__poster {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.video-facade__play {
+	position: absolute;
+	inset: 50% auto auto 50%;
+	width: 4rem;
+	height: 4rem;
+	translate: -50% -50%;
+	border-radius: var(--radius-circle);
+	background-color: var(--col-white);
+	box-shadow: var(--shadow-out);
+	transition: scale var(--transition);
+}
+
+.video-facade__play::after {
+	content: "";
+	position: absolute;
+	inset: 50% auto auto 54%;
+	width: 1.25rem;
+	height: 1.25rem;
+	translate: -50% -50%;
+	background-color: var(--col-orange-400);
+	clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.video-facade:hover .video-facade__play,
+.video-facade:focus-visible .video-facade__play {
+	scale: 1.1;
+}
+
+.video-facade:focus-visible {
+	outline: var(--border-width) solid var(--col-navy-400);
+	outline-offset: var(--space-1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.video-facade__play {
+		transition: none;
+	}
+}
+
+/*
+ * The pop-out player (src/js/video-facade.js): one <dialog> sized to the
+ * viewport, the player filling it, the close button just above its top right
+ * corner. Clicks on the backdrop land on the dialog itself and close it.
+ */
+.video-modal {
+	width: min(90vw, 70rem, calc(80vh * 16 / 9));
+	max-width: none;
+	padding: 0;
+	overflow: visible;
+	border: 0;
+	background: var(--col-black);
+}
+
+.video-modal::backdrop {
+	background: rgb(0 0 0 / 0.8);
+}
+
+.video-modal__inner {
+	aspect-ratio: 16 / 9;
+	border-radius: var(--radius-lg);
+	overflow: hidden;
+}
+
+.video-modal .video-facade__frame {
+	height: 100%;
+	border-radius: 0;
+}
+
+.video-modal__close {
+	position: absolute;
+	right: 0;
+	bottom: 100%;
+	display: grid;
+	place-items: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	margin-bottom: var(--space-2);
+	padding: 0;
+	border: var(--border-width) solid var(--col-white);
+	border-radius: 50%;
+	background: transparent;
+	color: var(--col-white);
+	font-size: var(--fs-h3);
+	line-height: 1;
+	cursor: pointer;
+	transition: background-color var(--transition), color var(--transition);
+}
+
+.video-modal__close:hover,
+.video-modal__close:focus-visible {
+	background: var(--col-white);
+	color: var(--col-black);
+}
+
+/* An unframed image (for transparent images): no corners, shadow or white box. */
+.text-and-media__image--plain {
+	border-radius: 0;
+	background-color: transparent;
+	box-shadow: none;
+}
+
+/* Tick list in the media slot. (A background colour is the block's native colour support.) */
+.text-and-media__list {
+	margin: 0;
+}

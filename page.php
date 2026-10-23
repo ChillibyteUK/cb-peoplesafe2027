@@ -2,23 +2,18 @@
 /**
  * Page template.
  *
- * Most projects build page layouts from native blocks rather than the_content()
- * directly — override this per project as needed.
+ * No wrapping container: every block draws its own .container (the core text
+ * blocks are wrapped in one by inc/blocks.php), so a block such as the CTA
+ * banner can run edge to edge.
  *
  * @package cb-peoplesafe2027
  */
 
 get_header();
-?>
 
-<div class="container">
-	<?php
-	while ( have_posts() ) {
-		the_post();
-		the_content();
-	}
-	?>
-</div>
+while ( have_posts() ) {
+	the_post();
+	the_content();
+}
 
-<?php
 get_footer();

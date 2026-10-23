@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/quote",
+	"title": "Quote",
+	"category": "cb-peoplesafe2027",
+	"description": "One or more customer quotes, each with an attribution, an optional logo and an optional photo. Two or more quotes become a slider.",
+	"icon": "format-quote",
+	"attributes": {
+		"quotes": { "type": "array", "default": [] }
+	},
+	"supports": {
+		"anchor": true,
+		"className": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

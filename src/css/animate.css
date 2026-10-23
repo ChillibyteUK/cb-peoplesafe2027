@@ -1,0 +1,51 @@
+/*
+ * Entrance animations, driven by src/js/scroll-animate.js, which adds
+ * .is-visible the first time an element scrolls into view.
+ *
+ *   data-animate="fade-up"     rises into place
+ *   data-animate="fade-right"  slides in from the left
+ *   data-animate="fade-left"   slides in from the right
+ *
+ * Elements are only hidden when scripting is on (so nothing is lost without
+ * JavaScript) and the visitor has not asked for reduced motion. Below md the
+ * sideways ones rise instead, so nothing slides past the screen edge.
+ */
+
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+	[data-animate] {
+		opacity: 0;
+		transition:
+			opacity 600ms ease-out,
+			translate 600ms ease-out;
+	}
+
+	[data-animate="fade-up"],
+	[data-animate="fade-left"],
+	[data-animate="fade-right"] {
+		translate: 0 var(--space-4);
+	}
+
+	[data-animate].is-visible {
+		opacity: 1;
+		translate: 0 0;
+	}
+
+	/* Already on screen when the page loads: shown at once, with no entrance. */
+	[data-animate].is-instant {
+		transition: none;
+	}
+}
+
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+	[data-animate="fade-right"] {
+		translate: calc(-1 * var(--space-5)) 0;
+	}
+
+	[data-animate="fade-left"] {
+		translate: var(--space-5) 0;
+	}
+
+	[data-animate].is-visible {
+		translate: 0 0;
+	}
+}

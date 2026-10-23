@@ -1,0 +1,90 @@
+/*
+ * Caption slider. A centred title over the shared slider (src/css/slider.css):
+ * two cards across on a phone, three from md, four from lg, five from xl. Each
+ * card is white with a soft border, an icon in a pale orange circle and a caption.
+ */
+
+.caption-slider {
+	padding-block: var(--block-padding);
+}
+
+.caption-slider__title {
+	margin-bottom: var(--space-4);
+	text-align: center;
+	text-wrap: balance;
+}
+
+.caption-slider .slider {
+	--slides-per-view: 2;
+	--slider-gap: var(--space-3);
+}
+
+.caption-slider__card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-2);
+	height: 100%;
+	padding: var(--space-3);
+	border: var(--border-width) solid var(--col-blue-300);
+	border-radius: var(--radius-card);
+	background: var(--col-white);
+	color: inherit;
+	text-align: center;
+	text-decoration: none;
+	transition:
+		border-color var(--transition),
+		box-shadow var(--transition);
+}
+
+a.caption-slider__card:hover {
+	border-color: var(--col-orange-400);
+	box-shadow: var(--shadow-in);
+	color: inherit;
+}
+
+.caption-slider__image {
+	display: grid;
+	place-items: center;
+	width: 4rem;
+	aspect-ratio: 1;
+	border-radius: 100vw;
+	background: color-mix(in srgb, var(--col-orange-400), var(--col-white) 90%);
+}
+
+.caption-slider__image img {
+	display: block;
+	width: 2.5rem;
+	height: 2.5rem;
+	object-fit: contain;
+}
+
+.caption-slider__caption {
+	font-size: var(--fs-h5);
+	font-weight: var(--fw-bold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.caption-slider__card {
+		transition: none;
+	}
+}
+
+@media (min-width: 768px) {
+	.caption-slider .slider {
+		--slides-per-view: 3;
+	}
+}
+
+@media (min-width: 992px) {
+	.caption-slider .slider {
+		--slides-per-view: 4;
+	}
+}
+
+@media (min-width: 1240px) {
+	.caption-slider .slider {
+		--slides-per-view: 5;
+	}
+}

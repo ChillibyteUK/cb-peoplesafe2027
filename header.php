@@ -30,7 +30,7 @@
 			</svg>
 		</button>
 
-		<div class="navbar-collapse" id="primary-menu">
+		<div class="navbar-collapse" id="primary-menu" data-lenis-prevent>
 			<?php
 			wp_nav_menu(
 				array(

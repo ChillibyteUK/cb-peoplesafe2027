@@ -1,7 +1,8 @@
 import { __ } from '@wordpress/i18n';
-import { useBlockProps, RichText, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
+import { useBlockProps, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import { TextControl, Button } from '@wordpress/components';
 import EditorBlockShell from '../../_shared/EditorBlockShell';
+import RichField from '../../_shared/RichField';
 import CtaButtonsField from '../../_shared/CtaButtonsField';
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
@@ -33,17 +34,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					/>
 				</div>
 			</div>
-			<div className="cb-peoplesafe2027-editor-field">
-				<label className="cb-peoplesafe2027-editor-field__label">{ __( 'Intro', 'cb-peoplesafe2027' ) }</label>
-				<RichText
-					tagName="div"
-					className="cb-peoplesafe2027-editor-field__control"
-					aria-label={ __( 'Intro', 'cb-peoplesafe2027' ) }
-					placeholder={ __( 'Intro', 'cb-peoplesafe2027' ) }
-					value={ content }
-					onChange={ ( value ) => setAttributes( { content: value } ) }
-				/>
-			</div>
+			<RichField
+				label={ __( 'Intro', 'cb-peoplesafe2027' ) }
+				value={ content }
+				onChange={ ( value ) => setAttributes( { content: value } ) }
+			/>
 			<CtaButtonsField value={ buttons } onChange={ ( rows ) => setAttributes( { buttons: rows } ) } />
 			<div className="cb-peoplesafe2027-editor-field">
 				<label className="cb-peoplesafe2027-editor-field__label">{ __( 'Image for small screens', 'cb-peoplesafe2027' ) }</label>

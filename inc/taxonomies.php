@@ -91,6 +91,5 @@ function cb_peoplesafe2027_register_theme_taxonomies() {
 			)
 		);
 	}
-
 }
 add_action( 'init', 'cb_peoplesafe2027_register_theme_taxonomies' );

@@ -42,7 +42,7 @@ function cb_peoplesafe2027_core_block_type_args( $args, $name ) {
 	$GLOBALS['cb_peoplesafe2027_original_block_categories'][ $name ] = isset( $args['category'] ) ? $args['category'] : '';
 
 	$theme_namespace = wp_get_theme()->get( 'TextDomain' ) . '/';
-	$wrapped_blocks = array( 'core/paragraph', 'core/heading', 'core/list', 'core/separator' );
+	$wrapped_blocks  = array( 'core/paragraph', 'core/heading', 'core/list', 'core/separator' );
 
 	if ( 0 !== strpos( $name, $theme_namespace ) ) {
 		$args['category'] = 'gutenberg';
@@ -173,9 +173,9 @@ function cb_peoplesafe2027_get_disallowed_gutenberg_blocks() {
  * @return bool|array
  */
 function cb_peoplesafe2027_disallow_unwanted_core_blocks( $allowed_block_types ) {
-	$registered_blocks       = WP_Block_Type_Registry::get_instance()->get_all_registered();
-	$disallowed_gutenberg    = cb_peoplesafe2027_get_disallowed_gutenberg_blocks();
-	$disallowed_blocks = array_keys(
+	$registered_blocks    = WP_Block_Type_Registry::get_instance()->get_all_registered();
+	$disallowed_gutenberg = cb_peoplesafe2027_get_disallowed_gutenberg_blocks();
+	$disallowed_blocks    = array_keys(
 		array_filter(
 			$registered_blocks,
 			static function ( $block_type, $block_name ) use ( $disallowed_gutenberg ) {
@@ -199,8 +199,7 @@ function cb_peoplesafe2027_disallow_unwanted_core_blocks( $allowed_block_types )
 					|| $is_widget_block
 					|| $is_listed_block
 					|| $has_disallowed_prefix;
-			}
-			,
+			},
 			ARRAY_FILTER_USE_BOTH
 		)
 	);
@@ -227,3 +226,89 @@ add_filter( 'allowed_block_types_all', 'cb_peoplesafe2027_disallow_unwanted_core
 function cb_peoplesafe2027_wrap_block_in_container( $attributes, $content ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
 	return '<div class="container">' . $content . '</div>';
 }
+
+/**
+ * Register the Ticks style for the core List block: checkmarks in place of
+ * bullets. The look is in src/css/typography.css (.is-style-check).
+ *
+ * @return void
+ */
+function cb_peoplesafe2027_register_block_styles() {
+	register_block_style(
+		'core/list',
+		array(
+			'name'  => 'check',
+			'label' => __( 'Ticks', 'cb-peoplesafe2027' ),
+		)
+	);
+
+	register_block_style(
+		'core/list',
+		array(
+			'name'  => 'check-orange',
+			'label' => __( 'Ticks, orange', 'cb-peoplesafe2027' ),
+		)
+	);
+}
+add_action( 'init', 'cb_peoplesafe2027_register_block_styles' );
+
+/**
+ * Register the theme's block patterns: every file in patterns/ is one pattern.
+ * A file starts with a header comment (Title, Slug, Description, Categories,
+ * Post Types, Keywords, Viewport Width) and the rest of the file is the pattern's
+ * block markup. WordPress only does this by itself for block themes, so it is
+ * done here. Patterns can be used to start a page; once inserted they are
+ * ordinary blocks.
+ *
+ * @return void
+ */
+function cb_peoplesafe2027_register_patterns() {
+	register_block_pattern_category(
+		'cb-peoplesafe2027-pages',
+		array( 'label' => __( 'Peoplesafe pages', 'cb-peoplesafe2027' ) )
+	);
+
+	$headers = array(
+		'title'         => 'Title',
+		'slug'          => 'Slug',
+		'description'   => 'Description',
+		'categories'    => 'Categories',
+		'postTypes'     => 'Post Types',
+		'keywords'      => 'Keywords',
+		'viewportWidth' => 'Viewport Width',
+	);
+
+	foreach ( glob( get_template_directory() . '/patterns/*.php' ) as $file ) {
+		$data = get_file_data( $file, $headers );
+
+		if ( '' === $data['title'] || '' === $data['slug'] ) {
+			continue;
+		}
+
+		ob_start();
+		include $file;
+		$content = ob_get_clean();
+
+		$pattern = array(
+			'title'   => $data['title'],
+			'content' => $content,
+		);
+
+		foreach ( array( 'categories', 'postTypes', 'keywords' ) as $list ) {
+			if ( '' !== $data[ $list ] ) {
+				$pattern[ $list ] = array_map( 'trim', explode( ',', $data[ $list ] ) );
+			}
+		}
+
+		if ( '' !== $data['description'] ) {
+			$pattern['description'] = $data['description'];
+		}
+
+		if ( '' !== $data['viewportWidth'] ) {
+			$pattern['viewportWidth'] = (int) $data['viewportWidth'];
+		}
+
+		register_block_pattern( $data['slug'], $pattern );
+	}
+}
+add_action( 'init', 'cb_peoplesafe2027_register_patterns' );

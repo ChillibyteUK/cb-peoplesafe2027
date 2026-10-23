@@ -1,0 +1,29 @@
+/* Breadcrumb trail, printed by cb_peoplesafe2027_render_breadcrumbs(). */
+
+.cb-breadcrumbs {
+	font-size: var(--fs-small);
+}
+
+.cb-breadcrumbs__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-1);
+	margin: 0 0 var(--space-3);
+	padding: 0;
+	list-style: none;
+}
+
+.cb-breadcrumbs__item + .cb-breadcrumbs__item::before {
+	content: "\00BB";
+	margin-right: var(--space-1);
+	color: var(--col-body-muted);
+}
+
+.cb-breadcrumbs a {
+	color: var(--col-body);
+	font-weight: var(--fw-bold);
+}
+
+.cb-breadcrumbs [aria-current="page"] {
+	color: var(--col-body-muted);
+}

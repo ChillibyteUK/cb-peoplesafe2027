@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/side-tabs",
+	"title": "Side tabs",
+	"category": "cb-peoplesafe2027",
+	"description": "A large image beside a stack of tabs. One tab is open at a time, and the image changes with it. On phones only the tabs show.",
+	"icon": "columns",
+	"attributes": {
+		"title": { "type": "string", "default": "" },
+		"intro": { "type": "string", "default": "" },
+		"tabs": {
+			"type": "array",
+			"default": [
+				{ "title": "", "content": "", "list": "", "linkText": "", "link": "", "linkTarget": false, "image": 0, "imageUrl": "" },
+				{ "title": "", "content": "", "list": "", "linkText": "", "link": "", "linkTarget": false, "image": 0, "imageUrl": "" },
+				{ "title": "", "content": "", "list": "", "linkText": "", "link": "", "linkTarget": false, "image": 0, "imageUrl": "" }
+			]
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

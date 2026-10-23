@@ -1,0 +1,75 @@
+/*
+ * Hero. Breadcrumbs above a two-column row: title, intro and buttons on the
+ * left, the image on the right (about a third of the width). Below md the image
+ * comes first, then the text. With no image the text is centred on its own.
+ */
+
+.hero {
+	padding-block: var(--space-6);
+}
+
+.hero__grid {
+	display: grid;
+	gap: var(--space-4);
+	align-items: center;
+}
+
+.hero__image {
+	display: block;
+	width: min(100%, 24rem);
+	height: auto;
+	margin-inline: auto;
+}
+
+.hero__label {
+	margin-bottom: var(--space-2);
+	color: var(--col-blue-400);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-bold);
+}
+
+/* Under a label the title is an H2 that keeps the large H1 size. */
+.hero__label + .hero__title {
+	font-size: var(--fs-h1);
+}
+
+.hero__title {
+	text-wrap: balance;
+}
+
+.hero__intro {
+	margin-bottom: var(--space-4);
+	font-size: var(--fs-lead);
+	line-height: 1.3;
+	text-wrap: pretty;
+}
+
+.hero__intro > :last-child {
+	margin-bottom: 0;
+}
+
+/* No image: the title, intro and buttons are centred, with the text kept to a readable width. */
+.hero--no-image .hero__grid {
+	grid-template-columns: 1fr;
+}
+
+.hero--no-image .hero__content {
+	max-width: 52rem;
+	margin-inline: auto;
+	text-align: center;
+}
+
+.hero--no-image .button-group {
+	justify-content: center;
+}
+
+@media (min-width: 768px) {
+	.hero__grid {
+		grid-template-columns: 2fr 1fr;
+	}
+
+	/* The image is first in the markup (so it leads on a phone) but sits on the right. */
+	.hero__media {
+		order: 2;
+	}
+}

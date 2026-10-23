@@ -1,0 +1,24 @@
+/*
+ * FAQ. The accordion itself is src/css/accordion.css (native <details>); this
+ * adds the block's spacing, the title and the question headings, which sit
+ * inside the summaries as h3s.
+ */
+
+.faq {
+	padding-block: var(--block-padding);
+}
+
+.faq__title {
+	margin-bottom: var(--space-4);
+}
+
+.faq__question {
+	margin: 0;
+	font-size: var(--fs-h4);
+	font-weight: var(--fw-bold);
+	text-wrap: balance;
+}
+
+.faq .accordion-body > :last-child {
+	margin-bottom: 0;
+}

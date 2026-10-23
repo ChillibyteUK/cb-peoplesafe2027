@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/top-tabs",
+	"title": "Top tabs",
+	"category": "cb-peoplesafe2027",
+	"description": "Two to five tabs along the top, each with an icon. The open tab shows its image, pre-title, title, text and button below. On phones the tabs stack and open in place.",
+	"icon": "index-card",
+	"attributes": {
+		"tabs": {
+			"type": "array",
+			"default": [
+				{ "title": "", "icon": 0, "iconUrl": "", "preTitle": "", "heading": "", "content": "", "linkText": "", "link": "", "linkTarget": false, "image": 0, "imageUrl": "" },
+				{ "title": "", "icon": 0, "iconUrl": "", "preTitle": "", "heading": "", "content": "", "linkText": "", "link": "", "linkTarget": false, "image": 0, "imageUrl": "" }
+			]
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"color": {
+			"background": true,
+			"text": false,
+			"link": false,
+			"gradients": false
+		}
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

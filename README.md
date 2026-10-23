@@ -77,6 +77,149 @@ URL fields use `blocks/_shared/SiteUrlInput.js`, a wrapper around core's
 suggestion is chosen, and never opens it for a value changed from outside
 (undo, a row move). Use it for any new URL field, not `URLInput` directly.
 
+### Hero and breadcrumbs
+
+`blocks/hero` is the page hero: breadcrumbs, title, intro and buttons on the
+left, the image on the right (below md the image comes first). The title and the
+image default to the page's own title and featured image, so most pages only
+need an intro and buttons. Breadcrumbs are a theme template part
+(`cb_peoplesafe2027_render_breadcrumbs()`, styled in `src/css/breadcrumbs.css`),
+not a block, and start at the region's home.
+
+The optional `label` is small blue text above the title, for product pages (it
+replaces the legacy Product header block). When set, the label is the page's H1
+and the title is rendered as an H2 at the H1 size, as on the live product pages;
+with no label the title stays the H1 and nothing changes.
+
+### Text and media
+
+`blocks/text-and-media` is text beside an image or a video (or text only). Fields:
+pre-title, title, content (nested paragraph, list and heading blocks), buttons, media type, media position (left or right),
+width (half and half, or wide text and narrow media), text under the video and a
+video transcript (a native `<details>`). A video is one pasted YouTube or Vimeo
+link, shown as a poster behind a play button: `inc/video.php` works out the
+provider, embed URL and poster (Vimeo's comes from its oEmbed endpoint, cached a
+week, or upload a poster), and `src/js/video-facade.js` loads the player only
+when it is clicked. By default ("Play the video": pop-out) it opens in a pop-out player, one shared native `<dialog>` that also stops Lenis, closes on Esc, the close button or a backdrop click, returns focus to the poster and removes the player so the video stops. Below md, or with "In place", it plays where the poster is. The embeds are trimmed: YouTube gets no annotations and the white progress bar (its title bar, related videos and branding cannot be switched off from the URL), Vimeo gets no title, byline, portrait, badge, Vimeo logo or picture-in-picture and the brand yellow controls (the logo and colour need a paid Vimeo plan on the video's owner). Below md the media comes first. It replaces the legacy
+text-image, text-image-2024, text-video and text-video-2024 blocks.
+
+The Ticks list style comes in two colours: Ticks (teal) and Ticks, orange (`is-style-check-orange`, which only changes `--tick-colour`); the tick list in Text and media and the Feature list have a Tick colour setting for the same choice.
+
+An image is framed by default (rounded corners, shadow, white background); the **Frame the image** switch turns that off for transparent images (`framed`, class `text-and-media__image--plain`).
+
+Text and media can also show a **tick list** in the media slot (Media: Tick list; short rich-text lines, rendered as a Ticks list), and supports a **background colour** through the block's native Color panel (the `surface` palette colour for the light grey band, with no field of its own), which together make the "Why choose Peoplesafe" bands on the Councils and Retail pages. The title stays in the text column.
+
+### CTA banner
+
+`blocks/cta-banner` is a full-width gradient band: colour (orange, pink, blue or
+plain), title, text, buttons and an optional image that shows on the left from lg
+up. The buttons are the shared CTA button group, using the white variant on the
+gradients with the text colour taken from the colour chosen. It replaces the
+legacy gradient-cta block (its "green" colour becomes blue). `page.php` adds no
+container of its own, so the banner runs edge to edge; every other block draws
+its own `.container`.
+
+### Child page index
+
+`blocks/child-page-index` lists the published pages directly under the current
+page, in menu order then title. It is used on the Legal hub (`/uk/legal/`) and
+needs no editing when a child is added, moved or renamed.
+
+### Sliders and the Quote block
+
+Every slider uses one shared wrapper (`src/js/slider.js`, built to `js/slider.min.js`) around Embla, which is vendored into `js/vendor/` (DEC-029). A block prints `<div class="slider" data-slider data-slider-label="...">` with a `.slider__viewport`, `.slider__track` and `.slider__slide` children, and calls `cb_peoplesafe2027_enqueue_slider()` from its `render.php`, so the code loads only on pages that have a slider. The wrapper adds the arrows, the dots, the carousel and slide ARIA, keyboard arrows, and `inert` on slides out of view. Slides per view and the gap are CSS (`--slides-per-view`, `--slider-gap` on the `.slider`, set per breakpoint). There is no autoplay, and movement is off for visitors who prefer reduced motion.
+
+`blocks/quote` is one or more quotes (quote, attribution, optional logo, optional photo). One quote is a static panel; two or more become a slider. The panel's gradient circle cycles blue, orange, pink by position. It replaces the legacy big-quote, big-quote-slider, big-quote-slider-2024 and case-study-quotes-2024 blocks.
+
+### Related content
+
+`blocks/related-content` shows cards for products, case studies, resources or posts. Show either items the editor picks one by one (type, then item) or the latest of one type (1 to 24, case studies can be limited to a sector). The title defaults from the type ("Related products") and can be set or hidden. Cards (image, title, a trimmed excerpt; a product uses its product header intro when it has one) sit in the shared slider, so they are plain cards when they all fit and arrows and dots when they do not: one on a phone, two from md, three from lg, four from lg when every card is a product. The whole card is the link. It replaces the legacy related-products, related-case-studies, related-resources, latest-posts, guides and latest-posts-author blocks; the case-user-combo block is handled separately.
+
+### FAQ
+
+`blocks/faq` is a title (an h2, optional) and questions with rich answers (bold, italic, links and paragraphs). It renders an accordion of native `<details>` elements (`src/css/accordion.css`, no JavaScript), closed to begin with, one open at a time within a block, with each question as an h3 inside its summary. Any number of FAQ blocks can sit on a page: each one queues its questions with `cb_peoplesafe2027_queue_faq_schema()` (`inc/faq.php`), and a single `FAQPage` JSON-LD script is printed in the footer holding all of them, with a repeated question listed once. Answers keep only the tags Google accepts. It replaces the legacy faq-block (the old `queue_faq_schema()` collector in `inc/utilities.php` is gone).
+
+### Logo slider
+
+`blocks/logo-slider` is a centred title (default "Some of our clients") over a row of client logos in the shared slider: two across on a phone, three from md, four from lg, five from xl. When they all fit it is a still row with no controls; when they do not it loops. It drifts along by itself every 3 seconds by default (a per-block "Rotate automatically" setting), with no arrows, dots or pause button (`data-slider-controls="none"` on the shared slider); autoplay pauses while the pointer or focus is on it, off screen or in a hidden tab, and there is none for reduced motion. Each logo sits in a square white card with a 2px soft border and rounded corners, filling about 70% of it, as on the live site; it works best with square logo images. The logos are chosen as a gallery (several at once in the media library, shown as thumbnails with move and remove buttons). An optional "View our case studies" button goes to all case studies, or to one sector with `?sector=slug`, which `cb_peoplesafe2027_routing_archives()` applies to the case study archive. Alt text comes from the media library. It replaces the legacy logo-slider, clients-slider and featured-in blocks.
+
+### Side tabs
+
+`blocks/side-tabs` is a title and intro (both optional) over 2 to 6 tabs (title, text, an optional bulleted list, an optional button, an image). From md up the tabs are stacked beside a large panel of images; below md only the tabs show. The tabs are native `<details>` elements sharing a `name`, so one is open at a time (the first to begin with) and they open and close with the same height animation as the FAQ. `src/js/side-tabs.js` shows the image of the open tab and stops the open tab being closed by clicking it. It is the legacy side-tab-group block; the top tab group is a separate block (Top tabs, not yet built).
+
+### Top tabs
+
+`blocks/top-tabs` is two to five tabs along the top (each a round icon over a title), with the open tab's panel below: image on the left, then a pre-title, an H2, text and an outline button. Each tab has `title`, `icon`, `preTitle`, `heading`, `content`, `linkText`/`link`/`linkTarget` and `image`. The pills are buttons with `aria-expanded`/`aria-controls`; `src/js/top-tabs.js` shows the open panel and hides the rest (the first panel shows without JavaScript). From lg up the pills share one row (`--tabs` columns) and the panel spans it; below lg they stack with each panel under its pill and a chevron. The panel fades in over `--transition-slow` (not for reduced motion). It replaces the legacy top tab group (the Side tabs block replaced the side group).
+
+### Caption slider
+
+`blocks/caption-slider` is a slider of white cards (an icon in a pale orange circle over a caption, the whole card a link) in the shared slider: two across on a phone, up to five on a wide screen, looping with dots and arrows, and a still row when everything fits. Attributes: `title` (optional) and `cards` (`image`, `caption`, `link`, `linkTarget`). It replaces the legacy caption slider ("Industries using MySOS").
+
+### Feature list
+
+`blocks/feature-list` is an optional pre-title and a title over a checklist of terms, each with a short definition (links allowed), as ticks in one column, or two from lg. It supports a background colour through the native Color panel. It replaces the legacy feature-list block and the hand-built native "benefits" lists (the NHS page).
+
+### Stats counter
+
+`blocks/stats-counter` is a title (default "Protection you can count on") over 2 to 4 stats (what goes before the number, the number, what goes after it, a label, a description) and an optional image (the standard cut-out when empty, or hidden). Each number is printed at its final value; `src/js/stats-counter.js` counts it up from 0 over 2 seconds the first time it is 60% in view, and stops on the exact value (decimals supported). It does nothing for reduced motion, and a visually hidden copy of the final value is what screen readers read. The numbers are `--col-orange-400`, as on the live site. It replaces the legacy stat-spinner block; the empty spinner-2024 leftover is dropped.
+
+### Sector cards and the Sector group
+
+`blocks/sector-cards` lists every page directly under the page it sits on (the Sectors page), in page order, as cards: each card is 16:9 (the image three parts, the title one, as on the live site), with the page's featured image cropped to fill its part (about 2.4:1) and a curved bottom edge (the live site's SVG mask), then its title. The Public sector / Private sector buttons come from `src/js/sector-filter.js` and are hidden until it runs (without it every card shows). Whether a sector is public, private or both is the page's `cb_sector_group` meta (`inc/sectors.php`), edited in a "Sector group" panel in the page sidebar that appears only on pages directly under the Sectors page (`blocks/_editor-sector-group`, loaded like the Lede format). The hero cut-out lives in the Hero block's own image field, so the featured image is free to be the card photo. It replaces the legacy sector-nav block, whose public/private list was hard-coded in the template.
+
+### Image columns
+
+`blocks/image-columns` is two to four images side by side, each with centred text below it (`items`: image and text; the column count follows the number of items). Images show at their natural size, never stretched, so they are uploaded at the size wanted; alt text comes from the media library. The text is a shared RichField limited to bold, italic, links and text colour (`mark` is allowed through `wp_kses` for the colour). It has an optional background colour (`supports.color.background`) and no title or intro of its own: put an ordinary heading and paragraph above it. Used for the three-image section on Retail.
+
+### Entrance animations
+
+Put `data-animate="fade-up"`, `"fade-left"` or `"fade-right"` on any element and it
+fades in once, the first time it scrolls into view (`src/js/scroll-animate.js`,
+`src/css/animate.css`). Nothing is hidden without JavaScript or with reduced
+motion, and below md the sideways ones rise instead. Text and media uses it:
+the text and the media slide in from their own sides.
+
+### Smooth scrolling and GSAP
+
+Lenis (smooth scrolling) is on every page; GSAP and ScrollTrigger load only on
+pages whose block calls `cb_peoplesafe2027_enqueue_motion()`, and then expose
+`window.cbMotion` (`{ gsap, ScrollTrigger, mm }`, `src/js/motion.js`). Use
+`mm.add('(prefers-reduced-motion: no-preference)', ...)` for every GSAP
+animation. Prefer CSS where it does the job. All three libraries are served from
+`js/vendor/`, copied from `node_modules` by `npm run vendor` (which `npm run
+dist` runs first); versions are in `package.json`. Nothing loads from a CDN.
+
+Things Lenis changes, so you know where to look:
+
+- **An element with its own scrollbar** (a long menu, a dialog body) needs
+  `data-lenis-prevent`, or the page scrolls instead. The mobile menu has it.
+- **Anything that locks the page** must call `window.cbLenis.stop()` and
+  `.start()`. `dialog.js` does. A consent banner or other overlay that locks
+  scrolling will need the same.
+- **In-page links and the skip link** are handled in `smooth-scroll.js`, so the
+  page glides and keyboard focus still moves to the target. Don't set
+  `scroll-behavior: smooth` in CSS: it fights Lenis.
+- **Reduced motion** turns Lenis off; touch devices keep native scrolling.
+- Sticky and fixed elements, `IntersectionObserver` and Ctrl+F are unaffected.
+- Iframes ignore the wheel while the page is smooth scrolling (Lenis's own rule).
+
+### Third-party requests
+
+The theme loads no libraries, fonts or icons from a CDN. What still reaches
+another site: the Trustpilot script (its own widget; it cannot be self-hosted),
+the YouTube or Vimeo player once someone presses play, and Google Analytics and
+Tag Manager if their IDs are set in Site-Wide Settings. Video posters are saved
+on this site (`uploads/cb-video-posters`) so a page with a video asks the
+provider for nothing until play.
+
+### Temporary page list
+
+`blocks/temp-page-list` lists the region's pages (nested) and the other content
+types on the front end, for logged-in editors only, until the real navigation
+exists. It is on the four region homes. Delete the block from those pages and
+the `blocks/temp-page-list` folder (and `src/blocks/temp-page-list.css`) before
+launch.
+
 ### Style guide
 
 `style-guide.php` is a page template ("Style Guide") that shows every token in
@@ -189,6 +332,22 @@ PostCSS (`postcss-import` + `postcss-nesting` + `autoprefixer`), then
 minification. This is entirely separate from block JS — `blocks:build` is
 its own step, run by `@wordpress/scripts` against `webpack.config.js`, which
 compiles each `blocks/{slug}/src/index.js` to `blocks/{slug}/build/index.js`.
+
+## Links, block spacing and image alt text
+
+Content links use `--col-link` (the brand yellow darkened, `--col-yellow-600`: 5.0:1 on white and 4.6:1 on the page background, AA needs 4.5:1; 4.2:1 against black body text, so they stand out without an underline), a step heavier than the light body text, and underline on hover. The bright yellow stays for buttons and fills. Every content block pads itself top and bottom with `--block-padding` (90px), so the gaps between blocks are even. Image alt text comes only from the media library (there is no alt field on the blocks); an image with no alt there renders `alt=""`, so decorative images stay silent and meaningful ones need alt text added in the media library.
+
+## Block patterns
+
+Every file in `patterns/` is a block pattern, registered by `cb_peoplesafe2027_register_patterns()` in `inc/blocks.php` (WordPress only does this by itself for block themes). A file starts with a header comment (Title, Slug, Description, Categories, Post Types, Keywords, Viewport Width) followed by the pattern's block markup. Patterns appear under "Peoplesafe pages" in the inserter and are starting points: once inserted they are ordinary blocks that can be edited freely. `patterns/sector-page.php` is a sector page: Hero, two Text and media blocks, a Quote, Related content (the latest case studies) and a CTA banner. To add one, copy that file, change the header and the markup.
+
+## Editor fields
+
+Blocks are edited through form fields. Rich text in a field (`blocks/_shared/RichField.js`) is one plain rich-text field with its format buttons in a floating toolbar, never WordPress's multi-line (`multiline`) mode, which re-parses the field on every keystroke and sends the cursor back to the start. Enter starts a new line, stored as `<br>`, and the page turns each line into a paragraph (`cb_peoplesafe2027_rich_paragraphs()`). A list that is only plain text is a "one item per line" box (`cb_peoplesafe2027_lines_to_items()`). Images use the shared `ImagePicker`, and a gallery of images (the Logo slider) uses the media library's multiple selection.
+
+## Native first, custom blocks second
+
+Use native WordPress blocks (paragraph, heading, list, image, buttons) wherever they do the job. Plain text pages, such as the legal pages, are a Hero plus core blocks, with no entrance animation. Build a custom block only for content that needs consistent styling and that editors would find confusing or easy to get wrong with core blocks: the hero, CTA banner, FAQ, product header and so on. Layout blocks such as Columns are the exception: prefer one of our blocks over a hand-built column layout.
 
 ## Adding a block
 

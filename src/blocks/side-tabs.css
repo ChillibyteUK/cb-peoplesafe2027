@@ -1,0 +1,156 @@
+/*
+ * Side tabs. From md up, a panel of images (the open tab's image shows) beside a
+ * stack of navy tabs; below md only the tabs. The tabs are native <details>
+ * elements that open and close with the same height animation as the FAQ.
+ */
+
+.side-tabs {
+	padding-block: var(--block-padding);
+}
+
+.side-tabs__title,
+.side-tabs__intro {
+	text-align: center;
+}
+
+.side-tabs__title {
+	margin-bottom: var(--space-3);
+}
+
+.side-tabs__intro {
+	margin-bottom: var(--space-5);
+}
+
+.side-tabs__grid {
+	display: grid;
+	gap: var(--space-4);
+}
+
+.side-tabs__images {
+	display: none;
+}
+
+.side-tabs__tabs {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-3);
+}
+
+.side-tabs__tab {
+	interpolate-size: allow-keywords;
+	padding: var(--space-3);
+	border: var(--border-width) solid var(--col-navy-400);
+	border-radius: var(--radius-md);
+	background-color: var(--col-navy-400);
+	box-shadow: var(--shadow-out);
+	color: var(--col-white);
+	transition:
+		background-color var(--transition),
+		border-color var(--transition),
+		color var(--transition);
+}
+
+.side-tabs__tab:not([open]):hover {
+	border-color: color-mix(in srgb, var(--col-navy-400), white 30%);
+	background-color: color-mix(in srgb, var(--col-navy-400), white 70%);
+	color: var(--col-navy-400);
+}
+
+.side-tabs__tab::details-content {
+	block-size: 0;
+	overflow: clip;
+	transition:
+		block-size 150ms ease-out,
+		content-visibility 150ms allow-discrete;
+}
+
+.side-tabs__tab[open]::details-content {
+	block-size: auto;
+}
+
+.side-tabs__summary {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-3);
+	list-style: none;
+	cursor: pointer;
+}
+
+.side-tabs__summary::-webkit-details-marker {
+	display: none;
+}
+
+.side-tabs__tab-title {
+	margin: 0;
+	color: inherit;
+	font-size: var(--fs-h4);
+}
+
+.side-tabs__chevron {
+	flex: none;
+	width: 1.25rem;
+	height: 1.25rem;
+	color: var(--col-yellow-400);
+	transition: transform 150ms ease-out;
+}
+
+.side-tabs__tab[open] .side-tabs__chevron {
+	transform: rotate(180deg);
+}
+
+.side-tabs__content {
+	padding-top: var(--space-3);
+}
+
+.side-tabs__content > :last-child {
+	margin-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.side-tabs__tab::details-content,
+	.side-tabs__chevron {
+		transition: none;
+	}
+}
+
+@media (min-width: 768px) {
+	.side-tabs__grid {
+		grid-template-columns: 1.5fr 1fr;
+		gap: var(--space-5);
+	}
+
+	.side-tabs__images {
+		position: relative;
+		display: block;
+		min-height: 20rem;
+	}
+
+	.side-tabs__image {
+		position: absolute;
+		inset: 0;
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		background-color: var(--col-surface);
+		box-shadow: var(--shadow-out);
+		opacity: 0;
+		transition: opacity 300ms ease-in-out;
+	}
+
+	.side-tabs__image.is-active {
+		opacity: 1;
+	}
+
+	.side-tabs__image img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+}
+
+@media (min-width: 768px) and (prefers-reduced-motion: reduce) {
+	.side-tabs__image {
+		transition: none;
+	}
+}

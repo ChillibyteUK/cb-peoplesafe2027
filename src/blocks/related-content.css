@@ -1,0 +1,89 @@
+/*
+ * Related content. A centred title over a row of cards in the shared slider
+ * (src/css/slider.css): one card on a phone, two from md, three from lg, or
+ * four from lg when every card is a product. The cards stretch to one height.
+ */
+
+.related-content {
+	padding-block: var(--block-padding);
+}
+
+.related-content__title {
+	margin-bottom: var(--space-4);
+	text-align: center;
+}
+
+.related-content .slider {
+	--slider-gap: var(--space-3);
+}
+
+.related-content .slider__slide {
+	display: flex;
+	padding-bottom: var(--space-3);
+}
+
+.related-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	overflow: clip;
+	border-radius: var(--radius-lg);
+	background: var(--col-white);
+	box-shadow: var(--shadow-in);
+	transition: box-shadow var(--transition);
+}
+
+.related-card:hover,
+.related-card:focus-within {
+	box-shadow: var(--shadow-card-hover);
+}
+
+.related-card__image {
+	display: block;
+	width: 100%;
+	aspect-ratio: 16 / 10;
+	object-fit: cover;
+}
+
+.related-card__inner {
+	padding: var(--space-3);
+}
+
+.related-card__title {
+	margin-bottom: var(--space-2);
+	font-size: var(--fs-h4);
+}
+
+/* The whole card is the link. */
+.related-card__link {
+	color: inherit;
+	text-decoration: none;
+}
+
+.related-card__link::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+}
+
+.related-card__excerpt {
+	margin: 0;
+	font-size: var(--fs-small);
+}
+
+@media (min-width: 768px) {
+	.related-content .slider {
+		--slides-per-view: 2;
+	}
+}
+
+@media (min-width: 992px) {
+	.related-content .slider {
+		--slides-per-view: 3;
+	}
+
+	.related-content--four-up .slider {
+		--slides-per-view: 4;
+	}
+}

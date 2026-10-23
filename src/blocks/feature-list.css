@@ -1,0 +1,51 @@
+/*
+ * Feature list. A title over a checklist of terms with definitions: one column,
+ * two from lg. The ticks come from the Ticks list style (src/css/typography.css).
+ */
+
+.feature-list {
+	padding-block: var(--block-padding);
+}
+
+.feature-list__pretitle {
+	margin-bottom: var(--space-2);
+	color: var(--col-blue-400);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-bold);
+}
+
+.feature-list__title {
+	margin-bottom: var(--space-4);
+	text-wrap: balance;
+}
+
+.feature-list__items {
+	display: grid;
+	gap: var(--space-3) var(--space-5);
+	margin: 0;
+}
+
+.feature-list__items > li {
+	margin-bottom: 0;
+}
+
+.feature-list__term,
+.feature-list__definition {
+	display: block;
+}
+
+.feature-list__term {
+	font-weight: var(--fw-normal);
+	color: var(--col-body);
+}
+
+.feature-list__definition {
+	color: var(--col-body-muted);
+	font-size: var(--fs-small);
+}
+
+@media (min-width: 992px) {
+	.feature-list__items {
+		grid-template-columns: 1fr 1fr;
+	}
+}

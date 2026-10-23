@@ -74,7 +74,7 @@ add_filter( 'request', 'cb_peoplesafe2027_root_request', 30 );
 /**
  * The hub's permalink is the site root.
  *
- * @param string $link    Permalink.
+ * @param string      $link    Permalink.
  * @param int|WP_Post $post_id Page ID, or the post for a post type link.
  * @return string
  */

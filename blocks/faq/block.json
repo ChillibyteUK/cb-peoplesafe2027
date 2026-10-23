@@ -1,0 +1,19 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/faq",
+	"title": "FAQ",
+	"category": "cb-peoplesafe2027",
+	"description": "Questions and answers in an accordion. Every FAQ block on a page feeds one FAQPage structured data script.",
+	"icon": "editor-help",
+	"attributes": {
+		"title": { "type": "string", "default": "" },
+		"faqs": { "type": "array", "default": [] }
+	},
+	"supports": {
+		"anchor": true,
+		"className": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

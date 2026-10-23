@@ -1,0 +1,156 @@
+/*
+ * Top tabs. From lg up, the pills sit in one row (one column each) with the open
+ * tab's panel below, spanning the row. Below lg the pills stack, each panel
+ * directly under its pill, and a chevron shows.
+ */
+
+.top-tabs {
+	padding-block: var(--block-padding);
+}
+
+.top-tabs__grid {
+	display: grid;
+	gap: var(--space-3);
+}
+
+.top-tabs__pill {
+	display: flex;
+	align-items: center;
+	gap: var(--space-3);
+	width: 100%;
+	padding: var(--space-2);
+	border: 4px solid var(--col-white);
+	border-radius: var(--radius-lg);
+	background-color: var(--col-white);
+	box-shadow: var(--shadow-out);
+	color: inherit;
+	font: inherit;
+	text-align: start;
+	cursor: pointer;
+	transition:
+		border-color var(--transition),
+		background-color var(--transition),
+		box-shadow var(--transition);
+}
+
+.top-tabs__pill:hover,
+.top-tabs__pill.is-active {
+	border-color: var(--col-orange-400);
+	background-color: color-mix(in srgb, var(--col-orange-400), var(--col-white) 80%);
+	box-shadow: var(--shadow-in);
+}
+
+.top-tabs__icon {
+	display: grid;
+	flex: none;
+	place-content: center;
+	width: 3.6rem;
+	aspect-ratio: 1;
+	border-radius: 100vw;
+	background-color: color-mix(in srgb, var(--col-orange-400), var(--col-white) 90%);
+}
+
+.top-tabs__icon img {
+	display: block;
+	width: 2rem;
+	height: 2rem;
+	object-fit: contain;
+}
+
+.top-tabs__pill-title {
+	flex: 1;
+	font-size: var(--fs-h5);
+	font-weight: var(--fw-bold);
+}
+
+.top-tabs__chevron {
+	flex: none;
+	width: 1.25rem;
+	height: 1.25rem;
+	margin-inline-end: var(--space-2);
+	transition: transform var(--transition);
+}
+
+.top-tabs__pill.is-active .top-tabs__chevron {
+	transform: rotate(180deg);
+}
+
+.top-tabs__panel[hidden] {
+	display: none;
+}
+
+.top-tabs__panel {
+	display: grid;
+	gap: var(--space-4);
+	align-items: center;
+	animation: top-tabs-fade var(--transition-slow) ease-in-out;
+}
+
+.top-tabs__image img {
+	display: block;
+	width: 100%;
+	max-width: 24rem;
+	height: auto;
+	margin-inline: auto;
+}
+
+.top-tabs__pretitle {
+	margin-bottom: var(--space-2);
+	color: var(--col-orange-400);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-bold);
+}
+
+.top-tabs__content > :last-child {
+	margin-bottom: 0;
+}
+
+@keyframes top-tabs-fade {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.top-tabs__panel {
+		animation: none;
+	}
+
+	.top-tabs__chevron,
+	.top-tabs__pill {
+		transition: none;
+	}
+}
+
+@media (min-width: 992px) {
+	.top-tabs__grid {
+		grid-template-columns: repeat(var(--tabs), 1fr);
+		row-gap: var(--space-5);
+	}
+
+	.top-tabs__pill {
+		flex-direction: column;
+		gap: var(--space-2);
+		text-align: center;
+	}
+
+	.top-tabs__chevron {
+		display: none;
+	}
+
+	.top-tabs__pill {
+		grid-column: var(--i);
+		grid-row: 1;
+	}
+
+	.top-tabs__panel {
+		grid-column: 1 / -1;
+		grid-row: 2;
+		grid-template-columns: 1fr 2fr;
+		gap: var(--space-5);
+	}
+}

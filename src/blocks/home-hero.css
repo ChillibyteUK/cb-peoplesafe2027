@@ -7,6 +7,7 @@
  */
 
 .home-hero {
+	padding-block: var(--space-5);
 	min-height: 33rem;
 	display: flex;
 	align-items: center;

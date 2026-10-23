@@ -22,7 +22,9 @@
   --col-surface: #fafafa;
   --col-border: #cccccc;
   --col-blue-200: #d5e1e5;
+  --col-blue-300: #c6d9df; /* the soft border of cards */
   --col-yellow-400: #ffb422;
+  --col-yellow-600: #996500; /* the brand yellow darkened for text links */
   --col-orange-400: #df4305;
   --col-pink-400: #de007d;
   --col-blue-400: #0484a0;
@@ -40,6 +42,8 @@
   --col-body: var(--col-black);
   --col-body-muted: var(--col-greyish);
   --col-body-bg: var(--col-white);
+  --col-link: var(--col-yellow-600); /* 5.0:1 on white, 4.6:1 on the page background (AA needs 4.5:1), and 4.2:1 against black body text so links stand out without an underline (1.4.1 needs 3:1) */
+  --col-link-hover: var(--col-black);
 
   /* Overlays */
   --overlay: rgb(0 0 0 / 0.5);
@@ -62,6 +66,7 @@
   --fs-h4: clamp(1.1rem, 10vw, 1.2rem); /* 19.8 to 21.6px */
   --fs-h5: 1rem;
   --fs-h6: 1rem;
+  --fs-lead: 1.2rem; /* 21.6px: hero intro and other lead text */
   --fs-title-sm: 1.333rem; /* 24px */
   --fs-title-md: 2.222rem; /* 40px */
   --fs-title-lg: 3.111rem; /* 56px */
@@ -91,9 +96,13 @@
   --space-6: 3rem;
   --space-7: 5rem;
 
+  /* Vertical padding of a content block (top and bottom): one rhythm for every block. */
+  --block-padding: var(--space-7);
+
   /* Radii */
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
+  --radius-card: 0.75rem; /* 13.5px: the logo cards */
   --radius-lg: 1rem;
   --radius-xl: 1.25rem;
   --radius-pill: 100vw;
@@ -212,18 +221,26 @@ p {
 }
 
 a {
-	color: var(--col-primary);
+	color: var(--col-link);
 	text-decoration: none;
 }
 
+/* Body text is light (300); plain content links are a step heavier. */
+a:not([class]) {
+	font-weight: var(--fw-normal);
+}
+
 /*
- * Underline-on-hover only for plain content links (no class) — cards,
+ * Underline on hover only for plain content links (no class); the link colour is
+ * dark enough to meet AA and to stand out from body text without one. Cards,
  * buttons, nav items, and social/icon links all carry their own class and
  * define their own hover treatment, so they're excluded here rather than
  * needing a `text-decoration: none` override per component.
  */
 a:not([class]):hover {
+	color: var(--col-link-hover);
 	text-decoration: underline;
+	text-underline-offset: 0.2em;
 }
 
 img,
@@ -244,6 +261,7 @@ figcaption {
 
 ul,
 ol {
+	margin: 0 0 var(--space-3);
 	padding-left: var(--space-4);
 }
 
@@ -288,6 +306,42 @@ ol {
 	font-display: swap;
 }
 
+/*
+ * List block, Ticks style: a checkmark in place of each bullet, teal by default and orange in the orange style. The tick is
+ * an SVG mask, so it takes its colour from the background and needs no icon font.
+ */
+.wp-block-list:is(.is-style-check, .is-style-check-orange) {
+	padding-left: 0;
+	list-style: none;
+}
+
+.wp-block-list:is(.is-style-check, .is-style-check-orange) > li {
+	position: relative;
+	margin-bottom: var(--space-2);
+	padding-left: var(--space-5);
+}
+
+.wp-block-list:is(.is-style-check, .is-style-check-orange) > li::before {
+	content: "";
+	position: absolute;
+	top: 0.3em;
+	left: 0;
+	width: 1em;
+	height: 1em;
+	background-color: var(--tick-colour, var(--col-teal-400));
+	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* The orange ticks (the brand's yellow-orange, --col-yellow-400): the same list with the tick colour changed. */
+.wp-block-list.is-style-check-orange {
+	--tick-colour: var(--col-yellow-400);
+}
+
+
+/* Coloured text from the editor's text colour tool is a <mark>: no highlighter background, just the colour. */
+mark.has-inline-color {
+	background-color: transparent;
+}
 /*
  * Structural grid container rules. The actual `.col-*` / `.col-md-*` span
  * classes are generated (see src/build/generate-utilities.js) since they're
@@ -645,6 +699,123 @@ ol {
 	}
 }
 
+/* Breadcrumb trail, printed by cb_peoplesafe2027_render_breadcrumbs(). */
+
+.cb-breadcrumbs {
+	font-size: var(--fs-small);
+}
+
+.cb-breadcrumbs__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-1);
+	margin: 0 0 var(--space-3);
+	padding: 0;
+	list-style: none;
+}
+
+.cb-breadcrumbs__item + .cb-breadcrumbs__item::before {
+	content: "\00BB";
+	margin-right: var(--space-1);
+	color: var(--col-body-muted);
+}
+
+.cb-breadcrumbs a {
+	color: var(--col-body);
+	font-weight: var(--fw-bold);
+}
+
+.cb-breadcrumbs [aria-current="page"] {
+	color: var(--col-body-muted);
+}
+
+/*
+ * Entrance animations, driven by src/js/scroll-animate.js, which adds
+ * .is-visible the first time an element scrolls into view.
+ *
+ *   data-animate="fade-up"     rises into place
+ *   data-animate="fade-right"  slides in from the left
+ *   data-animate="fade-left"   slides in from the right
+ *
+ * Elements are only hidden when scripting is on (so nothing is lost without
+ * JavaScript) and the visitor has not asked for reduced motion. Below md the
+ * sideways ones rise instead, so nothing slides past the screen edge.
+ */
+
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+	[data-animate] {
+		opacity: 0;
+		transition:
+			opacity 600ms ease-out,
+			translate 600ms ease-out;
+	}
+
+	[data-animate="fade-up"],
+	[data-animate="fade-left"],
+	[data-animate="fade-right"] {
+		translate: 0 var(--space-4);
+	}
+
+	[data-animate].is-visible {
+		opacity: 1;
+		translate: 0 0;
+	}
+
+	/* Already on screen when the page loads: shown at once, with no entrance. */
+	[data-animate].is-instant {
+		transition: none;
+	}
+}
+
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+	[data-animate="fade-right"] {
+		translate: calc(-1 * var(--space-5)) 0;
+	}
+
+	[data-animate="fade-left"] {
+		translate: var(--space-5) 0;
+	}
+
+	[data-animate].is-visible {
+		translate: 0 0;
+	}
+}
+
+/*
+ * Lenis smooth scrolling (src/js/smooth-scroll.js). These are the rules Lenis
+ * ships (node_modules/lenis/dist/lenis.css), kept here so there is no extra
+ * stylesheet request. If Lenis is upgraded, compare them with that file.
+ * Do not set scroll-behavior: smooth anywhere: it fights Lenis.
+ */
+
+html.lenis,
+html.lenis body {
+	height: auto;
+}
+
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+	overflow: clip;
+}
+
+.lenis [data-lenis-prevent],
+.lenis [data-lenis-prevent-wheel],
+.lenis [data-lenis-prevent-touch],
+.lenis [data-lenis-prevent-vertical],
+.lenis [data-lenis-prevent-horizontal] {
+	overscroll-behavior: contain;
+}
+
+/* A video or widget iframe would swallow the wheel while the page is smooth scrolling. */
+.lenis.lenis-smooth iframe {
+	pointer-events: none;
+}
+
+.lenis.lenis-autoToggle {
+	transition-property: overflow;
+	transition-duration: 1ms;
+	transition-behavior: allow-discrete;
+}
+
 /* Minimal, deliberately unopinionated form base — expected to be overridden per project. */
 
 input,
@@ -844,6 +1015,150 @@ select {
 	.wp-block-button .wp-block-button__link {
 		transition: none;
 	}
+}
+
+/*
+ * The shared slider (src/js/slider.js). Embla moves .slider__track inside
+ * .slider__viewport; the number of slides in view and the gap between them are
+ * set per block with --slides-per-view and --slider-gap on the .slider element.
+ * Without JavaScript the viewport scrolls sideways with snap points.
+ */
+
+.slider {
+	--slides-per-view: 1;
+	--slider-gap: var(--space-3);
+
+	position: relative;
+}
+
+.slider__viewport {
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+}
+
+.slider--ready .slider__viewport {
+	overflow: hidden;
+	scroll-snap-type: none;
+}
+
+.slider__track {
+	display: flex;
+	margin-left: calc(var(--slider-gap) * -1);
+}
+
+.slider__slide {
+	flex: 0 0 calc(100% / var(--slides-per-view));
+	min-width: 0;
+	padding-left: var(--slider-gap);
+	scroll-snap-align: start;
+}
+
+.slider__viewport:focus-visible {
+	outline: var(--border-width) solid var(--col-blue-400);
+	outline-offset: 2px;
+}
+
+.slider__controls {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-3);
+	margin-top: var(--space-3);
+}
+
+.slider__controls[hidden] {
+	display: none;
+}
+
+.slider__dots {
+	display: flex;
+	align-items: center;
+	gap: var(--space-3);
+}
+
+.slider__dot {
+	position: relative;
+	width: 0.75rem;
+	height: 0.75rem;
+	padding: 0;
+	border: var(--border-width) solid var(--col-navy-400);
+	border-radius: 50%;
+	background: transparent;
+	cursor: pointer;
+	transition: background-color var(--transition);
+}
+
+.slider__dot[aria-current="true"] {
+	background: var(--col-navy-400);
+}
+
+.slider__arrow {
+	display: grid;
+	place-items: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	padding: 0;
+	border: var(--border-width) solid var(--col-navy-400);
+	border-radius: 50%;
+	background: transparent;
+	color: var(--col-navy-400);
+	font-size: var(--fs-h4);
+	line-height: 1;
+	cursor: pointer;
+	transition: background-color var(--transition), color var(--transition);
+}
+
+.slider__arrow:hover:not(:disabled) {
+	background: var(--col-navy-400);
+	color: var(--col-white);
+}
+
+.slider__arrow:disabled {
+	opacity: 0.4;
+	cursor: default;
+}
+
+/* The dot is small to look at, but its tap target is 28px square (WCAG 2.5.8 asks for 24px). */
+.slider__dot::after {
+	content: "";
+	position: absolute;
+	inset: -0.5rem;
+}
+
+/* Pause / start button for sliders that rotate by themselves: a pause symbol, or a play triangle when paused. */
+.slider__pause {
+	display: grid;
+	place-items: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	padding: 0;
+	border: var(--border-width) solid var(--col-navy-400);
+	border-radius: 50%;
+	background: transparent;
+	color: var(--col-navy-400);
+	cursor: pointer;
+	transition: background-color var(--transition), color var(--transition);
+}
+
+.slider__pause:hover {
+	background: var(--col-navy-400);
+	color: var(--col-white);
+}
+
+.slider__pause span {
+	display: block;
+	width: 0.7rem;
+	height: 0.8rem;
+	border-inline: 0.2rem solid currentColor;
+}
+
+.slider__pause.is-paused span {
+	width: 0;
+	height: 0;
+	margin-left: 0.15rem;
+	border-block: 0.45rem solid transparent;
+	border-inline: 0.7rem solid currentColor;
+	border-right: 0;
 }
 
 /* Generated by src/build/generate-utilities.js — do not hand-edit. */
@@ -1907,9 +2222,470 @@ select {
 
 /* generated — see src/build/generate-utilities.js, run `npm run css-generate` */
 /* @import "tables.css"; -- uncomment if this project actually needs styled tables */
-/* @import "accordion.css"; -- uncomment if this project actually needs styled accordions */
+/*
+ * Accordion — Bootstrap-style class names, zero Bootstrap (same convention
+ * as .container/.row/.btn/.navbar elsewhere in this theme). Built on native
+ * <details>/<summary>, not JS: give sibling .accordion-item elements the
+ * same `name` attribute (e.g. name="cb-faqs-{block_id}") for native
+ * single-open-at-a-time behaviour — modern evergreen browsers only (see
+ * .browserslistrc), no JS file needed. Omit `name` (or give each item a
+ * unique one) if independent multi-open items are wanted instead.
+ */
+
+.accordion {
+  display: flex;
+  flex-direction: column;
+
+  /* One speed and curve for the height and the +/x icon, so they move together. */
+  --accordion-speed: 150ms;
+  --accordion-ease: ease-out;
+}
+
+.accordion-item {
+  border-bottom: 1px solid var(--col-border);
+}
+
+.accordion-item:first-child {
+  border-top: 1px solid var(--col-border);
+}
+
+.accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-block: var(--space-3);
+  list-style: none;
+  cursor: pointer;
+  font-weight: var(--fw-700);
+}
+
+.accordion-header::-webkit-details-marker {
+  display: none;
+}
+
+.accordion-icon {
+  flex-shrink: 0;
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  transition: transform var(--accordion-speed) var(--accordion-ease);
+}
+
+.accordion-item[open] .accordion-icon {
+  transform: rotate(45deg);
+}
+
+.accordion-body {
+  padding-bottom: var(--space-3);
+  color: var(--col-black);
+}
+
+/*
+ * Open and close animation. The answer's height transitions with the native
+ * ::details-content box (interpolate-size lets it animate to and from auto, and
+ * content-visibility is kept until the close finishes). Browsers without those
+ * features simply snap open and shut, which works as before. No motion for
+ * visitors who prefer reduced motion.
+ */
+.accordion-item {
+  interpolate-size: allow-keywords;
+}
+
+.accordion-item::details-content {
+  block-size: 0;
+  overflow: clip;
+  transition:
+    block-size var(--accordion-speed) var(--accordion-ease),
+    content-visibility var(--accordion-speed) allow-discrete;
+}
+
+.accordion-item[open]::details-content {
+  block-size: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accordion-item::details-content,
+  .accordion-icon {
+    transition: none;
+  }
+}
+
 /* Generated by src/build/generate-utilities.js — do not hand-edit.
    Concatenation of src/blocks/*.css, alphabetical by filename. */
+
+/* --- src/blocks/caption-slider.css --- */
+/*
+ * Caption slider. A centred title over the shared slider (src/css/slider.css):
+ * two cards across on a phone, three from md, four from lg, five from xl. Each
+ * card is white with a soft border, an icon in a pale orange circle and a caption.
+ */
+
+.caption-slider {
+	padding-block: var(--block-padding);
+}
+
+.caption-slider__title {
+	margin-bottom: var(--space-4);
+	text-align: center;
+	text-wrap: balance;
+}
+
+.caption-slider .slider {
+	--slides-per-view: 2;
+	--slider-gap: var(--space-3);
+}
+
+.caption-slider__card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-2);
+	height: 100%;
+	padding: var(--space-3);
+	border: var(--border-width) solid var(--col-blue-300);
+	border-radius: var(--radius-card);
+	background: var(--col-white);
+	color: inherit;
+	text-align: center;
+	text-decoration: none;
+	transition:
+		border-color var(--transition),
+		box-shadow var(--transition);
+}
+
+a.caption-slider__card:hover {
+	border-color: var(--col-orange-400);
+	box-shadow: var(--shadow-in);
+	color: inherit;
+}
+
+.caption-slider__image {
+	display: grid;
+	place-items: center;
+	width: 4rem;
+	aspect-ratio: 1;
+	border-radius: 100vw;
+	background: color-mix(in srgb, var(--col-orange-400), var(--col-white) 90%);
+}
+
+.caption-slider__image img {
+	display: block;
+	width: 2.5rem;
+	height: 2.5rem;
+	object-fit: contain;
+}
+
+.caption-slider__caption {
+	font-size: var(--fs-h5);
+	font-weight: var(--fw-bold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.caption-slider__card {
+		transition: none;
+	}
+}
+
+@media (min-width: 768px) {
+	.caption-slider .slider {
+		--slides-per-view: 3;
+	}
+}
+
+@media (min-width: 992px) {
+	.caption-slider .slider {
+		--slides-per-view: 4;
+	}
+}
+
+@media (min-width: 1240px) {
+	.caption-slider .slider {
+		--slides-per-view: 5;
+	}
+}
+
+/* --- src/blocks/child-page-index.css --- */
+/* Child page index (blocks/child-page-index). */
+
+.child-page-index {
+	padding-block: var(--space-4);
+}
+
+.child-page-index__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.child-page-index__item {
+	padding-block: var(--space-2);
+	border-bottom: var(--border-width) solid var(--col-border);
+}
+
+.child-page-index__link {
+	font-weight: var(--fw-bold);
+}
+
+/* --- src/blocks/cta-banner.css --- */
+/*
+ * CTA banner. A gradient band with a mask pattern behind it. The text sits on
+ * the right from the large breakpoint up, with the optional image on the left.
+ * The white button takes its text colour from --button-accent (set per theme).
+ */
+
+.cta-banner {
+	position: relative;
+	display: flex;
+	align-items: center;
+	min-height: 20rem;
+	padding-block: var(--space-5);
+	isolation: isolate;
+	color: var(--col-white);
+}
+
+.cta-banner::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background: url("../img/banner-mask.png") center left / cover no-repeat;
+}
+
+.cta-banner--orange {
+	background: var(--gradient-orange);
+	color: var(--col-black);
+}
+
+.cta-banner--pink {
+	background: var(--gradient-pink);
+}
+
+.cta-banner--blue {
+	background: var(--gradient-blue);
+}
+
+.cta-banner--plain {
+	background: var(--col-white);
+	color: var(--col-body);
+}
+
+.cta-banner--plain::before {
+	background: url("../img/banner-logo-yellow.svg") center left / cover no-repeat;
+}
+
+.cta-banner:not(.cta-banner--plain) a:not(.button),
+.cta-banner__title {
+	color: inherit;
+}
+
+.cta-banner__grid {
+	display: grid;
+	gap: var(--space-4);
+	width: 100%;
+}
+
+.cta-banner__media {
+	display: none;
+}
+
+.cta-banner__title {
+	color: inherit;
+}
+
+.cta-banner__text {
+	margin-bottom: var(--space-4);
+}
+
+.cta-banner__text > :last-child {
+	margin-bottom: 0;
+}
+
+@media (min-width: 992px) {
+	.cta-banner::before {
+		background-size: contain;
+	}
+
+	.cta-banner__grid {
+		grid-template-columns: 5fr 7fr;
+		align-items: center;
+	}
+
+	.cta-banner--has-image .cta-banner__media {
+		display: block;
+	}
+
+	.cta-banner__image {
+		display: block;
+		width: 100%;
+		height: auto;
+		max-height: 18rem;
+		object-fit: contain;
+		object-position: left;
+	}
+
+	/* No image: the text still sits in the right-hand seven twelfths. */
+	.cta-banner__content {
+		grid-column: 2;
+	}
+}
+
+/* --- src/blocks/faq.css --- */
+/*
+ * FAQ. The accordion itself is src/css/accordion.css (native <details>); this
+ * adds the block's spacing, the title and the question headings, which sit
+ * inside the summaries as h3s.
+ */
+
+.faq {
+	padding-block: var(--block-padding);
+}
+
+.faq__title {
+	margin-bottom: var(--space-4);
+}
+
+.faq__question {
+	margin: 0;
+	font-size: var(--fs-h4);
+	font-weight: var(--fw-bold);
+	text-wrap: balance;
+}
+
+.faq .accordion-body > :last-child {
+	margin-bottom: 0;
+}
+
+/* --- src/blocks/feature-list.css --- */
+/*
+ * Feature list. A title over a checklist of terms with definitions: one column,
+ * two from lg. The ticks come from the Ticks list style (src/css/typography.css).
+ */
+
+.feature-list {
+	padding-block: var(--block-padding);
+}
+
+.feature-list__pretitle {
+	margin-bottom: var(--space-2);
+	color: var(--col-blue-400);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-bold);
+}
+
+.feature-list__title {
+	margin-bottom: var(--space-4);
+	text-wrap: balance;
+}
+
+.feature-list__items {
+	display: grid;
+	gap: var(--space-3) var(--space-5);
+	margin: 0;
+}
+
+.feature-list__items > li {
+	margin-bottom: 0;
+}
+
+.feature-list__term,
+.feature-list__definition {
+	display: block;
+}
+
+.feature-list__term {
+	font-weight: var(--fw-normal);
+	color: var(--col-body);
+}
+
+.feature-list__definition {
+	color: var(--col-body-muted);
+	font-size: var(--fs-small);
+}
+
+@media (min-width: 992px) {
+	.feature-list__items {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+/* --- src/blocks/hero.css --- */
+/*
+ * Hero. Breadcrumbs above a two-column row: title, intro and buttons on the
+ * left, the image on the right (about a third of the width). Below md the image
+ * comes first, then the text. With no image the text is centred on its own.
+ */
+
+.hero {
+	padding-block: var(--space-6);
+}
+
+.hero__grid {
+	display: grid;
+	gap: var(--space-4);
+	align-items: center;
+}
+
+.hero__image {
+	display: block;
+	width: min(100%, 24rem);
+	height: auto;
+	margin-inline: auto;
+}
+
+.hero__label {
+	margin-bottom: var(--space-2);
+	color: var(--col-blue-400);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-bold);
+}
+
+/* Under a label the title is an H2 that keeps the large H1 size. */
+.hero__label + .hero__title {
+	font-size: var(--fs-h1);
+}
+
+.hero__title {
+	text-wrap: balance;
+}
+
+.hero__intro {
+	margin-bottom: var(--space-4);
+	font-size: var(--fs-lead);
+	line-height: 1.3;
+	text-wrap: pretty;
+}
+
+.hero__intro > :last-child {
+	margin-bottom: 0;
+}
+
+/* No image: the title, intro and buttons are centred, with the text kept to a readable width. */
+.hero--no-image .hero__grid {
+	grid-template-columns: 1fr;
+}
+
+.hero--no-image .hero__content {
+	max-width: 52rem;
+	margin-inline: auto;
+	text-align: center;
+}
+
+.hero--no-image .button-group {
+	justify-content: center;
+}
+
+@media (min-width: 768px) {
+	.hero__grid {
+		grid-template-columns: 2fr 1fr;
+	}
+
+	/* The image is first in the markup (so it leads on a phone) but sits on the right. */
+	.hero__media {
+		order: 2;
+	}
+}
 
 /* --- src/blocks/home-hero.css --- */
 /*
@@ -1921,6 +2697,7 @@ select {
  */
 
 .home-hero {
+	padding-block: var(--space-5);
 	min-height: 33rem;
 	display: flex;
 	align-items: center;
@@ -2129,6 +2906,1199 @@ select {
 	}
 }
 
+/* --- src/blocks/image-columns.css --- */
+/*
+ * Image columns. Two to four images side by side with text centred below each;
+ * one column on a phone. The heading and introduction above are ordinary blocks.
+ */
+
+.image-columns {
+	padding-block: var(--space-5);
+}
+
+.image-columns__grid {
+	display: grid;
+	gap: var(--space-4);
+	text-align: center;
+}
+
+.image-columns__image {
+	display: block;
+	width: auto; /* at its own size, never stretched: these are often small illustrations */
+	max-width: 100%;
+	height: auto;
+	margin: 0 auto var(--space-3);
+}
+
+.image-columns__text > :last-child {
+	margin-bottom: 0;
+}
+
+@media (min-width: 768px) {
+	.image-columns--2 .image-columns__grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.image-columns--3 .image-columns__grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	.image-columns--4 .image-columns__grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (min-width: 992px) {
+	.image-columns--4 .image-columns__grid {
+		grid-template-columns: repeat(4, 1fr);
+	}
+}
+
+/* --- src/blocks/logo-slider.css --- */
+/*
+ * Logo slider. A centred title over the shared slider (src/css/slider.css):
+ * two logos across on a phone, three from md, four from lg, five from xl. The
+ * logos keep their shape and sit centred in their slot.
+ */
+
+.logo-slider {
+	padding-block: var(--block-padding);
+}
+
+.logo-slider__title {
+	margin-bottom: var(--space-4);
+	text-align: center;
+	text-wrap: balance;
+}
+
+.logo-slider .slider {
+	--slides-per-view: 2;
+	--slider-gap: var(--space-3);
+}
+
+/*
+ * Each logo sits in a square white card with a soft border and rounded corners,
+ * the logo itself filling about 70% of it (as on the live site).
+ */
+.logo-slider__logo {
+	display: grid;
+	place-items: center;
+	aspect-ratio: 1;
+	border: var(--border-width) solid var(--col-blue-300);
+	border-radius: var(--radius-card);
+	background: var(--col-white);
+}
+
+.logo-slider__logo img {
+	display: block;
+	width: 70%;
+	height: 70%;
+	object-fit: contain;
+}
+
+.logo-slider__more {
+	margin-top: var(--space-4);
+	text-align: center;
+}
+
+@media (min-width: 768px) {
+	.logo-slider .slider {
+		--slides-per-view: 3;
+	}
+}
+
+@media (min-width: 992px) {
+	.logo-slider .slider {
+		--slides-per-view: 4;
+	}
+}
+
+@media (min-width: 1240px) {
+	.logo-slider .slider {
+		--slides-per-view: 5;
+	}
+}
+
+/* --- src/blocks/quote.css --- */
+/*
+ * Quote. A white card with the quote on the left (two thirds from lg up) and an
+ * optional photo on the right, in front of a gradient circle whose colour
+ * cycles blue, orange, pink. Below lg the photo is hidden. Two or more quotes
+ * use the shared slider (src/css/slider.css).
+ */
+
+.quote {
+	padding-block: var(--block-padding);
+}
+
+.quote .slider {
+	--slider-gap: var(--space-3);
+}
+
+.quote .slider--ready .slider__viewport {
+	/*
+	 * The card's shadow falls outside the card, and the slider clips whatever is
+	 * outside its viewport. Room for it below (padding, pulled back with a negative
+	 * margin so the layout does not move) and to the sides (a clip margin no wider
+	 * than the gap, so the next card's edge is still not shown).
+	 */
+	overflow: clip;
+	overflow-clip-margin: var(--slider-gap);
+	padding-bottom: var(--space-6);
+	margin-bottom: calc(-1 * var(--space-6));
+}
+
+.quote__card {
+	position: relative;
+	isolation: isolate;
+	overflow: clip;
+	min-height: 20rem;
+	margin: 0;
+	border-radius: var(--radius-lg);
+	background: var(--col-white);
+	box-shadow: var(--shadow-out);
+}
+
+.quote__card::before {
+	content: "";
+	position: absolute;
+	right: -4rem;
+	bottom: -5rem;
+	z-index: -1;
+	display: none;
+	height: 100%;
+	aspect-ratio: 1;
+	border-radius: 50%;
+}
+
+.quote__card--blue::before {
+	background: var(--gradient-blue);
+}
+
+.quote__card--orange::before {
+	background: var(--gradient-orange);
+}
+
+.quote__card--pink::before {
+	background: var(--gradient-pink);
+}
+
+.quote__inner {
+	display: grid;
+	grid-template-rows: 1fr auto auto;
+	gap: var(--space-3);
+	height: 100%;
+	min-height: inherit;
+	padding: var(--space-4);
+}
+
+.quote__text {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	line-height: 1.5;
+}
+
+.quote__text p {
+	font-size: var(--fs-h3);
+}
+
+.quote__text > :last-child {
+	margin-bottom: 0;
+}
+
+.quote__cite {
+	color: var(--col-pink-400);
+	font-size: var(--fs-small);
+}
+
+.quote__logo {
+	display: block;
+	width: auto;
+	max-width: 50%;
+	max-height: 5rem;
+}
+
+.quote__image {
+	display: none;
+}
+
+@media (min-width: 992px) {
+	.quote__card::before {
+		display: block;
+	}
+
+	.quote__card--has-image .quote__inner {
+		width: 66%;
+	}
+
+	.quote__image {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		display: block;
+		width: auto;
+		height: 95%;
+		max-width: 34%;
+		object-fit: contain;
+		object-position: right bottom;
+	}
+}
+
+/* --- src/blocks/related-content.css --- */
+/*
+ * Related content. A centred title over a row of cards in the shared slider
+ * (src/css/slider.css): one card on a phone, two from md, three from lg, or
+ * four from lg when every card is a product. The cards stretch to one height.
+ */
+
+.related-content {
+	padding-block: var(--block-padding);
+}
+
+.related-content__title {
+	margin-bottom: var(--space-4);
+	text-align: center;
+}
+
+.related-content .slider {
+	--slider-gap: var(--space-3);
+}
+
+.related-content .slider__slide {
+	display: flex;
+	padding-bottom: var(--space-3);
+}
+
+.related-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	overflow: clip;
+	border-radius: var(--radius-lg);
+	background: var(--col-white);
+	box-shadow: var(--shadow-in);
+	transition: box-shadow var(--transition);
+}
+
+.related-card:hover,
+.related-card:focus-within {
+	box-shadow: var(--shadow-card-hover);
+}
+
+.related-card__image {
+	display: block;
+	width: 100%;
+	aspect-ratio: 16 / 10;
+	object-fit: cover;
+}
+
+.related-card__inner {
+	padding: var(--space-3);
+}
+
+.related-card__title {
+	margin-bottom: var(--space-2);
+	font-size: var(--fs-h4);
+}
+
+/* The whole card is the link. */
+.related-card__link {
+	color: inherit;
+	text-decoration: none;
+}
+
+.related-card__link::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+}
+
+.related-card__excerpt {
+	margin: 0;
+	font-size: var(--fs-small);
+}
+
+@media (min-width: 768px) {
+	.related-content .slider {
+		--slides-per-view: 2;
+	}
+}
+
+@media (min-width: 992px) {
+	.related-content .slider {
+		--slides-per-view: 3;
+	}
+
+	.related-content--four-up .slider {
+		--slides-per-view: 4;
+	}
+}
+
+/* --- src/blocks/sector-cards.css --- */
+/*
+ * Sector cards. Filter buttons over a grid of cards: each card a link with the
+ * page's featured image above a curved bottom edge, then the title. Two across
+ * from md, one on a phone. Sizes and the curve follow the live site.
+ */
+
+.sector-cards {
+	padding-block: var(--space-6);
+}
+
+.sector-cards__filters {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: var(--space-2);
+	margin-bottom: var(--space-4);
+}
+
+.sector-cards__filters[hidden] {
+	display: none;
+}
+
+.sector-cards__filter {
+	min-width: 9rem;
+	padding: var(--space-3) var(--space-3);
+	border: 0;
+	border-radius: var(--radius-md);
+	background-color: var(--col-blue-200);
+	color: var(--col-black);
+	cursor: pointer;
+	transition: background-color var(--transition);
+}
+
+.sector-cards__filter:hover {
+	background-color: var(--col-blue-300);
+}
+
+.sector-cards__filter.is-active {
+	background-color: var(--col-yellow-400);
+}
+
+.sector-cards__grid {
+	display: grid;
+	gap: var(--space-3);
+}
+
+/*
+ * The card is 16:9: the image takes three parts of its height and the title one,
+ * as on the live site. The image is the page's featured image, cropped to fill
+ * its part (about 2.4:1), with the bottom edge curved by a mask.
+ */
+.sector-cards__card {
+	display: grid;
+	grid-template-rows: 3fr 1fr;
+	aspect-ratio: 16 / 9;
+	overflow: clip;
+	border-radius: var(--radius-lg);
+	background-color: var(--col-white);
+	box-shadow: var(--shadow-out);
+	color: var(--col-black);
+	text-decoration: none;
+	transition:
+		transform var(--transition),
+		box-shadow var(--transition);
+}
+
+.sector-cards__card[hidden] {
+	display: none;
+}
+
+.sector-cards__card:hover,
+.sector-cards__card:focus-visible {
+	box-shadow: var(--shadow-in);
+	color: var(--col-black);
+	transform: translateY(2px);
+}
+
+.sector-cards__image {
+	position: relative;
+	display: block;
+	overflow: hidden; /* a tall or square photo cannot stretch the card */
+
+	/* The curved bottom edge: the live site's own mask, stretched to cover and anchored at the bottom. It is on the box, not the photo, so the photo can zoom inside it. */
+	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 100'%3E%3Cpath fill='%23fff' d='m400,0v55.44c-60.68,28.58-128.47,44.56-200,44.56S60.68,84.02,0,55.44V0h400Z'/%3E%3C/svg%3E") bottom / cover no-repeat;
+}
+
+.sector-cards__image img {
+	position: absolute;
+	inset: 0;
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform var(--transition); /* the same timing as the card's lift and shadow */
+}
+
+/* A subtle zoom on the photo when the card is pointed at or focused. */
+.sector-cards__card:is(:hover, :focus-visible) .sector-cards__image img {
+	transform: scale(1.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.sector-cards__image img {
+		transition: none;
+	}
+
+	.sector-cards__card:is(:hover, :focus-visible) .sector-cards__image img {
+		transform: none;
+	}
+}
+
+.sector-cards__title {
+	padding: var(--space-3);
+	font-size: var(--fs-h4);
+	font-weight: var(--fw-bold);
+}
+
+@media (min-width: 768px) {
+	.sector-cards__grid {
+		grid-template-columns: repeat(2, 1fr);
+		column-gap: var(--space-6);
+	}
+}
+
+/* --- src/blocks/side-tabs.css --- */
+/*
+ * Side tabs. From md up, a panel of images (the open tab's image shows) beside a
+ * stack of navy tabs; below md only the tabs. The tabs are native <details>
+ * elements that open and close with the same height animation as the FAQ.
+ */
+
+.side-tabs {
+	padding-block: var(--block-padding);
+}
+
+.side-tabs__title,
+.side-tabs__intro {
+	text-align: center;
+}
+
+.side-tabs__title {
+	margin-bottom: var(--space-3);
+}
+
+.side-tabs__intro {
+	margin-bottom: var(--space-5);
+}
+
+.side-tabs__grid {
+	display: grid;
+	gap: var(--space-4);
+}
+
+.side-tabs__images {
+	display: none;
+}
+
+.side-tabs__tabs {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-3);
+}
+
+.side-tabs__tab {
+	interpolate-size: allow-keywords;
+	padding: var(--space-3);
+	border: var(--border-width) solid var(--col-navy-400);
+	border-radius: var(--radius-md);
+	background-color: var(--col-navy-400);
+	box-shadow: var(--shadow-out);
+	color: var(--col-white);
+	transition:
+		background-color var(--transition),
+		border-color var(--transition),
+		color var(--transition);
+}
+
+.side-tabs__tab:not([open]):hover {
+	border-color: color-mix(in srgb, var(--col-navy-400), white 30%);
+	background-color: color-mix(in srgb, var(--col-navy-400), white 70%);
+	color: var(--col-navy-400);
+}
+
+.side-tabs__tab::details-content {
+	block-size: 0;
+	overflow: clip;
+	transition:
+		block-size 150ms ease-out,
+		content-visibility 150ms allow-discrete;
+}
+
+.side-tabs__tab[open]::details-content {
+	block-size: auto;
+}
+
+.side-tabs__summary {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-3);
+	list-style: none;
+	cursor: pointer;
+}
+
+.side-tabs__summary::-webkit-details-marker {
+	display: none;
+}
+
+.side-tabs__tab-title {
+	margin: 0;
+	color: inherit;
+	font-size: var(--fs-h4);
+}
+
+.side-tabs__chevron {
+	flex: none;
+	width: 1.25rem;
+	height: 1.25rem;
+	color: var(--col-yellow-400);
+	transition: transform 150ms ease-out;
+}
+
+.side-tabs__tab[open] .side-tabs__chevron {
+	transform: rotate(180deg);
+}
+
+.side-tabs__content {
+	padding-top: var(--space-3);
+}
+
+.side-tabs__content > :last-child {
+	margin-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.side-tabs__tab::details-content,
+	.side-tabs__chevron {
+		transition: none;
+	}
+}
+
+@media (min-width: 768px) {
+	.side-tabs__grid {
+		grid-template-columns: 1.5fr 1fr;
+		gap: var(--space-5);
+	}
+
+	.side-tabs__images {
+		position: relative;
+		display: block;
+		min-height: 20rem;
+	}
+
+	.side-tabs__image {
+		position: absolute;
+		inset: 0;
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		background-color: var(--col-surface);
+		box-shadow: var(--shadow-out);
+		opacity: 0;
+		transition: opacity 300ms ease-in-out;
+	}
+
+	.side-tabs__image.is-active {
+		opacity: 1;
+	}
+
+	.side-tabs__image img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+}
+
+@media (min-width: 768px) and (prefers-reduced-motion: reduce) {
+	.side-tabs__image {
+		transition: none;
+	}
+}
+
+/* --- src/blocks/stats-counter.css --- */
+/*
+ * Stats counter. The image (a cut-out) on the left from md up and a title over a
+ * row of big orange numbers, each with a bold label and a short description.
+ * Below md the numbers come first and the image after them.
+ */
+
+.stats-counter {
+	padding-block: var(--block-padding);
+}
+
+.stats-counter__grid {
+	display: grid;
+	gap: var(--space-5);
+	align-items: center;
+}
+
+.stats-counter__media {
+	order: 2;
+}
+
+.stats-counter__content {
+	order: 1;
+}
+
+.stats-counter__image {
+	display: block;
+	width: 100%;
+	max-width: 21.75rem;
+	height: auto;
+	margin-inline: auto;
+}
+
+.stats-counter__title {
+	margin-bottom: var(--space-4);
+	text-wrap: balance;
+}
+
+.stats-counter__stats {
+	display: grid;
+	gap: var(--space-4);
+}
+
+.stats-counter__value {
+	margin-bottom: var(--space-2);
+	color: var(--col-orange-400);
+	font-size: var(--fs-title-md);
+	font-weight: var(--fw-bold);
+	line-height: 1.1;
+	font-variant-numeric: tabular-nums;
+}
+
+.stats-counter__label {
+	margin-bottom: var(--space-2);
+	font-weight: var(--fw-bold);
+}
+
+.stats-counter__description {
+	font-size: var(--fs-small);
+}
+
+@media (min-width: 768px) {
+	.stats-counter__grid {
+		grid-template-columns: 1fr 2fr;
+	}
+
+	.stats-counter--no-image .stats-counter__grid {
+		grid-template-columns: 1fr;
+	}
+
+	.stats-counter__media {
+		order: 1;
+	}
+
+	.stats-counter__content {
+		order: 2;
+	}
+
+	.stats-counter__stats {
+		grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+	}
+}
+
+/* --- src/blocks/temp-page-list.css --- */
+/* Temporary page list (blocks/temp-page-list). Delete with the block. */
+
+.temp-page-list {
+	padding-block: var(--space-4);
+}
+
+.temp-page-list > .container {
+	padding: var(--space-3);
+	border: var(--border-width) dashed var(--col-border);
+	border-radius: var(--radius-lg);
+	background-color: var(--col-white);
+}
+
+.temp-page-list__note {
+	margin-bottom: var(--space-3);
+	color: var(--col-body-muted);
+	font-size: var(--fs-small);
+}
+
+.temp-page-list__columns {
+	columns: 16rem;
+	column-gap: var(--space-5);
+}
+
+.temp-page-list__group {
+	break-inside: avoid;
+	margin-bottom: var(--space-4);
+}
+
+.temp-page-list__heading {
+	margin-bottom: var(--space-2);
+	font-size: var(--fs-base);
+	text-transform: uppercase;
+}
+
+.temp-page-list__list {
+	margin: 0;
+	padding-left: var(--space-3);
+	font-size: var(--fs-small);
+	list-style: none;
+}
+
+.temp-page-list__list ul {
+	margin: 0;
+	padding-left: var(--space-3);
+	list-style: none;
+}
+
+.temp-page-list__list a {
+	color: var(--col-body);
+}
+
+/* --- src/blocks/text-and-media.css --- */
+/*
+ * Text and media. Text beside an image or a video, half and half or with the
+ * text wider. Below md the media comes first, then the text. A video is a
+ * poster behind a play button (src/js/video-facade.js swaps in the player).
+ */
+
+.text-and-media {
+	padding-block: var(--block-padding);
+}
+
+.text-and-media__grid {
+	display: grid;
+	gap: var(--space-4);
+	align-items: center;
+}
+
+.text-and-media__media {
+	order: -1;
+}
+
+.text-and-media__pretitle {
+	margin-bottom: var(--space-2);
+	color: var(--col-blue-400);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-bold);
+}
+
+.text-and-media__title {
+	text-wrap: balance;
+}
+
+.text-and-media__text > :last-child,
+.text-and-media__text > .container:last-child > :last-child {
+	margin-bottom: 0;
+}
+
+/* Core paragraphs and lists are each wrapped in a .container by the theme; inside this block they sit in its own column. */
+.text-and-media__text .container {
+	max-width: none;
+	margin: 0;
+	padding-inline: 0;
+}
+
+.text-and-media__text {
+	margin-bottom: var(--space-4);
+}
+
+.text-and-media__image {
+	display: block;
+	width: 100%;
+	height: auto;
+	margin-inline: auto;
+	border-radius: var(--radius-lg);
+	background-color: var(--col-white);
+	box-shadow: var(--shadow-out);
+}
+
+.text-and-media__below {
+	margin-top: var(--space-4);
+	text-align: right;
+}
+
+.text-and-media__transcript {
+	margin-top: var(--space-4);
+}
+
+.text-and-media__transcript summary {
+	cursor: pointer;
+	font-size: var(--fs-h4);
+	font-weight: var(--fw-bold);
+}
+
+.text-and-media__transcript-body {
+	padding-top: var(--space-2);
+}
+
+@media (min-width: 768px) {
+	.text-and-media__grid {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.text-and-media--wide-text .text-and-media__grid {
+		grid-template-columns: 2fr 1fr;
+	}
+
+	.text-and-media--text-only .text-and-media__grid {
+		grid-template-columns: 1fr;
+	}
+
+	.text-and-media__media {
+		order: 0;
+	}
+
+	.text-and-media--media-left .text-and-media__media {
+		order: -1;
+	}
+
+	.text-and-media--media-right .text-and-media__media {
+		order: 1;
+	}
+
+	/* With the media on the left the columns swap, so the narrow one stays the media. */
+	.text-and-media--wide-text.text-and-media--media-left .text-and-media__grid {
+		grid-template-columns: 1fr 2fr;
+	}
+}
+
+/*
+ * Stacked: the title, text and buttons centred, with the media below them,
+ * centred and 640px wide at most. The video keeps its rounded corners and shadow.
+ */
+.text-and-media--stacked .text-and-media__grid {
+	grid-template-columns: 1fr;
+	text-align: center;
+}
+
+.text-and-media--stacked .text-and-media__media {
+	order: 1;
+	width: 100%;
+	max-width: 35.5rem; /* 640px, as on the live site */
+	margin-inline: auto;
+}
+
+.text-and-media--stacked .button-group {
+	justify-content: center;
+}
+
+/* Video behind a play button. */
+.video-facade,
+.video-facade__frame {
+	display: block;
+	width: 100%;
+	aspect-ratio: 16 / 9;
+	border: 0;
+	border-radius: var(--radius-lg);
+}
+
+.video-facade {
+	box-shadow: var(--shadow-out);
+	position: relative;
+	padding: 0;
+	overflow: hidden;
+	background-color: var(--col-navy-400);
+	cursor: pointer;
+}
+
+.video-facade__poster {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.video-facade__play {
+	position: absolute;
+	inset: 50% auto auto 50%;
+	width: 4rem;
+	height: 4rem;
+	translate: -50% -50%;
+	border-radius: var(--radius-circle);
+	background-color: var(--col-white);
+	box-shadow: var(--shadow-out);
+	transition: scale var(--transition);
+}
+
+.video-facade__play::after {
+	content: "";
+	position: absolute;
+	inset: 50% auto auto 54%;
+	width: 1.25rem;
+	height: 1.25rem;
+	translate: -50% -50%;
+	background-color: var(--col-orange-400);
+	clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.video-facade:hover .video-facade__play,
+.video-facade:focus-visible .video-facade__play {
+	scale: 1.1;
+}
+
+.video-facade:focus-visible {
+	outline: var(--border-width) solid var(--col-navy-400);
+	outline-offset: var(--space-1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.video-facade__play {
+		transition: none;
+	}
+}
+
+/*
+ * The pop-out player (src/js/video-facade.js): one <dialog> sized to the
+ * viewport, the player filling it, the close button just above its top right
+ * corner. Clicks on the backdrop land on the dialog itself and close it.
+ */
+.video-modal {
+	width: min(90vw, 70rem, calc(80vh * 16 / 9));
+	max-width: none;
+	padding: 0;
+	overflow: visible;
+	border: 0;
+	background: var(--col-black);
+}
+
+.video-modal::backdrop {
+	background: rgb(0 0 0 / 0.8);
+}
+
+.video-modal__inner {
+	aspect-ratio: 16 / 9;
+	border-radius: var(--radius-lg);
+	overflow: hidden;
+}
+
+.video-modal .video-facade__frame {
+	height: 100%;
+	border-radius: 0;
+}
+
+.video-modal__close {
+	position: absolute;
+	right: 0;
+	bottom: 100%;
+	display: grid;
+	place-items: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	margin-bottom: var(--space-2);
+	padding: 0;
+	border: var(--border-width) solid var(--col-white);
+	border-radius: 50%;
+	background: transparent;
+	color: var(--col-white);
+	font-size: var(--fs-h3);
+	line-height: 1;
+	cursor: pointer;
+	transition: background-color var(--transition), color var(--transition);
+}
+
+.video-modal__close:hover,
+.video-modal__close:focus-visible {
+	background: var(--col-white);
+	color: var(--col-black);
+}
+
+/* An unframed image (for transparent images): no corners, shadow or white box. */
+.text-and-media__image--plain {
+	border-radius: 0;
+	background-color: transparent;
+	box-shadow: none;
+}
+
+/* Tick list in the media slot. (A background colour is the block's native colour support.) */
+.text-and-media__list {
+	margin: 0;
+}
+
+/* --- src/blocks/top-tabs.css --- */
+/*
+ * Top tabs. From lg up, the pills sit in one row (one column each) with the open
+ * tab's panel below, spanning the row. Below lg the pills stack, each panel
+ * directly under its pill, and a chevron shows.
+ */
+
+.top-tabs {
+	padding-block: var(--block-padding);
+}
+
+.top-tabs__grid {
+	display: grid;
+	gap: var(--space-3);
+}
+
+.top-tabs__pill {
+	display: flex;
+	align-items: center;
+	gap: var(--space-3);
+	width: 100%;
+	padding: var(--space-2);
+	border: 4px solid var(--col-white);
+	border-radius: var(--radius-lg);
+	background-color: var(--col-white);
+	box-shadow: var(--shadow-out);
+	color: inherit;
+	font: inherit;
+	text-align: start;
+	cursor: pointer;
+	transition:
+		border-color var(--transition),
+		background-color var(--transition),
+		box-shadow var(--transition);
+}
+
+.top-tabs__pill:hover,
+.top-tabs__pill.is-active {
+	border-color: var(--col-orange-400);
+	background-color: color-mix(in srgb, var(--col-orange-400), var(--col-white) 80%);
+	box-shadow: var(--shadow-in);
+}
+
+.top-tabs__icon {
+	display: grid;
+	flex: none;
+	place-content: center;
+	width: 3.6rem;
+	aspect-ratio: 1;
+	border-radius: 100vw;
+	background-color: color-mix(in srgb, var(--col-orange-400), var(--col-white) 90%);
+}
+
+.top-tabs__icon img {
+	display: block;
+	width: 2rem;
+	height: 2rem;
+	object-fit: contain;
+}
+
+.top-tabs__pill-title {
+	flex: 1;
+	font-size: var(--fs-h5);
+	font-weight: var(--fw-bold);
+}
+
+.top-tabs__chevron {
+	flex: none;
+	width: 1.25rem;
+	height: 1.25rem;
+	margin-inline-end: var(--space-2);
+	transition: transform var(--transition);
+}
+
+.top-tabs__pill.is-active .top-tabs__chevron {
+	transform: rotate(180deg);
+}
+
+.top-tabs__panel[hidden] {
+	display: none;
+}
+
+.top-tabs__panel {
+	display: grid;
+	gap: var(--space-4);
+	align-items: center;
+	animation: top-tabs-fade var(--transition-slow) ease-in-out;
+}
+
+.top-tabs__image img {
+	display: block;
+	width: 100%;
+	max-width: 24rem;
+	height: auto;
+	margin-inline: auto;
+}
+
+.top-tabs__pretitle {
+	margin-bottom: var(--space-2);
+	color: var(--col-orange-400);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-bold);
+}
+
+.top-tabs__content > :last-child {
+	margin-bottom: 0;
+}
+
+@keyframes top-tabs-fade {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.top-tabs__panel {
+		animation: none;
+	}
+
+	.top-tabs__chevron,
+	.top-tabs__pill {
+		transition: none;
+	}
+}
+
+@media (min-width: 992px) {
+	.top-tabs__grid {
+		grid-template-columns: repeat(var(--tabs), 1fr);
+		row-gap: var(--space-5);
+	}
+
+	.top-tabs__pill {
+		flex-direction: column;
+		gap: var(--space-2);
+		text-align: center;
+	}
+
+	.top-tabs__chevron {
+		display: none;
+	}
+
+	.top-tabs__pill {
+		grid-column: var(--i);
+		grid-row: 1;
+	}
+
+	.top-tabs__panel {
+		grid-column: 1 / -1;
+		grid-row: 2;
+		grid-template-columns: 1fr 2fr;
+		gap: var(--space-5);
+	}
+}
+
+/* --- src/blocks/trustpilot-widget.css --- */
+/*
+ * Trustpilot widget. On a card: white, rounded and softly shadowed, centred, so
+ * the pale page background shows around it. Without a card the widget just
+ * sits in the container.
+ *
+ * Trustpilot decides how much to show from the width it is given: about 850px
+ * or more shows "Excellent, stars, 4.7 out of 5 based on N reviews"; narrower
+ * drops the score and review count, and narrower still keeps only the stars.
+ * 50rem (900px) keeps the full version. Change --trustpilot-card-width on the
+ * block for a smaller card and the shorter widget.
+ */
+
+.trustpilot {
+	padding-block: var(--space-4);
+}
+
+/* Inset a little from the column edge so the card never touches it on a tablet. */
+.trustpilot__card {
+	width: min(calc(100% - var(--space-4)), var(--trustpilot-card-width, 50rem));
+	margin-inline: auto;
+	padding: var(--space-3);
+	background-color: var(--col-white);
+	border-radius: var(--radius-lg);
+	box-shadow: var(--shadow-in);
+}
 /* generated — concatenation of src/blocks/*.css, see src/build/generate-utilities.js */
 
 /*# sourceMappingURL=theme.css.map */

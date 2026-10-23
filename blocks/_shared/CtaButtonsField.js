@@ -41,7 +41,7 @@ export default function CtaButtonsField( { value, onChange, label } ) {
 	}
 
 	return (
-		<div className="cb-peoplesafe2027-cta-buttons">
+		<div className="cb-peoplesafe2027-cta-buttons cb-peoplesafe2027-editor-field">
 			<label className="cb-peoplesafe2027-editor-field__label">{ label || __( 'Buttons', 'cb-peoplesafe2027' ) }</label>
 			{ rows.map( ( row, index ) => (
 				<div
@@ -120,7 +120,7 @@ export default function CtaButtonsField( { value, onChange, label } ) {
 						</div>
 				</div>
 			) ) }
-			<Button variant="primary" onClick={ () => addRow( EMPTY_ROW ) }>
+			<Button variant="secondary" onClick={ () => addRow( EMPTY_ROW ) }>
 				{ __( 'Add button', 'cb-peoplesafe2027' ) }
 			</Button>
 		</div>

@@ -1,0 +1,31 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/image-columns",
+	"title": "Image columns",
+	"category": "cb-peoplesafe2027",
+	"description": "Two to four images side by side, each with centred text below it. Put an ordinary heading and paragraph above it for the title and introduction.",
+	"icon": "columns",
+	"attributes": {
+		"items": {
+			"type": "array",
+			"default": [
+				{ "image": 0, "imageUrl": "", "text": "" },
+				{ "image": 0, "imageUrl": "", "text": "" },
+				{ "image": 0, "imageUrl": "", "text": "" }
+			]
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"color": {
+			"background": true,
+			"text": false,
+			"link": false,
+			"gradients": false
+		}
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

@@ -1,0 +1,34 @@
+/*
+ * Lenis smooth scrolling (src/js/smooth-scroll.js). These are the rules Lenis
+ * ships (node_modules/lenis/dist/lenis.css), kept here so there is no extra
+ * stylesheet request. If Lenis is upgraded, compare them with that file.
+ * Do not set scroll-behavior: smooth anywhere: it fights Lenis.
+ */
+
+html.lenis,
+html.lenis body {
+	height: auto;
+}
+
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+	overflow: clip;
+}
+
+.lenis [data-lenis-prevent],
+.lenis [data-lenis-prevent-wheel],
+.lenis [data-lenis-prevent-touch],
+.lenis [data-lenis-prevent-vertical],
+.lenis [data-lenis-prevent-horizontal] {
+	overscroll-behavior: contain;
+}
+
+/* A video or widget iframe would swallow the wheel while the page is smooth scrolling. */
+.lenis.lenis-smooth iframe {
+	pointer-events: none;
+}
+
+.lenis.lenis-autoToggle {
+	transition-property: overflow;
+	transition-duration: 1ms;
+	transition-behavior: allow-discrete;
+}

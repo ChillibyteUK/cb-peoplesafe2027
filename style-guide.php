@@ -95,47 +95,47 @@ get_header();
 		Breakpoints (in <code>tokens.config.js</code>): sm 576, md 768, lg 992, xl 1240, xxl 1400.
 	</p>
 	<ul class="sg__toc">
-		<?php foreach ( array( 'colour', 'gradients', 'type', 'headings', 'spacing', 'radius', 'shadows', 'motion', 'stacking', 'buttons', 'layout' ) as $section ) : ?>
+		<?php foreach ( array( 'colour', 'gradients', 'type', 'headings', 'spacing', 'radius', 'shadows', 'motion', 'stacking', 'buttons', 'layout' ) as $section ) { ?>
 			<li><a href="#<?php echo esc_attr( $section ); ?>"><?php echo esc_html( ucfirst( $section ) ); ?></a></li>
-		<?php endforeach; ?>
+		<?php } ?>
 	</ul>
 
 	<h2 id="colour">Colour</h2>
-	<?php foreach ( array_merge( cb_peoplesafe2027_style_guide_group( $tokens, 'col-' ), cb_peoplesafe2027_style_guide_group( $tokens, 'overlay' ) ) as $name => $value ) : ?>
+	<?php foreach ( array_merge( cb_peoplesafe2027_style_guide_group( $tokens, 'col-' ), cb_peoplesafe2027_style_guide_group( $tokens, 'overlay' ) ) as $name => $value ) { ?>
 		<div class="sg__row">
 			<div class="sg__name">--<?php echo esc_html( $name ); ?><small><?php echo esc_html( $value ); ?></small></div>
 			<div class="sg__chip" style="background: var(--<?php echo esc_attr( $name ); ?>)"></div>
 		</div>
-	<?php endforeach; ?>
+	<?php } ?>
 
 	<h2 id="gradients">Gradients</h2>
-	<?php foreach ( cb_peoplesafe2027_style_guide_group( $tokens, 'gradient-' ) as $name => $value ) : ?>
-		<?php if ( 0 === strpos( $value, 'linear-gradient' ) ) : ?>
+	<?php foreach ( cb_peoplesafe2027_style_guide_group( $tokens, 'gradient-' ) as $name => $value ) { ?>
+		<?php if ( 0 === strpos( $value, 'linear-gradient' ) ) { ?>
 			<div class="sg__row">
 				<div class="sg__name">--<?php echo esc_html( $name ); ?></div>
 				<div class="sg__chip" style="background: var(--<?php echo esc_attr( $name ); ?>)"></div>
 			</div>
-		<?php else : ?>
+		<?php } else { ?>
 			<div class="sg__row"><div class="sg__name">--<?php echo esc_html( $name ); ?></div><div><?php echo esc_html( $value ); ?></div></div>
-		<?php endif; ?>
-	<?php endforeach; ?>
+		<?php } ?>
+	<?php } ?>
 
 	<h2 id="type">Type</h2>
 	<div class="sg__row"><div class="sg__name">--font-family-base</div><div style="font-family: var(--font-family-base)"><?php echo esc_html( isset( $tokens['font-family-base'] ) ? $tokens['font-family-base'] : '' ); ?></div></div>
 	<h3>Sizes</h3>
-	<?php foreach ( cb_peoplesafe2027_style_guide_group( $tokens, 'fs-' ) as $name => $value ) : ?>
+	<?php foreach ( cb_peoplesafe2027_style_guide_group( $tokens, 'fs-' ) as $name => $value ) { ?>
 		<div class="sg__row">
 			<div class="sg__name">--<?php echo esc_html( $name ); ?><small><?php echo esc_html( $value ); ?></small></div>
 			<div style="font-size: var(--<?php echo esc_attr( $name ); ?>); line-height: var(--line-height-heading)">Protect your people. Wherever. Whenever.</div>
 		</div>
-	<?php endforeach; ?>
+	<?php } ?>
 	<h3>Weights</h3>
-	<?php foreach ( cb_peoplesafe2027_style_guide_group( $tokens, 'fw-' ) as $name => $value ) : ?>
+	<?php foreach ( cb_peoplesafe2027_style_guide_group( $tokens, 'fw-' ) as $name => $value ) { ?>
 		<div class="sg__row">
 			<div class="sg__name">--<?php echo esc_html( $name ); ?><small><?php echo esc_html( $value ); ?></small></div>
 			<div style="font-weight: var(--<?php echo esc_attr( $name ); ?>)">Protect your people. Wherever. Whenever.</div>
 		</div>
-	<?php endforeach; ?>
+	<?php } ?>
 
 	<h2 id="headings">Headings and text</h2>
 	<h1>Heading 1</h1>
@@ -149,38 +149,38 @@ get_header();
 	<p><small>Small text.</small></p>
 
 	<h2 id="spacing">Spacing</h2>
-	<?php foreach ( cb_peoplesafe2027_style_guide_group( $tokens, 'space-' ) as $name => $value ) : ?>
+	<?php foreach ( cb_peoplesafe2027_style_guide_group( $tokens, 'space-' ) as $name => $value ) { ?>
 		<div class="sg__row">
 			<div class="sg__name">--<?php echo esc_html( $name ); ?><small><?php echo esc_html( $value ); ?></small></div>
 			<div><div class="sg__bar" style="width: var(--<?php echo esc_attr( $name ); ?>)"></div></div>
 		</div>
-	<?php endforeach; ?>
+	<?php } ?>
 
 	<h2 id="radius">Radius</h2>
-	<?php foreach ( cb_peoplesafe2027_style_guide_group( $tokens, 'radius-' ) as $name => $value ) : ?>
+	<?php foreach ( cb_peoplesafe2027_style_guide_group( $tokens, 'radius-' ) as $name => $value ) { ?>
 		<div class="sg__row">
 			<div class="sg__name">--<?php echo esc_html( $name ); ?><small><?php echo esc_html( $value ); ?></small></div>
 			<div><div class="sg__box" style="background: var(--col-neutral); border-radius: var(--<?php echo esc_attr( $name ); ?>)"></div></div>
 		</div>
-	<?php endforeach; ?>
+	<?php } ?>
 
 	<h2 id="shadows">Shadows</h2>
-	<?php foreach ( cb_peoplesafe2027_style_guide_group( $tokens, 'shadow-' ) as $name => $value ) : ?>
+	<?php foreach ( cb_peoplesafe2027_style_guide_group( $tokens, 'shadow-' ) as $name => $value ) { ?>
 		<div class="sg__row">
 			<div class="sg__name">--<?php echo esc_html( $name ); ?></div>
 			<div style="padding: var(--space-3)"><div class="sg__box" style="box-shadow: var(--<?php echo esc_attr( $name ); ?>)"></div></div>
 		</div>
-	<?php endforeach; ?>
+	<?php } ?>
 
 	<h2 id="motion">Motion and borders</h2>
-	<?php foreach ( array_merge( cb_peoplesafe2027_style_guide_group( $tokens, 'transition' ), cb_peoplesafe2027_style_guide_group( $tokens, 'border-width' ) ) as $name => $value ) : ?>
+	<?php foreach ( array_merge( cb_peoplesafe2027_style_guide_group( $tokens, 'transition' ), cb_peoplesafe2027_style_guide_group( $tokens, 'border-width' ) ) as $name => $value ) { ?>
 		<div class="sg__row"><div class="sg__name">--<?php echo esc_html( $name ); ?></div><div><?php echo esc_html( $value ); ?></div></div>
-	<?php endforeach; ?>
+	<?php } ?>
 
 	<h2 id="stacking">Stacking</h2>
-	<?php foreach ( cb_peoplesafe2027_style_guide_group( $tokens, 'z-' ) as $name => $value ) : ?>
+	<?php foreach ( cb_peoplesafe2027_style_guide_group( $tokens, 'z-' ) as $name => $value ) { ?>
 		<div class="sg__row"><div class="sg__name">--<?php echo esc_html( $name ); ?></div><div><?php echo esc_html( $value ); ?></div></div>
-	<?php endforeach; ?>
+	<?php } ?>
 
 	<h2 id="buttons">Buttons</h2>
 	<h3>On white</h3>
@@ -201,19 +201,19 @@ get_header();
 		<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="#buttons">Core outline</a></div>
 	</div>
 	<p>Button tokens:</p>
-	<?php foreach ( cb_peoplesafe2027_style_guide_group( $tokens, 'button-' ) as $name => $value ) : ?>
+	<?php foreach ( cb_peoplesafe2027_style_guide_group( $tokens, 'button-' ) as $name => $value ) { ?>
 		<div class="sg__row"><div class="sg__name">--<?php echo esc_html( $name ); ?></div><div><?php echo esc_html( $value ); ?></div></div>
-	<?php endforeach; ?>
+	<?php } ?>
 
 	<h2 id="layout">Layout</h2>
-	<?php foreach ( cb_peoplesafe2027_style_guide_group( $tokens, 'container-' ) as $name => $value ) : ?>
+	<?php foreach ( cb_peoplesafe2027_style_guide_group( $tokens, 'container-' ) as $name => $value ) { ?>
 		<div class="sg__row"><div class="sg__name">--<?php echo esc_html( $name ); ?></div><div><?php echo esc_html( $value ); ?></div></div>
-	<?php endforeach; ?>
-	<?php foreach ( array( 'grid-columns', 'grid-gutter', 'grid-min', 'nav-height', 'line-height-base', 'line-height-heading' ) as $name ) : ?>
-		<?php if ( isset( $tokens[ $name ] ) ) : ?>
+	<?php } ?>
+	<?php foreach ( array( 'grid-columns', 'grid-gutter', 'grid-min', 'nav-height', 'line-height-base', 'line-height-heading' ) as $name ) { ?>
+		<?php if ( isset( $tokens[ $name ] ) ) { ?>
 			<div class="sg__row"><div class="sg__name">--<?php echo esc_html( $name ); ?></div><div><?php echo esc_html( $tokens[ $name ] ); ?></div></div>
-		<?php endif; ?>
-	<?php endforeach; ?>
+		<?php } ?>
+	<?php } ?>
 </div>
 
 <?php

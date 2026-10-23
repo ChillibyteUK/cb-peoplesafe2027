@@ -1,0 +1,101 @@
+/*
+ * CTA banner. A gradient band with a mask pattern behind it. The text sits on
+ * the right from the large breakpoint up, with the optional image on the left.
+ * The white button takes its text colour from --button-accent (set per theme).
+ */
+
+.cta-banner {
+	position: relative;
+	display: flex;
+	align-items: center;
+	min-height: 20rem;
+	padding-block: var(--space-5);
+	isolation: isolate;
+	color: var(--col-white);
+}
+
+.cta-banner::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background: url("../img/banner-mask.png") center left / cover no-repeat;
+}
+
+.cta-banner--orange {
+	background: var(--gradient-orange);
+	color: var(--col-black);
+}
+
+.cta-banner--pink {
+	background: var(--gradient-pink);
+}
+
+.cta-banner--blue {
+	background: var(--gradient-blue);
+}
+
+.cta-banner--plain {
+	background: var(--col-white);
+	color: var(--col-body);
+}
+
+.cta-banner--plain::before {
+	background: url("../img/banner-logo-yellow.svg") center left / cover no-repeat;
+}
+
+.cta-banner:not(.cta-banner--plain) a:not(.button),
+.cta-banner__title {
+	color: inherit;
+}
+
+.cta-banner__grid {
+	display: grid;
+	gap: var(--space-4);
+	width: 100%;
+}
+
+.cta-banner__media {
+	display: none;
+}
+
+.cta-banner__title {
+	color: inherit;
+}
+
+.cta-banner__text {
+	margin-bottom: var(--space-4);
+}
+
+.cta-banner__text > :last-child {
+	margin-bottom: 0;
+}
+
+@media (min-width: 992px) {
+	.cta-banner::before {
+		background-size: contain;
+	}
+
+	.cta-banner__grid {
+		grid-template-columns: 5fr 7fr;
+		align-items: center;
+	}
+
+	.cta-banner--has-image .cta-banner__media {
+		display: block;
+	}
+
+	.cta-banner__image {
+		display: block;
+		width: 100%;
+		height: auto;
+		max-height: 18rem;
+		object-fit: contain;
+		object-position: left;
+	}
+
+	/* No image: the text still sits in the right-hand seven twelfths. */
+	.cta-banner__content {
+		grid-column: 2;
+	}
+}

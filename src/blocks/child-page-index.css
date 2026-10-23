@@ -1,0 +1,20 @@
+/* Child page index (blocks/child-page-index). */
+
+.child-page-index {
+	padding-block: var(--space-4);
+}
+
+.child-page-index__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.child-page-index__item {
+	padding-block: var(--space-2);
+	border-bottom: var(--border-width) solid var(--col-border);
+}
+
+.child-page-index__link {
+	font-weight: var(--fw-bold);
+}

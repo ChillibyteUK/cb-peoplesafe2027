@@ -11,6 +11,10 @@
 .accordion {
   display: flex;
   flex-direction: column;
+
+  /* One speed and curve for the height and the +/x icon, so they move together. */
+  --accordion-speed: 150ms;
+  --accordion-ease: ease-out;
 }
 
 .accordion-item {
@@ -41,7 +45,7 @@
   display: block;
   width: 1rem;
   height: 1rem;
-  transition: transform var(--transition);
+  transition: transform var(--accordion-speed) var(--accordion-ease);
 }
 
 .accordion-item[open] .accordion-icon {
@@ -51,4 +55,34 @@
 .accordion-body {
   padding-bottom: var(--space-3);
   color: var(--col-black);
+}
+
+/*
+ * Open and close animation. The answer's height transitions with the native
+ * ::details-content box (interpolate-size lets it animate to and from auto, and
+ * content-visibility is kept until the close finishes). Browsers without those
+ * features simply snap open and shut, which works as before. No motion for
+ * visitors who prefer reduced motion.
+ */
+.accordion-item {
+  interpolate-size: allow-keywords;
+}
+
+.accordion-item::details-content {
+  block-size: 0;
+  overflow: clip;
+  transition:
+    block-size var(--accordion-speed) var(--accordion-ease),
+    content-visibility var(--accordion-speed) allow-discrete;
+}
+
+.accordion-item[open]::details-content {
+  block-size: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accordion-item::details-content,
+  .accordion-icon {
+    transition: none;
+  }
 }

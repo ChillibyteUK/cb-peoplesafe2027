@@ -26,3 +26,41 @@
 	font-style: normal;
 	font-display: swap;
 }
+
+/*
+ * List block, Ticks style: a checkmark in place of each bullet, teal by default and orange in the orange style. The tick is
+ * an SVG mask, so it takes its colour from the background and needs no icon font.
+ */
+.wp-block-list:is(.is-style-check, .is-style-check-orange) {
+	padding-left: 0;
+	list-style: none;
+}
+
+.wp-block-list:is(.is-style-check, .is-style-check-orange) > li {
+	position: relative;
+	margin-bottom: var(--space-2);
+	padding-left: var(--space-5);
+}
+
+.wp-block-list:is(.is-style-check, .is-style-check-orange) > li::before {
+	content: "";
+	position: absolute;
+	top: 0.3em;
+	left: 0;
+	width: 1em;
+	height: 1em;
+	background-color: var(--tick-colour, var(--col-teal-400));
+	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / contain no-repeat;
+	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* The orange ticks (the brand's yellow-orange, --col-yellow-400): the same list with the tick colour changed. */
+.wp-block-list.is-style-check-orange {
+	--tick-colour: var(--col-yellow-400);
+}
+
+
+/* Coloured text from the editor's text colour tool is a <mark>: no highlighter background, just the colour. */
+mark.has-inline-color {
+	background-color: transparent;
+}

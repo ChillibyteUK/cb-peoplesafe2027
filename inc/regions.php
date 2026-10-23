@@ -49,7 +49,7 @@ function cb_peoplesafe2027_region_slugs() {
 /**
  * The site root URL, with a trailing slash and no region.
  *
- * home_url() cannot be used for this: Polylang filters it, and on the
+ * The function home_url() cannot be used for this: Polylang filters it, and on the
  * front end it returns the current region's home.
  *
  * @return string
@@ -83,7 +83,7 @@ function cb_peoplesafe2027_request_region() {
 /**
  * The URL of a region's root, for example http://example.com/uk/.
  *
- * pll_home_url() cannot be used to build paths: with a static front page it
+ * The function pll_home_url() cannot be used to build paths: with a static front page it
  * returns the front page's own permalink.
  *
  * @param string $region Region slug.

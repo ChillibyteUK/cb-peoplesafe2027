@@ -99,61 +99,6 @@ function get_icon( $name ) {
 }
 
 /**
- * Queue Q&A pairs for the aggregated FAQPage JSON-LD schema, output once in
- * the footer by output_faq_schema(). Safe to call from multiple
- * FAQ-style blocks on the same page — everything queued is combined into a
- * single FAQPage block rather than one per block instance, matching
- * Google's own guidance of one FAQPage schema per page.
- *
- * @param array $items Array of ['question' => string, 'answer' => string] pairs.
- * @return void
- */
-function queue_faq_schema( array $items ) {
-	global $faq_schema_items;
-
-	if ( ! isset( $faq_schema_items ) ) {
-		$faq_schema_items = array();
-	}
-
-	foreach ( $items as $item ) {
-		if ( empty( $item['question'] ) || empty( $item['answer'] ) ) {
-			continue;
-		}
-
-		$faq_schema_items[] = array(
-			'@type'          => 'Question',
-			'name'           => wp_strip_all_tags( $item['question'] ),
-			'acceptedAnswer' => array(
-				'@type' => 'Answer',
-				'text'  => wp_strip_all_tags( $item['answer'] ),
-			),
-		);
-	}
-}
-
-/**
- * Output the aggregated FAQPage JSON-LD schema, if anything was queued.
- *
- * @return void
- */
-function output_faq_schema() {
-	global $faq_schema_items;
-
-	if ( empty( $faq_schema_items ) ) {
-		return;
-	}
-
-	$schema = array(
-		'@context'   => 'https://schema.org',
-		'@type'      => 'FAQPage',
-		'mainEntity' => $faq_schema_items,
-	);
-
-	echo '<script type="application/ld+json">' . wp_json_encode( $schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-}
-add_action( 'wp_footer', 'output_faq_schema' );
-
-/**
  * Estimate reading time for a piece of content.
  *
  * @param string $content          Content to estimate.
@@ -201,7 +146,8 @@ function cb_peoplesafe2027_get_breadcrumbs( $post_id = 0 ) {
 	$breadcrumbs = array(
 		array(
 			'label' => __( 'Home', 'cb-peoplesafe2027' ),
-			'url'   => home_url( '/' ),
+			// The region's home (/uk/), not the front page's own permalink that Polylang puts in home_url().
+			'url'   => ( function_exists( 'cb_peoplesafe2027_region_url' ) && pll_current_language() ) ? cb_peoplesafe2027_region_url( pll_current_language() ) : home_url( '/' ),
 		),
 	);
 
@@ -304,7 +250,7 @@ function cb_peoplesafe2027_get_vimeo_embed_url( $url ) {
 		return '';
 	}
 
-	if ( empty( $parts['path'] ) || ! preg_match_all( '#/(\d+)#', $parts['path'], $matches ) ) {
+	if ( empty( $parts['path'] ) || ! preg_match_all( '#/(\d+)(?=/|$)#', $parts['path'], $matches ) ) {
 		return '';
 	}
 
@@ -323,7 +269,8 @@ function cb_peoplesafe2027_get_vimeo_embed_url( $url ) {
 		}
 	}
 
-	$embed_url = 'https://player.vimeo.com/video/' . $video_id . '?autoplay=1&dnt=1';
+	// No title, byline, portrait, badge, Vimeo logo or picture-in-picture; the controls take the brand yellow. Logo and colour need a paid Vimeo plan on the video's owner; the player ignores them otherwise.
+	$embed_url = 'https://player.vimeo.com/video/' . $video_id . '?autoplay=1&dnt=1&title=0&byline=0&portrait=0&badge=0&vimeo_logo=0&pip=0&color=ffb422';
 
 	if ( $hash ) {
 		$embed_url .= '&h=' . $hash;
@@ -365,4 +312,86 @@ function cb_peoplesafe2027_get_attachment_ext( $attachment_id ) {
 	}
 
 	return strtoupper( pathinfo( $path, PATHINFO_EXTENSION ) );
+}
+
+
+/**
+ * Rich-text lines as clean paragraphs. A rich-text field in a block's edit form
+ * keeps its lines as HTML separated by <br>; each line becomes a <p>. Text that
+ * is already paragraphs or lists (older pages) is returned as it is.
+ *
+ * @param string $html Field value.
+ * @return string
+ */
+function cb_peoplesafe2027_rich_paragraphs( $html ) {
+	$html = trim( wp_kses_post( (string) $html ) );
+
+	if ( '' === $html || preg_match( '#<(p|ul|ol)[\s>]#i', $html ) ) {
+		return $html;
+	}
+
+	// Plain text from older pages: a blank line starts a paragraph, a single line break stays a line break.
+	if ( ! preg_match( '#<br\s*/?>#i', $html ) && preg_match( '#\n#', $html ) ) {
+		$paragraphs = array_filter( array_map( 'trim', preg_split( '#\R\s*\R#', $html ) ) );
+		$paragraphs = array_map(
+			function ( $cb_paragraph ) {
+				return preg_replace( '#\s*\R\s*#', '<br>', $cb_paragraph );
+			},
+			$paragraphs
+		);
+
+		return $paragraphs ? '<p>' . implode( '</p><p>', $paragraphs ) . '</p>' : '';
+	}
+
+	$lines = array_filter( array_map( 'trim', preg_split( '#(?:\s*<br\s*/?>\s*)+#i', $html ) ) );
+
+	return $lines ? '<p>' . implode( '</p><p>', $lines ) . '</p>' : '';
+}
+
+/**
+ * A list typed one item per line as <li> elements. Older pages store <li>
+ * elements already; those are returned as they are.
+ *
+ * @param string $text Field value.
+ * @return string
+ */
+function cb_peoplesafe2027_lines_to_items( $text ) {
+	$text = trim( (string) $text );
+
+	if ( '' === $text ) {
+		return '';
+	}
+
+	if ( false !== stripos( $text, '<li' ) ) {
+		return wp_kses_post( $text );
+	}
+
+	$items = '';
+
+	foreach ( preg_split( '#\R#', $text ) as $line ) {
+		$line = trim( $line );
+
+		if ( '' !== $line ) {
+			$items .= '<li>' . esc_html( $line ) . '</li>';
+		}
+	}
+
+	return $items;
+}
+
+
+/**
+ * Rich-text lines on one line: the same field as cb_peoplesafe2027_rich_paragraphs()
+ * with the lines joined by a space and no <p>, for text that sits inside an
+ * element of its own (a list item's definition, for example).
+ *
+ * @param string $html Field value.
+ * @return string
+ */
+function cb_peoplesafe2027_rich_paragraphs_inline( $html ) {
+	$html = trim( (string) $html );
+	$html = preg_replace( '#</p>\s*<p[^>]*>#i', ' ', $html );
+	$html = preg_replace( '#</?p[^>]*>#i', '', $html );
+
+	return trim( preg_replace( '#(?:\s*<br\s*/?>\s*)+#i', ' ', $html ) );
 }

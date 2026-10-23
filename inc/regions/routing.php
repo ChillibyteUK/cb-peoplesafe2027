@@ -305,6 +305,18 @@ function cb_peoplesafe2027_routing_archives( $query ) {
 		$query->is_post_type_archive = true;
 	}
 
+	// ?sector=slug narrows the case study archive to one sector (the Logo slider's case studies button links here).
+	if ( $term_base && 'case_study' === $type && ! $query->get( 'case_study' ) && isset( $_GET['sector'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- a public filter, no state changes.
+		$tax_query   = (array) $query->get( 'tax_query' );
+		$tax_query[] = array(
+			'taxonomy' => 'sector',
+			'field'    => 'slug',
+			'terms'    => array( sanitize_title( wp_unslash( $_GET['sector'] ) ) ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		);
+
+		$query->set( 'tax_query', $tax_query );
+	}
+
 	$stream = $query->get( 'cb_post_stream' );
 	if ( $stream && ! $query->get( 'name' ) && $region ) {
 		$news = cb_peoplesafe2027_region_term_id( cb_peoplesafe2027_news_category_slug(), 'category', $region );

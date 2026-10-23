@@ -157,14 +157,14 @@ function cb_peoplesafe2027_language_switcher() {
 			<svg class="language-switcher__chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M1 1l4 4 4-4" /></svg>
 		</button>
 		<ul class="dropdown-menu language-switcher__menu" id="language-switcher-menu">
-			<?php foreach ( $items as $item ) : ?>
+			<?php foreach ( $items as $item ) { ?>
 				<li class="language-switcher__item<?php echo $item['current'] ? ' is-current' : ''; ?><?php echo $item['fallback'] ? ' is-fallback' : ''; ?>">
 					<a class="language-switcher__link" href="<?php echo esc_url( $item['url'] ); ?>" hreflang="<?php echo esc_attr( $item['locale'] ); ?>" lang="<?php echo esc_attr( $item['locale'] ); ?>"<?php echo $item['current'] ? ' aria-current="true"' : ''; ?>>
 						<?php cb_peoplesafe2027_flag_img( $item['flag'] ); ?>
 						<span><?php echo esc_html( $item['name'] ); ?></span>
 					</a>
 				</li>
-			<?php endforeach; ?>
+			<?php } ?>
 		</ul>
 	</nav>
 	<?php

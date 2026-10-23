@@ -48,9 +48,21 @@
           "origin": "theme"
         },
         {
+          "name": "blue-300",
+          "slug": "blue-300",
+          "color": "#c6d9df",
+          "origin": "theme"
+        },
+        {
           "name": "yellow-400",
           "slug": "yellow-400",
           "color": "#ffb422",
+          "origin": "theme"
+        },
+        {
+          "name": "yellow-600",
+          "slug": "yellow-600",
+          "color": "#996500",
           "origin": "theme"
         },
         {
@@ -155,6 +167,11 @@
           "name": "h6",
           "slug": "h6",
           "size": "1rem"
+        },
+        {
+          "name": "lead",
+          "slug": "lead",
+          "size": "1.2rem"
         },
         {
           "name": "title-sm",

@@ -1,9 +1,23 @@
 import { initNavToggle } from './nav-toggle';
 import { initNavDropdowns } from './nav-dropdown';
 import { initDialogs } from './dialog';
+import { initVideoFacades } from './video-facade';
+import { initScrollAnimate } from './scroll-animate';
+import { initSmoothScroll } from './smooth-scroll';
+import { initSideTabs } from './side-tabs';
+import { initTopTabs } from './top-tabs';
+import { initStatsCounters } from './stats-counter';
+import { initSectorFilters } from './sector-filter';
 
 document.addEventListener('DOMContentLoaded', () => {
+	initSmoothScroll();
 	initNavToggle();
 	initNavDropdowns();
 	initDialogs();
+	initVideoFacades();
+	initScrollAnimate();
+	initSideTabs();
+	initTopTabs();
+	initStatsCounters();
+	initSectorFilters();
 });

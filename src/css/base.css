@@ -65,18 +65,26 @@ p {
 }
 
 a {
-	color: var(--col-primary);
+	color: var(--col-link);
 	text-decoration: none;
 }
 
+/* Body text is light (300); plain content links are a step heavier. */
+a:not([class]) {
+	font-weight: var(--fw-normal);
+}
+
 /*
- * Underline-on-hover only for plain content links (no class) — cards,
+ * Underline on hover only for plain content links (no class); the link colour is
+ * dark enough to meet AA and to stand out from body text without one. Cards,
  * buttons, nav items, and social/icon links all carry their own class and
  * define their own hover treatment, so they're excluded here rather than
  * needing a `text-decoration: none` override per component.
  */
 a:not([class]):hover {
+	color: var(--col-link-hover);
 	text-decoration: underline;
+	text-underline-offset: 0.2em;
 }
 
 img,
@@ -97,6 +105,7 @@ figcaption {
 
 ul,
 ol {
+	margin: 0 0 var(--space-3);
 	padding-left: var(--space-4);
 }
 

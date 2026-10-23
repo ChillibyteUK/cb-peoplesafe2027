@@ -1,0 +1,25 @@
+/*
+ * Trustpilot widget. On a card: white, rounded and softly shadowed, centred, so
+ * the pale page background shows around it. Without a card the widget just
+ * sits in the container.
+ *
+ * Trustpilot decides how much to show from the width it is given: about 850px
+ * or more shows "Excellent, stars, 4.7 out of 5 based on N reviews"; narrower
+ * drops the score and review count, and narrower still keeps only the stars.
+ * 50rem (900px) keeps the full version. Change --trustpilot-card-width on the
+ * block for a smaller card and the shorter widget.
+ */
+
+.trustpilot {
+	padding-block: var(--space-4);
+}
+
+/* Inset a little from the column edge so the card never touches it on a tablet. */
+.trustpilot__card {
+	width: min(calc(100% - var(--space-4)), var(--trustpilot-card-width, 50rem));
+	margin-inline: auto;
+	padding: var(--space-3);
+	background-color: var(--col-white);
+	border-radius: var(--radius-lg);
+	box-shadow: var(--shadow-in);
+}

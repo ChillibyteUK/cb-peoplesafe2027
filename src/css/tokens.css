@@ -22,7 +22,9 @@
   --col-surface: #fafafa;
   --col-border: #cccccc;
   --col-blue-200: #d5e1e5;
+  --col-blue-300: #c6d9df; /* the soft border of cards */
   --col-yellow-400: #ffb422;
+  --col-yellow-600: #996500; /* the brand yellow darkened for text links */
   --col-orange-400: #df4305;
   --col-pink-400: #de007d;
   --col-blue-400: #0484a0;
@@ -40,6 +42,8 @@
   --col-body: var(--col-black);
   --col-body-muted: var(--col-greyish);
   --col-body-bg: var(--col-white);
+  --col-link: var(--col-yellow-600); /* 5.0:1 on white, 4.6:1 on the page background (AA needs 4.5:1), and 4.2:1 against black body text so links stand out without an underline (1.4.1 needs 3:1) */
+  --col-link-hover: var(--col-black);
 
   /* Overlays */
   --overlay: rgb(0 0 0 / 0.5);
@@ -62,6 +66,7 @@
   --fs-h4: clamp(1.1rem, 10vw, 1.2rem); /* 19.8 to 21.6px */
   --fs-h5: 1rem;
   --fs-h6: 1rem;
+  --fs-lead: 1.2rem; /* 21.6px: hero intro and other lead text */
   --fs-title-sm: 1.333rem; /* 24px */
   --fs-title-md: 2.222rem; /* 40px */
   --fs-title-lg: 3.111rem; /* 56px */
@@ -91,9 +96,13 @@
   --space-6: 3rem;
   --space-7: 5rem;
 
+  /* Vertical padding of a content block (top and bottom): one rhythm for every block. */
+  --block-padding: var(--space-7);
+
   /* Radii */
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
+  --radius-card: 0.75rem; /* 13.5px: the logo cards */
   --radius-lg: 1rem;
   --radius-xl: 1.25rem;
   --radius-pill: 100vw;

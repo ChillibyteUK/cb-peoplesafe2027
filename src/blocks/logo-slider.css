@@ -1,0 +1,63 @@
+/*
+ * Logo slider. A centred title over the shared slider (src/css/slider.css):
+ * two logos across on a phone, three from md, four from lg, five from xl. The
+ * logos keep their shape and sit centred in their slot.
+ */
+
+.logo-slider {
+	padding-block: var(--block-padding);
+}
+
+.logo-slider__title {
+	margin-bottom: var(--space-4);
+	text-align: center;
+	text-wrap: balance;
+}
+
+.logo-slider .slider {
+	--slides-per-view: 2;
+	--slider-gap: var(--space-3);
+}
+
+/*
+ * Each logo sits in a square white card with a soft border and rounded corners,
+ * the logo itself filling about 70% of it (as on the live site).
+ */
+.logo-slider__logo {
+	display: grid;
+	place-items: center;
+	aspect-ratio: 1;
+	border: var(--border-width) solid var(--col-blue-300);
+	border-radius: var(--radius-card);
+	background: var(--col-white);
+}
+
+.logo-slider__logo img {
+	display: block;
+	width: 70%;
+	height: 70%;
+	object-fit: contain;
+}
+
+.logo-slider__more {
+	margin-top: var(--space-4);
+	text-align: center;
+}
+
+@media (min-width: 768px) {
+	.logo-slider .slider {
+		--slides-per-view: 3;
+	}
+}
+
+@media (min-width: 992px) {
+	.logo-slider .slider {
+		--slides-per-view: 4;
+	}
+}
+
+@media (min-width: 1240px) {
+	.logo-slider .slider {
+		--slides-per-view: 5;
+	}
+}

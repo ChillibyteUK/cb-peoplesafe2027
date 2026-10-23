@@ -1,0 +1,24 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/related-content",
+	"title": "Related content",
+	"category": "cb-peoplesafe2027",
+	"description": "Cards for related products, case studies, resources or posts: pick them by hand, or show the latest of one type. Cards become a slider when they do not all fit.",
+	"icon": "grid-view",
+	"attributes": {
+		"title": { "type": "string", "default": "" },
+		"hideTitle": { "type": "boolean", "default": false },
+		"source": { "type": "string", "default": "curated" },
+		"items": { "type": "array", "default": [] },
+		"postType": { "type": "string", "default": "product" },
+		"count": { "type": "number", "default": 6 },
+		"sector": { "type": "number", "default": 0 }
+	},
+	"supports": {
+		"anchor": true,
+		"className": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

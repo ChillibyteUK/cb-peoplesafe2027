@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/caption-slider",
+	"title": "Caption slider",
+	"category": "cb-peoplesafe2027",
+	"description": "A slider of white cards, each with an icon and a caption, linking to a page. Two across on a phone, up to five on a wide screen.",
+	"icon": "slides",
+	"attributes": {
+		"title": { "type": "string", "default": "" },
+		"cards": {
+			"type": "array",
+			"default": [
+				{ "image": 0, "imageUrl": "", "caption": "", "link": "", "linkTarget": false }
+			]
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"color": {
+			"background": true,
+			"text": false,
+			"link": false,
+			"gradients": false
+		}
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

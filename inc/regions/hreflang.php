@@ -1,6 +1,6 @@
 <?php
 /**
- * hreflang: add x-default to every page that has alternates.
+ * Hreflang: add x-default to every page that has alternates.
  *
  * Polylang prints x-default on the front page only. Search engines want it
  * on every page of the set, pointing at the page that lets a visitor choose

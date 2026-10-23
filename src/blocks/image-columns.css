@@ -1,0 +1,46 @@
+/*
+ * Image columns. Two to four images side by side with text centred below each;
+ * one column on a phone. The heading and introduction above are ordinary blocks.
+ */
+
+.image-columns {
+	padding-block: var(--space-5);
+}
+
+.image-columns__grid {
+	display: grid;
+	gap: var(--space-4);
+	text-align: center;
+}
+
+.image-columns__image {
+	display: block;
+	width: auto; /* at its own size, never stretched: these are often small illustrations */
+	max-width: 100%;
+	height: auto;
+	margin: 0 auto var(--space-3);
+}
+
+.image-columns__text > :last-child {
+	margin-bottom: 0;
+}
+
+@media (min-width: 768px) {
+	.image-columns--2 .image-columns__grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.image-columns--3 .image-columns__grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	.image-columns--4 .image-columns__grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (min-width: 992px) {
+	.image-columns--4 .image-columns__grid {
+		grid-template-columns: repeat(4, 1fr);
+	}
+}

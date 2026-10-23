@@ -66,74 +66,125 @@ function cb_peoplesafe2027_register_settings_page() {
 	add_settings_section( 'cb_peoplesafe2027_general', 'General', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'cb_peoplesafe2027_social', 'Social', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'cb_peoplesafe2027_tracking', 'Tracking & Verification', '__return_false', 'theme-general-settings' );
+	add_settings_section( 'cb_peoplesafe2027_trustpilot', 'Trustpilot', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'cb_peoplesafe2027_scripts', 'Scripts', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'cb_peoplesafe2027_gallery', 'Gallery', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'cb_peoplesafe2027_repeater', 'Repeater', '__return_false', 'theme-general-settings' );
 
 	$fields = array(
-		'email'                     => array(
+		'email'                          => array(
 			'label'   => 'Email',
 			'type'    => 'email',
 			'section' => 'cb_peoplesafe2027_general',
 		),
-		'phone'                     => array(
+		'phone'                          => array(
 			'label'   => 'Phone',
 			'type'    => 'text',
 			'section' => 'cb_peoplesafe2027_general',
 		),
-		'facebook_url'              => array(
+		'facebook_url'                   => array(
 			'label'       => 'Facebook URL',
 			'type'        => 'url',
 			'section'     => 'cb_peoplesafe2027_social',
 			'placeholder' => 'https://facebook.com/...',
 			'description' => 'Leave blank to hide this icon from [social_icons].',
 		),
-		'instagram_url'             => array(
+		'instagram_url'                  => array(
 			'label'       => 'Instagram URL',
 			'type'        => 'url',
 			'section'     => 'cb_peoplesafe2027_social',
 			'placeholder' => 'https://instagram.com/...',
 			'description' => 'Leave blank to hide this icon from [social_icons].',
 		),
-		'ga_property'               => array(
+		'ga_property'                    => array(
 			'label'       => 'GA Property',
 			'type'        => 'text',
 			'section'     => 'cb_peoplesafe2027_tracking',
 			'placeholder' => 'G-XXXXXXX',
 			'description' => 'Google Analytics measurement ID. Only fires for logged-out visitors.',
 		),
-		'gtm_property'              => array(
+		'gtm_property'                   => array(
 			'label'       => 'GTM Property',
 			'type'        => 'text',
 			'section'     => 'cb_peoplesafe2027_tracking',
 			'placeholder' => 'GTM-XXXXXXX',
 			'description' => 'Google Tag Manager container ID. Only fires for logged-out visitors.',
 		),
-		'google_site_verification'  => array(
+		'google_site_verification'       => array(
 			'label'       => 'Google Site Verification',
 			'type'        => 'text',
 			'section'     => 'cb_peoplesafe2027_tracking',
 			'description' => 'Content value of the google-site-verification meta tag.',
 		),
-		'bing_site_verification'    => array(
+		'bing_site_verification'         => array(
 			'label'       => 'Bing Site Verification',
 			'type'        => 'text',
 			'section'     => 'cb_peoplesafe2027_tracking',
 			'description' => 'Content value of the msvalidate.01 meta tag.',
 		),
-		'custom_head'               => array(
+		'trustpilot_business_unit'       => array(
+			'label'       => 'Trustpilot Business Unit ID',
+			'type'        => 'text',
+			'section'     => 'cb_peoplesafe2027_trustpilot',
+			'placeholder' => '60bf889cafe44a000151a439',
+			'description' => 'The data-businessunit-id from your TrustBox code. Shared by every widget below.',
+		),
+		'trustpilot_review_url'          => array(
+			'label'       => 'Trustpilot Review Page',
+			'type'        => 'url',
+			'section'     => 'cb_peoplesafe2027_trustpilot',
+			'placeholder' => 'https://uk.trustpilot.com/review/example.com',
+			'description' => 'Where the fallback link inside each widget points.',
+		),
+		'trustpilot_widgets'             => array(
+			'label'       => 'Trustpilot Widgets',
+			'type'        => 'repeater',
+			'section'     => 'cb_peoplesafe2027_trustpilot',
+			'sub_fields'  => array(
+				'name'             => array(
+					'label' => 'Name',
+					'type'  => 'text',
+				),
+				'template_id'      => array(
+					'label' => 'Template ID',
+					'type'  => 'text',
+				),
+				'token'            => array(
+					'label' => 'Token',
+					'type'  => 'text',
+				),
+				'height'           => array(
+					'label' => 'Height',
+					'type'  => 'text',
+				),
+				'stars'            => array(
+					'label' => 'Stars',
+					'type'  => 'text',
+				),
+				'review_languages' => array(
+					'label' => 'Review languages',
+					'type'  => 'text',
+				),
+				'card'             => array(
+					'label' => 'On a card (yes)',
+					'type'  => 'text',
+				),
+			),
+			'description' => 'One row per TrustBox (data-template-id, data-token and data-style-height from its code; stars and review languages are optional). Type yes under "On a card" to put the widget on a white card by default (a block can override it). The Trustpilot widget block lists these by name. The locale is taken from the visitor\'s region.',
+		),
+		'custom_head'                    => array(
 			'label'       => 'Head',
 			'type'        => 'code',
 			'section'     => 'cb_peoplesafe2027_scripts',
 			'description' => 'Printed in <head> after the managed GA/GTM tags. Paste vendor snippets verbatim, <script> tags and all — nothing is escaped or filtered.',
 		),
-		'custom_body_open'          => array(
+		'custom_body_open'               => array(
 			'label'       => 'Body Open',
 			'type'        => 'code',
 			'section'     => 'cb_peoplesafe2027_scripts',
 			'description' => 'Printed immediately after <body> opens, after the GTM noscript fallback. Where <noscript> tracking pixels belong.',
 		),
-		'custom_body_close'         => array(
+		'custom_body_close'              => array(
 			'label'       => 'Body Close',
 			'type'        => 'code',
 			'section'     => 'cb_peoplesafe2027_scripts',
@@ -146,13 +197,13 @@ function cb_peoplesafe2027_register_settings_page() {
 			'default'     => '1',
 			'description' => 'On by default, matching GA/GTM — keeps the team\'s own traffic out of whatever these scripts measure. Untick if a slot holds something every visitor should see, e.g. a chat widget.',
 		),
-		'example_gallery'           => array(
+		'example_gallery'                => array(
 			'label'       => 'Example Gallery',
 			'type'        => 'gallery',
 			'section'     => 'cb_peoplesafe2027_gallery',
 			'description' => 'A fixed multi-image list — e.g. accreditation badges, a logo strip. Read with cb_peoplesafe2027_get_repeater_setting-style helper of your own, mirroring cb_peoplesafe2027_get_footer_accreditation_ids() in the cb-hts-js-2026 sibling theme.',
 		),
-		'example_repeater'          => array(
+		'example_repeater'               => array(
 			'label'       => 'Example Repeater',
 			'type'        => 'repeater',
 			'section'     => 'cb_peoplesafe2027_repeater',
@@ -306,12 +357,12 @@ function cb_peoplesafe2027_render_textarea_field( $args ) {
 		placeholder="<?php echo esc_attr( $args['placeholder'] ?? '' ); ?>"
 		rows="<?php echo (int) ( $args['rows'] ?? ( $is_code ? 10 : 4 ) ); ?>"
 		class="large-text"
-		<?php if ( $is_code ) : ?>
+		<?php if ( $is_code ) { ?>
 		spellcheck="false"
 		autocapitalize="off"
 		autocomplete="off"
 		style="font-family: Consolas, Monaco, monospace; font-size: 12px; white-space: pre; overflow-wrap: normal; overflow-x: auto;"
-		<?php endif; ?>
+		<?php } ?>
 	><?php echo esc_textarea( $value ); ?></textarea>
 	<?php
 	if ( ! empty( $args['description'] ) ) {

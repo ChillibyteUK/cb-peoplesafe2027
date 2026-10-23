@@ -2,6 +2,17 @@ import { __ } from '@wordpress/i18n';
 import { MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import { TextControl, TextareaControl, ToggleControl, Button, RadioControl } from '@wordpress/components';
 import useRowMotion from './useRowMotion';
+import useMediaUrl from './useMediaUrl';
+
+/**
+ * A small preview of an image row field, looked up from its ID when the row
+ * has no stored URL.
+ */
+function MediaThumb( { id, url } ) {
+	const src = useMediaUrl( id, url );
+
+	return src ? <img src={ src } alt="" /> : null;
+}
 
 /**
  * Generic repeater UI for a block attribute holding an array of row objects.
@@ -105,9 +116,7 @@ export default function RepeaterField( { label, value, onChange, fields, emptyRo
 										value={ row[ field.name ] }
 										render={ ( { open } ) => (
 											<div className="cb-peoplesafe2027-repeater-field__image">
-												{ row[ `${ field.name }Url` ] && (
-													<img src={ row[ `${ field.name }Url` ] } alt="" />
-												) }
+												<MediaThumb id={ row[ field.name ] } url={ row[ `${ field.name }Url` ] } />
 												<Button variant="secondary" size="small" onClick={ open }>
 													{ row[ field.name ]
 														? __( 'Replace', 'cb-peoplesafe2027' )
@@ -261,7 +270,7 @@ export default function RepeaterField( { label, value, onChange, fields, emptyRo
 				</div>
 			) ) }
 			</div>
-			<Button variant="primary" onClick={ () => addRow( emptyRow ) }>
+			<Button variant="secondary" onClick={ () => addRow( emptyRow ) }>
 				{ __( 'Add row', 'cb-peoplesafe2027' ) }
 			</Button>
 		</div>

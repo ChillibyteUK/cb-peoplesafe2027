@@ -1,0 +1,29 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/stats-counter",
+	"title": "Stats counter",
+	"category": "cb-peoplesafe2027",
+	"description": "A title and two to four big numbers that count up as the block scrolls into view, each with a label and a short description, beside an optional image.",
+	"icon": "chart-bar",
+	"attributes": {
+		"title": { "type": "string", "default": "" },
+		"imageId": { "type": "number", "default": 0 },
+		"imageUrl": { "type": "string", "default": "" },
+		"hideImage": { "type": "boolean", "default": false },
+		"stats": {
+			"type": "array",
+			"default": [
+				{ "prefix": "", "value": "", "suffix": "", "label": "", "description": "" },
+				{ "prefix": "", "value": "", "suffix": "", "label": "", "description": "" },
+				{ "prefix": "", "value": "", "suffix": "", "label": "", "description": "" }
+			]
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

@@ -170,7 +170,6 @@ function cb_peoplesafe2027_register_post_types() {
 			)
 		);
 	}
-
 }
 add_action( 'init', 'cb_peoplesafe2027_register_post_types' );
 

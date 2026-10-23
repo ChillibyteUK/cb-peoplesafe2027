@@ -1,0 +1,40 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/text-and-media",
+	"title": "Text and media",
+	"category": "cb-peoplesafe2027",
+	"description": "Text beside an image or a video, with an optional pre-title, buttons, text under the video and a video transcript.",
+	"icon": "align-pull-left",
+	"attributes": {
+		"preTitle": { "type": "string", "default": "" },
+		"title": { "type": "string", "default": "" },
+		"buttons": { "type": "array", "default": [] },
+		"mediaType": { "type": "string", "default": "image" },
+		"imageId": { "type": "number", "default": 0 },
+		"imageUrl": { "type": "string", "default": "" },
+		"videoUrl": { "type": "string", "default": "" },
+		"playIn": { "type": "string", "default": "modal" },
+		"framed": { "type": "boolean", "default": true },
+		"listItems": { "type": "array", "default": [] },
+		"tickColour": { "type": "string", "default": "" },
+		"posterId": { "type": "number", "default": 0 },
+		"posterUrl": { "type": "string", "default": "" },
+		"mediaPosition": { "type": "string", "default": "right" },
+		"split": { "type": "string", "default": "half" },
+		"belowMedia": { "type": "string", "default": "" },
+		"transcript": { "type": "string", "default": "" }
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"color": {
+			"background": true,
+			"text": false,
+			"link": false,
+			"gradients": false
+		}
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

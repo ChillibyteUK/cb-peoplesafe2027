@@ -1,0 +1,81 @@
+/*
+ * Stats counter. The image (a cut-out) on the left from md up and a title over a
+ * row of big orange numbers, each with a bold label and a short description.
+ * Below md the numbers come first and the image after them.
+ */
+
+.stats-counter {
+	padding-block: var(--block-padding);
+}
+
+.stats-counter__grid {
+	display: grid;
+	gap: var(--space-5);
+	align-items: center;
+}
+
+.stats-counter__media {
+	order: 2;
+}
+
+.stats-counter__content {
+	order: 1;
+}
+
+.stats-counter__image {
+	display: block;
+	width: 100%;
+	max-width: 21.75rem;
+	height: auto;
+	margin-inline: auto;
+}
+
+.stats-counter__title {
+	margin-bottom: var(--space-4);
+	text-wrap: balance;
+}
+
+.stats-counter__stats {
+	display: grid;
+	gap: var(--space-4);
+}
+
+.stats-counter__value {
+	margin-bottom: var(--space-2);
+	color: var(--col-orange-400);
+	font-size: var(--fs-title-md);
+	font-weight: var(--fw-bold);
+	line-height: 1.1;
+	font-variant-numeric: tabular-nums;
+}
+
+.stats-counter__label {
+	margin-bottom: var(--space-2);
+	font-weight: var(--fw-bold);
+}
+
+.stats-counter__description {
+	font-size: var(--fs-small);
+}
+
+@media (min-width: 768px) {
+	.stats-counter__grid {
+		grid-template-columns: 1fr 2fr;
+	}
+
+	.stats-counter--no-image .stats-counter__grid {
+		grid-template-columns: 1fr;
+	}
+
+	.stats-counter__media {
+		order: 1;
+	}
+
+	.stats-counter__content {
+		order: 2;
+	}
+
+	.stats-counter__stats {
+		grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+	}
+}

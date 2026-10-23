@@ -1,0 +1,16 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/temp-page-list",
+	"title": "Page list (temporary)",
+	"category": "cb-peoplesafe2027",
+	"description": "A temporary list of the site's pages and content, for looking at the build before the real navigation exists. Shown to logged-in editors only. Delete it before launch.",
+	"icon": "list-view",
+	"attributes": {},
+	"supports": {
+		"anchor": false,
+		"className": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

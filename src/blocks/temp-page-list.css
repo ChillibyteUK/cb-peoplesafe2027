@@ -1,0 +1,51 @@
+/* Temporary page list (blocks/temp-page-list). Delete with the block. */
+
+.temp-page-list {
+	padding-block: var(--space-4);
+}
+
+.temp-page-list > .container {
+	padding: var(--space-3);
+	border: var(--border-width) dashed var(--col-border);
+	border-radius: var(--radius-lg);
+	background-color: var(--col-white);
+}
+
+.temp-page-list__note {
+	margin-bottom: var(--space-3);
+	color: var(--col-body-muted);
+	font-size: var(--fs-small);
+}
+
+.temp-page-list__columns {
+	columns: 16rem;
+	column-gap: var(--space-5);
+}
+
+.temp-page-list__group {
+	break-inside: avoid;
+	margin-bottom: var(--space-4);
+}
+
+.temp-page-list__heading {
+	margin-bottom: var(--space-2);
+	font-size: var(--fs-base);
+	text-transform: uppercase;
+}
+
+.temp-page-list__list {
+	margin: 0;
+	padding-left: var(--space-3);
+	font-size: var(--fs-small);
+	list-style: none;
+}
+
+.temp-page-list__list ul {
+	margin: 0;
+	padding-left: var(--space-3);
+	list-style: none;
+}
+
+.temp-page-list__list a {
+	color: var(--col-body);
+}

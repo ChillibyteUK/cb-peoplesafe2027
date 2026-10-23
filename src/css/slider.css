@@ -1,0 +1,143 @@
+/*
+ * The shared slider (src/js/slider.js). Embla moves .slider__track inside
+ * .slider__viewport; the number of slides in view and the gap between them are
+ * set per block with --slides-per-view and --slider-gap on the .slider element.
+ * Without JavaScript the viewport scrolls sideways with snap points.
+ */
+
+.slider {
+	--slides-per-view: 1;
+	--slider-gap: var(--space-3);
+
+	position: relative;
+}
+
+.slider__viewport {
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+}
+
+.slider--ready .slider__viewport {
+	overflow: hidden;
+	scroll-snap-type: none;
+}
+
+.slider__track {
+	display: flex;
+	margin-left: calc(var(--slider-gap) * -1);
+}
+
+.slider__slide {
+	flex: 0 0 calc(100% / var(--slides-per-view));
+	min-width: 0;
+	padding-left: var(--slider-gap);
+	scroll-snap-align: start;
+}
+
+.slider__viewport:focus-visible {
+	outline: var(--border-width) solid var(--col-blue-400);
+	outline-offset: 2px;
+}
+
+.slider__controls {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-3);
+	margin-top: var(--space-3);
+}
+
+.slider__controls[hidden] {
+	display: none;
+}
+
+.slider__dots {
+	display: flex;
+	align-items: center;
+	gap: var(--space-3);
+}
+
+.slider__dot {
+	position: relative;
+	width: 0.75rem;
+	height: 0.75rem;
+	padding: 0;
+	border: var(--border-width) solid var(--col-navy-400);
+	border-radius: 50%;
+	background: transparent;
+	cursor: pointer;
+	transition: background-color var(--transition);
+}
+
+.slider__dot[aria-current="true"] {
+	background: var(--col-navy-400);
+}
+
+.slider__arrow {
+	display: grid;
+	place-items: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	padding: 0;
+	border: var(--border-width) solid var(--col-navy-400);
+	border-radius: 50%;
+	background: transparent;
+	color: var(--col-navy-400);
+	font-size: var(--fs-h4);
+	line-height: 1;
+	cursor: pointer;
+	transition: background-color var(--transition), color var(--transition);
+}
+
+.slider__arrow:hover:not(:disabled) {
+	background: var(--col-navy-400);
+	color: var(--col-white);
+}
+
+.slider__arrow:disabled {
+	opacity: 0.4;
+	cursor: default;
+}
+
+/* The dot is small to look at, but its tap target is 28px square (WCAG 2.5.8 asks for 24px). */
+.slider__dot::after {
+	content: "";
+	position: absolute;
+	inset: -0.5rem;
+}
+
+/* Pause / start button for sliders that rotate by themselves: a pause symbol, or a play triangle when paused. */
+.slider__pause {
+	display: grid;
+	place-items: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	padding: 0;
+	border: var(--border-width) solid var(--col-navy-400);
+	border-radius: 50%;
+	background: transparent;
+	color: var(--col-navy-400);
+	cursor: pointer;
+	transition: background-color var(--transition), color var(--transition);
+}
+
+.slider__pause:hover {
+	background: var(--col-navy-400);
+	color: var(--col-white);
+}
+
+.slider__pause span {
+	display: block;
+	width: 0.7rem;
+	height: 0.8rem;
+	border-inline: 0.2rem solid currentColor;
+}
+
+.slider__pause.is-paused span {
+	width: 0;
+	height: 0;
+	margin-left: 0.15rem;
+	border-block: 0.45rem solid transparent;
+	border-inline: 0.7rem solid currentColor;
+	border-right: 0;
+}

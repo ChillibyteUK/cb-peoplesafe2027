@@ -1,0 +1,124 @@
+/*
+ * Quote. A white card with the quote on the left (two thirds from lg up) and an
+ * optional photo on the right, in front of a gradient circle whose colour
+ * cycles blue, orange, pink. Below lg the photo is hidden. Two or more quotes
+ * use the shared slider (src/css/slider.css).
+ */
+
+.quote {
+	padding-block: var(--block-padding);
+}
+
+.quote .slider {
+	--slider-gap: var(--space-3);
+}
+
+.quote .slider--ready .slider__viewport {
+	/*
+	 * The card's shadow falls outside the card, and the slider clips whatever is
+	 * outside its viewport. Room for it below (padding, pulled back with a negative
+	 * margin so the layout does not move) and to the sides (a clip margin no wider
+	 * than the gap, so the next card's edge is still not shown).
+	 */
+	overflow: clip;
+	overflow-clip-margin: var(--slider-gap);
+	padding-bottom: var(--space-6);
+	margin-bottom: calc(-1 * var(--space-6));
+}
+
+.quote__card {
+	position: relative;
+	isolation: isolate;
+	overflow: clip;
+	min-height: 20rem;
+	margin: 0;
+	border-radius: var(--radius-lg);
+	background: var(--col-white);
+	box-shadow: var(--shadow-out);
+}
+
+.quote__card::before {
+	content: "";
+	position: absolute;
+	right: -4rem;
+	bottom: -5rem;
+	z-index: -1;
+	display: none;
+	height: 100%;
+	aspect-ratio: 1;
+	border-radius: 50%;
+}
+
+.quote__card--blue::before {
+	background: var(--gradient-blue);
+}
+
+.quote__card--orange::before {
+	background: var(--gradient-orange);
+}
+
+.quote__card--pink::before {
+	background: var(--gradient-pink);
+}
+
+.quote__inner {
+	display: grid;
+	grid-template-rows: 1fr auto auto;
+	gap: var(--space-3);
+	height: 100%;
+	min-height: inherit;
+	padding: var(--space-4);
+}
+
+.quote__text {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	line-height: 1.5;
+}
+
+.quote__text p {
+	font-size: var(--fs-h3);
+}
+
+.quote__text > :last-child {
+	margin-bottom: 0;
+}
+
+.quote__cite {
+	color: var(--col-pink-400);
+	font-size: var(--fs-small);
+}
+
+.quote__logo {
+	display: block;
+	width: auto;
+	max-width: 50%;
+	max-height: 5rem;
+}
+
+.quote__image {
+	display: none;
+}
+
+@media (min-width: 992px) {
+	.quote__card::before {
+		display: block;
+	}
+
+	.quote__card--has-image .quote__inner {
+		width: 66%;
+	}
+
+	.quote__image {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		display: block;
+		width: auto;
+		height: 95%;
+		max-width: 34%;
+		object-fit: contain;
+		object-position: right bottom;
+	}
+}

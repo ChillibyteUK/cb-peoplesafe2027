@@ -410,16 +410,18 @@
  * title with URL and dialog with style, and the style radios in a row.
  */
 .cb-peoplesafe2027-cta-buttons__row {
-	margin-block: 0.75rem;
+	display: flex;
+	align-items: flex-start;
+	gap: 0.75rem;
+	margin-bottom: 0.75rem;
 	padding: 0.75rem;
 	border: 1px solid #ddd;
 	border-radius: 2px;
 }
 
-.cb-peoplesafe2027-cta-buttons__row {
-	display: flex;
-	align-items: flex-start;
-	gap: 0.75rem;
+/* The Add button sits under the rows, level with the field's own padding. */
+.cb-peoplesafe2027-cta-buttons > .components-button {
+	margin-top: 0.25rem;
 }
 
 .cb-peoplesafe2027-cta-buttons__fields {
@@ -519,6 +521,145 @@
 		animation: none;
 		background-color: rgb(255 180 34 / 0.4);
 	}
+}
+
+/* Related content: one row per chosen item, type and item side by side. */
+.cb-peoplesafe2027-related-items__row {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.75rem;
+	margin-block: 0.75rem;
+	padding: 0.75rem;
+	border: 1px solid #ddd;
+	border-radius: 2px;
+}
+
+.cb-peoplesafe2027-related-items__row > .components-base-control {
+	flex: 1 1 0;
+	min-width: 0;
+}
+
+/* FAQ: the question and its answer stack inside one row. */
+.cb-peoplesafe2027-faq-rows__fields {
+	flex: 1 1 0;
+	min-width: 0;
+}
+
+/* A single image picker: thumbnail, then Replace and Remove. */
+.cb-peoplesafe2027-image-picker img {
+	display: block;
+	height: auto;
+	margin-bottom: 0.5rem;
+	border: 1px solid #ddd;
+	background: #fff;
+}
+
+.cb-peoplesafe2027-image-picker__actions {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+/* Two image pickers side by side (the Quote's logo and photo). */
+.cb-peoplesafe2027-image-pair {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1rem;
+	margin-top: 0.5rem;
+}
+
+/* The logo gallery: a grid of square thumbnails, each with move and remove buttons beneath. */
+.cb-peoplesafe2027-logo-gallery {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+	gap: 0.75rem;
+	margin: 0 0 0.75rem;
+	padding: 0;
+	list-style: none;
+}
+
+.cb-peoplesafe2027-logo-gallery__tile {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 0;
+	padding: 0.5rem;
+	border: 1px solid #ddd;
+	border-radius: 2px;
+	background: #fff;
+}
+
+.cb-peoplesafe2027-logo-gallery__tile img {
+	display: block;
+	width: 100%;
+	aspect-ratio: 1;
+	object-fit: contain;
+}
+
+.cb-peoplesafe2027-logo-gallery__missing {
+	display: grid;
+	place-items: center;
+	width: 100%;
+	aspect-ratio: 1;
+	color: #999;
+}
+
+.cb-peoplesafe2027-logo-gallery__actions {
+	display: flex;
+	gap: 0.125rem;
+	margin-top: 0.25rem;
+}
+
+/* The row lists (FAQ, Quote, Side tabs) take the same padding and white background as every other field, and a row's number sits at its top. */
+.cb-peoplesafe2027-faq-rows {
+	padding: 0.75rem 1rem;
+	background: #fff;
+}
+
+.cb-peoplesafe2027-related-items__row > .cb-peoplesafe2027-repeater-field__number {
+	margin-top: 1.5rem;
+}
+
+/*
+ * A URL input sitting directly in a field (Text and media's video link) is
+ * three WordPress field wrappers deep, and each one picked up the block-wide
+ * field padding. Only the outermost keeps the field's own padding.
+ */
+.cb-peoplesafe2027-editor-field .block-editor-url-input,
+.cb-peoplesafe2027-editor-field .block-editor-url-input .components-base-control {
+	padding: 0;
+}
+
+/*
+ * Inside a repeating row (FAQ, Quote, Side tabs, Tick list) the fields are plain
+ * and stacked: no extra field padding or background, so labels and inputs line up
+ * and the URL input is not padded again at each WordPress wrapper.
+ */
+.cb-peoplesafe2027-faq-rows__fields .components-base-control,
+.cb-peoplesafe2027-faq-rows__fields .cb-peoplesafe2027-editor-field,
+.cb-peoplesafe2027-faq-rows__fields .block-editor-url-input {
+	padding: 0;
+	background: transparent;
+}
+
+.cb-peoplesafe2027-faq-rows__fields .components-base-control,
+.cb-peoplesafe2027-faq-rows__fields .cb-peoplesafe2027-editor-field {
+	margin-bottom: 0.75rem;
+}
+
+.cb-peoplesafe2027-faq-rows__fields .cb-peoplesafe2027-cta-buttons__pair {
+	gap: 0.75rem;
+}
+
+.cb-peoplesafe2027-faq-rows__fields .cb-peoplesafe2027-cta-buttons__url .components-toggle-control {
+	margin-top: 0.5rem;
+}
+
+/* The stat's number row: what goes before it, the number, what goes after, side by side. */
+.cb-peoplesafe2027-stat-number {
+	display: grid;
+	grid-template-columns: 1fr 2fr 1fr;
+	gap: 0.75rem;
 }
 
 /*# sourceMappingURL=editor.css.map */
