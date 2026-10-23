@@ -20,7 +20,7 @@
 <!-- HEADER-NAV:START -->
 <header id="masthead">
 	<nav class="navbar container" aria-label="Primary navigation">
-		<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="navbar-brand">
+		<a href="<?php echo esc_url( function_exists( 'cb_peoplesafe2027_region_url' ) && pll_current_language() ? cb_peoplesafe2027_region_url( pll_current_language() ) : home_url( '/' ) ); ?>" class="navbar-brand">
 			<?php bloginfo( 'name' ); ?>
 		</a>
 

@@ -1,0 +1,95 @@
+/*
+ * Region switcher: a flag and code button that opens a list of regions.
+ * Open and close behaviour is the theme's dropdown script
+ * (src/js/nav-dropdown.js), which toggles .is-open on the menu.
+ */
+
+.language-switcher {
+	position: relative;
+}
+
+.language-switcher .dropdown-toggle {
+	width: auto;
+	padding: var(--space-1) var(--space-2);
+	border: var(--border-width) solid transparent;
+	border-radius: var(--radius-sm);
+	color: var(--col-body);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-bold);
+	transition: border-color var(--transition);
+}
+
+.language-switcher .dropdown-toggle:hover,
+.language-switcher .dropdown-toggle[aria-expanded="true"] {
+	border-color: var(--col-border);
+}
+
+.language-switcher .dropdown-toggle:focus-visible,
+.language-switcher__link:focus-visible {
+	outline: var(--border-width) solid var(--col-navy-400);
+	outline-offset: var(--space-1);
+}
+
+.language-switcher__chevron {
+	transition: transform var(--transition);
+}
+
+.language-switcher .dropdown-toggle[aria-expanded="true"] .language-switcher__chevron {
+	transform: rotate(180deg);
+}
+
+.language-switcher .flag {
+	display: block;
+	width: 20px;
+	height: 15px;
+	border-radius: 2px;
+	box-shadow: 0 0 0 1px rgb(0 0 0 / 0.15);
+}
+
+/* Right-aligned panel on every screen size (the nav dropdown rules only
+   position their panel from lg up, and left-aligned). */
+.language-switcher__menu {
+	position: absolute;
+	top: 100%;
+	right: 0;
+	left: auto;
+	min-width: 12rem;
+	margin: var(--space-1) 0 0;
+	padding: var(--space-1);
+	background-color: var(--col-body-bg);
+	border: 1px solid var(--col-border);
+	border-radius: var(--radius-sm);
+	box-shadow: var(--shadow-out);
+	z-index: var(--z-nav);
+}
+
+.language-switcher__link {
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
+	padding: var(--space-2);
+	border-radius: var(--radius-sm);
+	color: var(--col-body);
+	font-size: var(--fs-small);
+	text-decoration: none;
+}
+
+.language-switcher__link:hover {
+	background-color: var(--col-neutral);
+}
+
+.language-switcher__item.is-current .language-switcher__link {
+	font-weight: var(--fw-bold);
+}
+
+/* A region with no equivalent of this page links to its home page. */
+.language-switcher__item.is-fallback .language-switcher__link {
+	color: var(--col-body-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.language-switcher .dropdown-toggle,
+	.language-switcher__chevron {
+		transition: none;
+	}
+}

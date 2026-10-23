@@ -9,7 +9,7 @@ instead of ACF. See "Adding a block" below.
 ## Regions
 
 One install, one language per region: `en_GB` at `/uk/` (default), `en_US` at
-`/us/`, `en_AU` at `/au/`. The site root `/` is a language-neutral hub where
+`/us/`, `en_AU` at `/au/`, `en_CA` at `/ca/`. The site root `/` is a language-neutral hub where
 visitors choose a region. The code is in `inc/regions.php` and `inc/regions/`,
 and does nothing when Polylang is not active.
 
@@ -20,9 +20,11 @@ and does nothing when Polylang is not active.
 | `routing.php` | merged post type paths, landing pages, front page, one canonical URL |
 | `menu.php` | one menu, resolved to the visitor's region |
 | `root.php` | serves the Root hub at `/` |
-| `language-switcher.php` | the header switcher (unstyled) |
+| `language-switcher.php` | the header region dropdown, with flags (`img/flags`, flag-icons, MIT) |
 
 URL shape: `/uk/guides|whitepapers|brochures|infographics|video/{slug}/`,
+`/uk/case-studies/{slug}/` and `/uk/stories/{slug}/` (term User story),
+`/uk/partnerships/{slug}/` and `/uk/accreditations/{slug}/` (term Accreditation),
 `/uk/news/{slug}/` and `/uk/blogs/{slug}/`, landing pages at `/uk/{slug}/`,
 taxonomies under `/jurisdiction/`. Decisions: DEC-023 to DEC-027 in the project
 tracker.
@@ -32,8 +34,9 @@ tracker.
 Registered in `inc/posttypes.php` and `inc/taxonomies.php` from one table each
 (add a row for a new one): Products, Case studies, Resources, Legislation,
 Partners, Careers, Landing pages and People (non-public), with their taxonomies
-(`resource_type`, `jurisdiction` and the filters). Resources and Landing pages
-register with `rewrite => false` because `routing.php` builds their paths.
+(`resource_type`, `jurisdiction` and the filters). Resources, Case studies, Partners and Landing pages
+register with `rewrite => false` because `routing.php` builds their paths (a term
+can give an item its own path base: see `cb_peoplesafe2027_term_routes()`).
 Everything translatable is ticked in Polylang (not People, so one person serves
 every region). Terms for News, the resource types, User story and the landing
 types are seeded once per region from the CLI, not by the theme.
@@ -52,6 +55,36 @@ turns the literal `--col-*` colours and `--fs-*` sizes into the editor palette.
 The agreed set and the reasoning are in `style-token-proposal.md` (project
 folder, outside the theme).
 
+### Buttons
+
+One system in `src/css/buttons.css`: `.button` plus `--primary`, `--outline`,
+`--outline-white`, `--white` (set `--button-accent` on a banner for its text
+colour) and `--small`. `.button-group` lays them out. Full width below md. The
+core Buttons block gets the same look. Tokens are the `--button-*` ones.
+
+### CTA buttons and the Home hero
+
+`inc/cta-buttons.php` prints any block's row of buttons
+(`cb_peoplesafe2027_cta_buttons()`), and `blocks/_shared/CtaButtonsField.js` is
+the matching editor field, so Hero, Home hero, Product header and CTA banner
+share one set of controls and one markup. In the editor each button has title and URL side by side (the URL suggests pages and posts as you type, takes plain text otherwise, and keeps same-site links as root-relative paths so they survive a move between environments), then dialog id and style side by side. A button either links or opens a
+`<dialog>` by id (`data-dialog-target`, `src/js/dialog.js`). The Home hero is
+`blocks/home-hero` (animation layers in `img/home-hero/`, CSS in
+`src/blocks/home-hero.css`, reduced-motion safe).
+
+URL fields use `blocks/_shared/SiteUrlInput.js`, a wrapper around core's
+`URLInput` that closes its suggestion list when focus leaves the field or a
+suggestion is chosen, and never opens it for a value changed from outside
+(undo, a row move). Use it for any new URL field, not `URLInput` directly.
+
+### Style guide
+
+`style-guide.php` is a page template ("Style Guide") that shows every token in
+`tokens.css` as it renders, plus headings, text and buttons. It reads
+`tokens.css`, so it cannot drift. Editors only (anyone else sees the 404) and
+always `noindex`, so it is safe on live. Add a section when a component or
+block is built. The local page is `/uk/style-guide/`.
+
 ### Needs the cbp-peoplesafe plugin
 
 Polylang decides the `/` to `/uk/` redirect before the theme loads, and the Root
@@ -61,7 +94,7 @@ with the theme.
 
 ### Polylang Pro settings
 
-- Languages: UK (`en_GB`, default), US (`en_US`), AU (`en_AU`); directory URLs;
+- Languages: UK (`en_GB`, default), US (`en_US`), AU (`en_AU`), CA (`en_CA`); directory URLs;
   default language not hidden; remove `/language/`.
 - Share slugs and Translate slugs on (Pro, on by default).
 - Set a post's language **before** its slug, or slugs are not shared.

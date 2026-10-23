@@ -55,7 +55,7 @@ function cb_peoplesafe2027_register_post_types() {
 	 * Project post types (DEC-012). Paths keep each current type's base with the
 	 * region in front (DEC-026): the region prefix comes from Polylang, the base
 	 * from the rewrite slug here, or from inc/regions/routing.php where rewrite
-	 * is false. Types that routing.php builds paths for: resource, landing_page.
+	 * is false. Types that routing.php builds paths for: resource, case_study, partner, landing_page.
 	 */
 	$types = array(
 		'product'      => array(
@@ -73,11 +73,8 @@ function cb_peoplesafe2027_register_post_types() {
 			'plural'  => 'Case studies',
 			'single'  => 'Case study',
 			'icon'    => 'dashicons-awards',
-			'rewrite' => array(
-				'slug'       => 'case-studies',
-				'with_front' => false,
-			),
-			'archive' => true,
+			'rewrite' => false, // Paths by type term: routing.php.
+			'archive' => false,
 			'taxes'   => array( 'sector', 'case_study_type' ),
 		),
 		'resource'     => array(
@@ -104,11 +101,8 @@ function cb_peoplesafe2027_register_post_types() {
 			'plural'  => 'Partners',
 			'single'  => 'Partner',
 			'icon'    => 'dashicons-groups',
-			'rewrite' => array(
-				'slug'       => 'partnerships',
-				'with_front' => false,
-			),
-			'archive' => true,
+			'rewrite' => false, // Paths by type term: routing.php.
+			'archive' => false,
 			'taxes'   => array( 'partner_type' ),
 		),
 		'career'       => array(

@@ -166,7 +166,15 @@ body {
 	font-weight: var(--fw-light);
 	line-height: var(--line-height-base);
 	color: var(--col-body);
-	background-color: var(--col-body-bg);
+	/* The site background: pale blue-grey with faint diamonds. Wider than the
+	   screen on small devices so the diamonds stay a sensible size. */
+	background: var(--col-neutral) url("../img/background.svg") center top / 200% auto repeat-y;
+}
+
+@media (min-width: 768px) {
+	body {
+		background-size: 100% auto;
+	}
 }
 
 h1,
@@ -541,6 +549,102 @@ ol {
 	}
 }
 
+/*
+ * Region switcher: a flag and code button that opens a list of regions.
+ * Open and close behaviour is the theme's dropdown script
+ * (src/js/nav-dropdown.js), which toggles .is-open on the menu.
+ */
+
+.language-switcher {
+	position: relative;
+}
+
+.language-switcher .dropdown-toggle {
+	width: auto;
+	padding: var(--space-1) var(--space-2);
+	border: var(--border-width) solid transparent;
+	border-radius: var(--radius-sm);
+	color: var(--col-body);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-bold);
+	transition: border-color var(--transition);
+}
+
+.language-switcher .dropdown-toggle:hover,
+.language-switcher .dropdown-toggle[aria-expanded="true"] {
+	border-color: var(--col-border);
+}
+
+.language-switcher .dropdown-toggle:focus-visible,
+.language-switcher__link:focus-visible {
+	outline: var(--border-width) solid var(--col-navy-400);
+	outline-offset: var(--space-1);
+}
+
+.language-switcher__chevron {
+	transition: transform var(--transition);
+}
+
+.language-switcher .dropdown-toggle[aria-expanded="true"] .language-switcher__chevron {
+	transform: rotate(180deg);
+}
+
+.language-switcher .flag {
+	display: block;
+	width: 20px;
+	height: 15px;
+	border-radius: 2px;
+	box-shadow: 0 0 0 1px rgb(0 0 0 / 0.15);
+}
+
+/* Right-aligned panel on every screen size (the nav dropdown rules only
+   position their panel from lg up, and left-aligned). */
+.language-switcher__menu {
+	position: absolute;
+	top: 100%;
+	right: 0;
+	left: auto;
+	min-width: 12rem;
+	margin: var(--space-1) 0 0;
+	padding: var(--space-1);
+	background-color: var(--col-body-bg);
+	border: 1px solid var(--col-border);
+	border-radius: var(--radius-sm);
+	box-shadow: var(--shadow-out);
+	z-index: var(--z-nav);
+}
+
+.language-switcher__link {
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
+	padding: var(--space-2);
+	border-radius: var(--radius-sm);
+	color: var(--col-body);
+	font-size: var(--fs-small);
+	text-decoration: none;
+}
+
+.language-switcher__link:hover {
+	background-color: var(--col-neutral);
+}
+
+.language-switcher__item.is-current .language-switcher__link {
+	font-weight: var(--fw-bold);
+}
+
+/* A region with no equivalent of this page links to its home page. */
+.language-switcher__item.is-fallback .language-switcher__link {
+	color: var(--col-body-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.language-switcher .dropdown-toggle,
+	.language-switcher__chevron {
+		transition: none;
+	}
+}
+
 /* Minimal, deliberately unopinionated form base — expected to be overridden per project. */
 
 input,
@@ -595,6 +699,152 @@ select {
 		outline: 2px solid var(--col-primary);
 		outline-offset: 2px;
 	}
+
+/*
+ * Buttons: one system. Base .button plus a variant:
+ *   .button--primary        yellow fill, black text, orange wipes in on hover
+ *   .button--outline        black border and text, orange on hover
+ *   .button--outline-white  white border and text, for dark backgrounds
+ *   .button--white          white fill, coloured text, for gradient banners
+ *                           (set --button-accent on the banner for the text colour)
+ *   .button--small          16px, for pagers and tab controls (combine with a variant)
+ *
+ * Group them with .button-group (gap, wraps). Below md every button is full
+ * width; from md up they size to their content. The core Buttons block gets
+ * the same look (default = primary, "Outline" style = outline).
+ * Everything comes from tokens.css: no literals here.
+ */
+
+.button,
+.wp-block-button .wp-block-button__link {
+	--_accent: var(--button-accent, var(--col-orange-400));
+	display: flex;
+	align-items: center; /* keep the label centred if a parent stretches the button */
+	justify-content: center;
+	width: 100%;
+	padding: var(--button-padding-block) var(--button-padding-inline);
+	border: var(--button-border) solid transparent;
+	border-radius: var(--button-radius);
+	font-family: inherit;
+	font-size: var(--button-font-size);
+	font-weight: var(--fw-bold);
+	line-height: var(--line-height-heading);
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+	transition:
+		color var(--transition),
+		border-color var(--transition),
+		background-size var(--transition),
+		box-shadow var(--transition);
+}
+
+@media (min-width: 768px) {
+	.button,
+	.wp-block-button .wp-block-button__link {
+		display: inline-flex;
+		width: auto;
+	}
+}
+
+/* Primary: yellow, with an orange fill that grows from the centre. The fill is
+   a background layer sized 0 to 100%, so no extra markup or pseudo-element. */
+.button--primary,
+.wp-block-button .wp-block-button__link {
+	background-color: var(--col-primary);
+	background-image: linear-gradient(var(--col-orange-400), var(--col-orange-400));
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 0% 100%;
+	background-origin: border-box;
+	color: var(--col-black);
+}
+
+.button--primary:hover,
+.wp-block-button .wp-block-button__link:hover {
+	background-size: 100% 100%;
+	color: var(--col-white);
+}
+
+.button--outline,
+.wp-block-button.is-style-outline .wp-block-button__link {
+	background: transparent;
+	border-color: var(--col-black);
+	color: var(--col-black);
+}
+
+.button--outline:hover,
+.wp-block-button.is-style-outline .wp-block-button__link:hover {
+	background: transparent;
+	border-color: var(--col-orange-400);
+	color: var(--col-orange-400);
+}
+
+.button--outline-white {
+	background: transparent;
+	border-color: var(--col-white);
+	color: var(--col-white);
+	--_focus: var(--col-white);
+}
+
+.button--outline-white:hover {
+	border-color: var(--col-orange-400);
+	color: var(--col-orange-400);
+}
+
+.button--white {
+	background: var(--col-white);
+	color: var(--_accent);
+}
+
+.button--white:hover {
+	box-shadow: var(--shadow-button-hover);
+}
+
+.button--small {
+	padding: var(--space-1) var(--space-3);
+	font-size: var(--fs-small);
+}
+
+.button:focus-visible,
+.wp-block-button .wp-block-button__link:focus-visible {
+	outline: var(--border-width) solid var(--_focus, var(--col-navy-400));
+	outline-offset: var(--space-1);
+}
+
+.button:disabled,
+.button[aria-disabled="true"],
+.button.is-disabled {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+.button-group,
+.wp-block-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center; /* do not stretch buttons of different sizes to the tallest */
+	gap: var(--space-2);
+}
+
+/* The core block wraps each button in a div: full width below md, like .button. */
+.wp-block-buttons > .wp-block-button {
+	flex: 1 1 100%;
+	margin: 0;
+}
+
+@media (min-width: 768px) {
+	.wp-block-buttons > .wp-block-button {
+		flex: 0 0 auto;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.button,
+	.wp-block-button .wp-block-button__link {
+		transition: none;
+	}
+}
 
 /* Generated by src/build/generate-utilities.js — do not hand-edit. */
 
@@ -1660,6 +1910,225 @@ select {
 /* @import "accordion.css"; -- uncomment if this project actually needs styled accordions */
 /* Generated by src/build/generate-utilities.js — do not hand-edit.
    Concatenation of src/blocks/*.css, alphabetical by filename. */
+
+/* --- src/blocks/home-hero.css --- */
+/*
+ * Home hero. A headline whose last words fade in one after another, and a
+ * square stage where eight image layers animate in (a spinning ring of dots,
+ * a person, a laptop and three phones). Below 576px the stage is swapped for
+ * one still image. With reduced motion the animation is skipped and every
+ * layer shows in its final position.
+ */
+
+.home-hero {
+	min-height: 33rem;
+	display: flex;
+	align-items: center;
+}
+
+.home-hero__inner {
+	display: grid;
+	gap: var(--space-4);
+	align-items: center;
+	width: 100%;
+}
+
+.home-hero__media {
+	grid-row: 1;
+}
+
+.home-hero__title {
+	font-size: var(--fs-display);
+	text-wrap: balance;
+}
+
+.home-hero__title-text {
+	display: block;
+}
+
+/* The animated words share one line, wrapping only if the screen is too narrow. */
+.home-hero__words {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: 0.25em;
+	color: var(--col-blue-400);
+}
+
+.home-hero__words > span {
+	opacity: 0;
+	animation: home-hero-fade 1s ease-in forwards;
+}
+
+.home-hero__words > span:nth-child(1) {
+	animation-delay: 1s;
+}
+
+.home-hero__words > span:nth-child(2) {
+	animation-delay: 2s;
+}
+
+.home-hero__text {
+	margin-bottom: var(--space-4);
+}
+
+/* Stage: hidden below 576px, where the still image shows instead. */
+.home-hero__anim {
+	display: none;
+	position: relative;
+	aspect-ratio: 1;
+	width: 300px;
+	margin-inline: auto;
+	overflow: clip;
+	isolation: isolate;
+}
+
+.home-hero__layer {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	inset: 0;
+}
+
+.home-hero__still {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+@media (min-width: 576px) {
+	.home-hero__anim {
+		display: block;
+	}
+
+	.home-hero__still {
+		display: none;
+	}
+}
+
+@media (min-width: 992px) {
+	.home-hero__inner {
+		grid-template-columns: 2fr 1fr;
+	}
+
+	.home-hero__media {
+		grid-row: auto;
+	}
+
+	.home-hero__anim {
+		width: 100%;
+	}
+}
+
+.home-hero__layer--circle,
+.home-hero__layer--gradient {
+	z-index: 0;
+}
+
+.home-hero__layer--dots {
+	z-index: 0;
+	animation: home-hero-spin 8s linear infinite;
+}
+
+.home-hero__layer--shakira {
+	z-index: 1;
+	opacity: 0;
+	animation: home-hero-person 750ms ease-in forwards;
+}
+
+.home-hero__layer--laptop {
+	z-index: 6;
+	opacity: 0;
+	animation: home-hero-laptop 1s ease-in forwards;
+}
+
+.home-hero__layer--phone1,
+.home-hero__layer--phone2,
+.home-hero__layer--phone3 {
+	opacity: 0;
+	animation: home-hero-phone 750ms ease-in forwards;
+}
+
+.home-hero__layer--phone1 {
+	z-index: 5;
+	animation-delay: 1s;
+}
+
+.home-hero__layer--phone2 {
+	z-index: 4;
+	animation-delay: 2s;
+}
+
+.home-hero__layer--phone3 {
+	z-index: 3;
+	animation-delay: 3s;
+}
+
+@keyframes home-hero-fade {
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes home-hero-spin {
+	to {
+		rotate: 360deg;
+	}
+}
+
+@keyframes home-hero-person {
+	from {
+		opacity: 0;
+		scale: 0.8;
+		translate: 10% 10%;
+	}
+
+	to {
+		opacity: 1;
+		scale: 1;
+		translate: 0 0;
+	}
+}
+
+@keyframes home-hero-laptop {
+	from {
+		opacity: 0;
+		translate: 110% 10%;
+	}
+
+	to {
+		opacity: 1;
+		translate: 0 0;
+	}
+}
+
+@keyframes home-hero-phone {
+	from {
+		opacity: 0;
+		translate: 25% 5%;
+	}
+
+	to {
+		opacity: 1;
+		translate: 0 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.home-hero__words > span,
+	.home-hero__layer--shakira,
+	.home-hero__layer--laptop,
+	.home-hero__layer--phone1,
+	.home-hero__layer--phone2,
+	.home-hero__layer--phone3 {
+		opacity: 1;
+		animation: none;
+	}
+
+	.home-hero__layer--dots {
+		animation: none;
+	}
+}
+
 /* generated — concatenation of src/blocks/*.css, see src/build/generate-utilities.js */
 
 /*# sourceMappingURL=theme.css.map */

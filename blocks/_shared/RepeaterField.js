@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import { TextControl, TextareaControl, ToggleControl, Button, RadioControl } from '@wordpress/components';
+import useRowMotion from './useRowMotion';
 
 /**
  * Generic repeater UI for a block attribute holding an array of row objects.
@@ -44,29 +45,14 @@ export default function RepeaterField( { label, value, onChange, fields, emptyRo
 		onChange( next );
 	}
 
-	function addRow() {
-		onChange( [ ...rows, { ...emptyRow } ] );
-	}
+	const { keys, setRowRef, movedKey, addRow, moveRow, removeRow } = useRowMotion( rows, onChange );
 
-	function removeRow( index ) {
+	function confirmRemove( index ) {
 		// eslint-disable-next-line no-alert -- a plain confirm() is enough
 		// friction for an irreversible remove; no undo exists for this field.
-		if ( ! window.confirm( __( 'Remove this row?', 'cb-peoplesafe2027' ) ) ) {
-			return;
+		if ( window.confirm( __( 'Remove this row?', 'cb-peoplesafe2027' ) ) ) {
+			removeRow( index );
 		}
-		onChange( rows.filter( ( _row, i ) => i !== index ) );
-	}
-
-	function moveRow( index, direction ) {
-		const target = index + direction;
-		if ( target < 0 || target >= rows.length ) {
-			return;
-		}
-		const next = rows.slice();
-		const tmp = next[ index ];
-		next[ index ] = next[ target ];
-		next[ target ] = tmp;
-		onChange( next );
 	}
 
 	return (
@@ -98,7 +84,11 @@ export default function RepeaterField( { label, value, onChange, fields, emptyRo
 			) }
 			<div className="cb-peoplesafe2027-repeater-field__rows">
 			{ rows.map( ( row, index ) => (
-				<div className="cb-peoplesafe2027-repeater-field__row" key={ index }>
+				<div
+					className={ 'cb-peoplesafe2027-repeater-field__row' + ( keys[ index ] === movedKey ? ' is-moved' : '' ) }
+					key={ keys[ index ] }
+					ref={ setRowRef( keys[ index ] ) }
+				>
 					<span className="cb-peoplesafe2027-repeater-field__number">{ index + 1 }</span>
 					{ fields.map( ( field ) => {
 						if ( 'image' === field.type ) {
@@ -243,6 +233,7 @@ export default function RepeaterField( { label, value, onChange, fields, emptyRo
 					<div className="cb-peoplesafe2027-repeater-field__row-actions">
 						<Button
 							size="small"
+							data-move="up"
 							label={ __( 'Move up', 'cb-peoplesafe2027' ) }
 							onClick={ () => moveRow( index, -1 ) }
 							disabled={ 0 === index }
@@ -251,6 +242,7 @@ export default function RepeaterField( { label, value, onChange, fields, emptyRo
 						</Button>
 						<Button
 							size="small"
+							data-move="down"
 							label={ __( 'Move down', 'cb-peoplesafe2027' ) }
 							onClick={ () => moveRow( index, 1 ) }
 							disabled={ index === rows.length - 1 }
@@ -261,7 +253,7 @@ export default function RepeaterField( { label, value, onChange, fields, emptyRo
 							size="small"
 							isDestructive
 							label={ __( 'Remove', 'cb-peoplesafe2027' ) }
-							onClick={ () => removeRow( index ) }
+							onClick={ () => confirmRemove( index ) }
 						>
 							&times;
 						</Button>
@@ -269,7 +261,7 @@ export default function RepeaterField( { label, value, onChange, fields, emptyRo
 				</div>
 			) ) }
 			</div>
-			<Button variant="primary" onClick={ addRow }>
+			<Button variant="primary" onClick={ () => addRow( emptyRow ) }>
 				{ __( 'Add row', 'cb-peoplesafe2027' ) }
 			</Button>
 		</div>

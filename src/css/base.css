@@ -19,7 +19,15 @@ body {
 	font-weight: var(--fw-light);
 	line-height: var(--line-height-base);
 	color: var(--col-body);
-	background-color: var(--col-body-bg);
+	/* The site background: pale blue-grey with faint diamonds. Wider than the
+	   screen on small devices so the diamonds stay a sensible size. */
+	background: var(--col-neutral) url("../img/background.svg") center top / 200% auto repeat-y;
+}
+
+@media (min-width: 768px) {
+	body {
+		background-size: 100% auto;
+	}
 }
 
 h1,

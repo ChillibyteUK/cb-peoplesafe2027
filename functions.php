@@ -35,4 +35,5 @@ require_once CB_PEOPLESAFE2027_DIR . '/inc/taxonomies.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/security.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/toc.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/footnotes.php';
+require_once CB_PEOPLESAFE2027_DIR . '/inc/cta-buttons.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/regions.php';

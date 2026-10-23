@@ -405,4 +405,120 @@
 	margin-bottom: 1.5rem;
 }
 
+/*
+ * Shared button fields (blocks/_shared/CtaButtonsField.js): two columns,
+ * title with URL and dialog with style, and the style radios in a row.
+ */
+.cb-peoplesafe2027-cta-buttons__row {
+	margin-block: 0.75rem;
+	padding: 0.75rem;
+	border: 1px solid #ddd;
+	border-radius: 2px;
+}
+
+.cb-peoplesafe2027-cta-buttons__row {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.75rem;
+}
+
+.cb-peoplesafe2027-cta-buttons__fields {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+/* Up, down and remove sit inline at the end of the row, level with the first line of fields. */
+.cb-peoplesafe2027-cta-buttons__actions {
+	display: flex;
+	flex: 0 0 auto;
+	gap: 0.125rem;
+	padding-top: 1.25rem;
+}
+
+.cb-peoplesafe2027-cta-buttons__pair {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.75rem;
+	align-items: start;
+	margin-bottom: 0.75rem;
+}
+
+.cb-peoplesafe2027-cta-buttons__url .block-editor-url-input {
+	width: 100%;
+	min-width: 0;
+}
+
+.cb-peoplesafe2027-cta-buttons__url .block-editor-url-input input {
+	width: 100%;
+}
+
+.cb-peoplesafe2027-cta-buttons__style .components-radio-control__group-wrapper {
+	display: flex;
+	flex-flow: row wrap;
+	gap: 0.25rem 1rem;
+}
+
+.cb-peoplesafe2027-cta-buttons__pair .components-base-control,
+.cb-peoplesafe2027-cta-buttons__pair .components-toggle-control {
+	margin-bottom: 0;
+}
+
+.cb-peoplesafe2027-cta-buttons__url {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.cb-peoplesafe2027-cta-buttons__url > .cb-peoplesafe2027-editor-field__label {
+	margin: 0;
+	line-height: 1.4;
+}
+
+.cb-peoplesafe2027-cta-buttons__url .block-editor-url-input {
+	margin: 0;
+}
+
+.cb-peoplesafe2027-cta-buttons__url .block-editor-url-input input[type="text"] {
+	min-height: 32px;
+	margin: 0;
+}
+
+/* Inside a button row the row supplies the padding, as in a repeater row. */
+.cb-peoplesafe2027-cta-buttons__row .components-base-control {
+	padding: 0;
+}
+
+.cb-peoplesafe2027-cta-buttons__row > .cb-peoplesafe2027-repeater-field__number {
+	align-self: flex-start;
+	margin-top: 1.25rem;
+}
+
+/*
+ * A row that has just been moved (blocks/_shared/useRowMotion.js): a yellow
+ * tint that fades out. With reduced motion it shows for the same time with
+ * no fade.
+ */
+.cb-peoplesafe2027-repeater-field__row.is-moved,
+.cb-peoplesafe2027-cta-buttons__row.is-moved {
+	animation: cb-peoplesafe2027-row-moved 1.2s ease-out;
+}
+
+@keyframes cb-peoplesafe2027-row-moved {
+	from {
+		background-color: rgb(255 180 34 / 0.4);
+	}
+
+	to {
+		background-color: transparent;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.cb-peoplesafe2027-repeater-field__row.is-moved,
+	.cb-peoplesafe2027-cta-buttons__row.is-moved {
+		animation: none;
+		background-color: rgb(255 180 34 / 0.4);
+	}
+}
+
 /*# sourceMappingURL=editor.css.map */

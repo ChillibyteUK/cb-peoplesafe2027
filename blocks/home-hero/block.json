@@ -1,0 +1,25 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/home-hero",
+	"title": "Home hero",
+	"category": "cb-peoplesafe2027",
+	"description": "The animated hero for the region home pages: headline with two animated words, intro, buttons and a device animation. A static image shows on small screens.",
+	"icon": "cover-image",
+	"attributes": {
+		"title": { "type": "string", "default": "" },
+		"wordOne": { "type": "string", "default": "" },
+		"wordTwo": { "type": "string", "default": "" },
+		"content": { "type": "string", "default": "" },
+		"buttons": { "type": "array", "default": [] },
+		"mobileImageId": { "type": "number", "default": 0 },
+		"mobileImageUrl": { "type": "string", "default": "" },
+		"mobileImageAlt": { "type": "string", "default": "" }
+	},
+	"supports": {
+		"anchor": true,
+		"className": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

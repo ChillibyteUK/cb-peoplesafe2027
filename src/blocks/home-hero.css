@@ -1,0 +1,216 @@
+/*
+ * Home hero. A headline whose last words fade in one after another, and a
+ * square stage where eight image layers animate in (a spinning ring of dots,
+ * a person, a laptop and three phones). Below 576px the stage is swapped for
+ * one still image. With reduced motion the animation is skipped and every
+ * layer shows in its final position.
+ */
+
+.home-hero {
+	min-height: 33rem;
+	display: flex;
+	align-items: center;
+}
+
+.home-hero__inner {
+	display: grid;
+	gap: var(--space-4);
+	align-items: center;
+	width: 100%;
+}
+
+.home-hero__media {
+	grid-row: 1;
+}
+
+.home-hero__title {
+	font-size: var(--fs-display);
+	text-wrap: balance;
+}
+
+.home-hero__title-text {
+	display: block;
+}
+
+/* The animated words share one line, wrapping only if the screen is too narrow. */
+.home-hero__words {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: 0.25em;
+	color: var(--col-blue-400);
+}
+
+.home-hero__words > span {
+	opacity: 0;
+	animation: home-hero-fade 1s ease-in forwards;
+}
+
+.home-hero__words > span:nth-child(1) {
+	animation-delay: 1s;
+}
+
+.home-hero__words > span:nth-child(2) {
+	animation-delay: 2s;
+}
+
+.home-hero__text {
+	margin-bottom: var(--space-4);
+}
+
+/* Stage: hidden below 576px, where the still image shows instead. */
+.home-hero__anim {
+	display: none;
+	position: relative;
+	aspect-ratio: 1;
+	width: 300px;
+	margin-inline: auto;
+	overflow: clip;
+	isolation: isolate;
+}
+
+.home-hero__layer {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	inset: 0;
+}
+
+.home-hero__still {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+@media (min-width: 576px) {
+	.home-hero__anim {
+		display: block;
+	}
+
+	.home-hero__still {
+		display: none;
+	}
+}
+
+@media (min-width: 992px) {
+	.home-hero__inner {
+		grid-template-columns: 2fr 1fr;
+	}
+
+	.home-hero__media {
+		grid-row: auto;
+	}
+
+	.home-hero__anim {
+		width: 100%;
+	}
+}
+
+.home-hero__layer--circle,
+.home-hero__layer--gradient {
+	z-index: 0;
+}
+
+.home-hero__layer--dots {
+	z-index: 0;
+	animation: home-hero-spin 8s linear infinite;
+}
+
+.home-hero__layer--shakira {
+	z-index: 1;
+	opacity: 0;
+	animation: home-hero-person 750ms ease-in forwards;
+}
+
+.home-hero__layer--laptop {
+	z-index: 6;
+	opacity: 0;
+	animation: home-hero-laptop 1s ease-in forwards;
+}
+
+.home-hero__layer--phone1,
+.home-hero__layer--phone2,
+.home-hero__layer--phone3 {
+	opacity: 0;
+	animation: home-hero-phone 750ms ease-in forwards;
+}
+
+.home-hero__layer--phone1 {
+	z-index: 5;
+	animation-delay: 1s;
+}
+
+.home-hero__layer--phone2 {
+	z-index: 4;
+	animation-delay: 2s;
+}
+
+.home-hero__layer--phone3 {
+	z-index: 3;
+	animation-delay: 3s;
+}
+
+@keyframes home-hero-fade {
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes home-hero-spin {
+	to {
+		rotate: 360deg;
+	}
+}
+
+@keyframes home-hero-person {
+	from {
+		opacity: 0;
+		scale: 0.8;
+		translate: 10% 10%;
+	}
+
+	to {
+		opacity: 1;
+		scale: 1;
+		translate: 0 0;
+	}
+}
+
+@keyframes home-hero-laptop {
+	from {
+		opacity: 0;
+		translate: 110% 10%;
+	}
+
+	to {
+		opacity: 1;
+		translate: 0 0;
+	}
+}
+
+@keyframes home-hero-phone {
+	from {
+		opacity: 0;
+		translate: 25% 5%;
+	}
+
+	to {
+		opacity: 1;
+		translate: 0 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.home-hero__words > span,
+	.home-hero__layer--shakira,
+	.home-hero__layer--laptop,
+	.home-hero__layer--phone1,
+	.home-hero__layer--phone2,
+	.home-hero__layer--phone3 {
+		opacity: 1;
+		animation: none;
+	}
+
+	.home-hero__layer--dots {
+		animation: none;
+	}
+}
