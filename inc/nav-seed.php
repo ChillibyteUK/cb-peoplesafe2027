@@ -16,10 +16,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
-	return;
-}
-
 /**
  * The navigation as it was in the 2024 theme's header.php.
  *
@@ -234,40 +230,61 @@ function cb_peoplesafe2027_nav_seed_item( $row, $dir ) {
 		),
 	);
 
-	$path = '';
+	$id = $row['img'] ? cb_peoplesafe2027_nav_seed_image( $row['img'], $dir ) : 0;
 
-	foreach ( array_filter( array_map( 'trim', explode( ',', (string) $dir ) ) ) as $folder ) {
-		if ( $row['img'] && file_exists( trailingslashit( $folder ) . $row['img'] ) ) {
-			$path = trailingslashit( $folder ) . $row['img'];
-			break;
-		}
-	}
-
-	if ( $path ) {
-		$id = cb_peoplesafe2027_nav_seed_image( $path );
-
-		if ( $id ) {
-			$item['image']    = $id;
-			$item['imageUrl'] = wp_get_attachment_url( $id );
-		}
+	if ( $id ) {
+		$item['image']    = $id;
+		$item['imageUrl'] = wp_get_attachment_url( $id );
 	}
 
 	return $item;
 }
 
 /**
- * Add an image to the media library, once: a second run reuses the first copy.
+ * Where a menu image can be downloaded from on the live 2024 site.
  *
- * @param string $path File path.
+ * @param string $img Image name from the seed data.
+ * @return string URL, or an empty string when it is not known.
+ */
+function cb_peoplesafe2027_nav_seed_remote_url( $img ) {
+	$uploads = array(
+		'Lone-Worker-App.png'                => '2024/07/Lone-Worker-App.png',
+		'Personal-Safety-App.png'            => '2024/07/Personal-Safety-App.png',
+		'Travelsafe.png'                     => '2024/07/Travelsafe.png',
+		'Apple-Watch-Personal-App.png'       => '2024/07/Apple-Watch-Personal-App.png',
+		'International-Traveller-1.png'      => '2024/07/International-Traveller-1.png',
+		'roamsafe-menu.png'                  => '2024/12/roamsafe-menu.png',
+		'okalone.png'                        => '2025/04/okalone.png',
+		'Nexus-API-hero.png'                 => '2025/01/Nexus-API-hero.png',
+		'Peoplesafe-Alert.png'               => '2024/07/Peoplesafe-Alert.png',
+		'team-broadcast-sm.png'              => '2025/04/team-broadcast-sm.png',
+		'Body-Worn-Camera-menu-image.png'    => '2025/10/Body-Worn-Camera-menu-image.png',
+		'Surecam.png'                        => '2024/07/Surecam.png',
+	);
+
+	if ( 0 === strpos( $img, '2024/' ) ) {
+		return 'https://peoplesafe.co.uk/wp-content/themes/cb-peoplesafe2024/img/' . $img;
+	}
+
+	return isset( $uploads[ $img ] ) ? 'https://peoplesafe.co.uk/wp-content/uploads/' . $uploads[ $img ] : '';
+}
+
+/**
+ * Add a menu image to the media library, once: a second run reuses the first
+ * copy. The file comes from a local folder when found there, otherwise it is
+ * downloaded from the live 2024 site.
+ *
+ * @param string $img Image name from the seed data, for example 2024/products/MySOS.png.
+ * @param string $dir Comma-separated local folders to look in (may be empty).
  * @return int Attachment ID, or 0.
  */
-function cb_peoplesafe2027_nav_seed_image( $path ) {
+function cb_peoplesafe2027_nav_seed_image( $img, $dir = '' ) {
 	$existing = get_posts(
 		array(
 			'post_type'   => 'attachment',
 			'post_status' => 'inherit',
 			'meta_key'    => '_cb_nav_seed',
-			'meta_value'  => basename( $path ),
+			'meta_value'  => basename( $img ),
 			'fields'      => 'ids',
 			'numberposts' => 1,
 		)
@@ -281,12 +298,29 @@ function cb_peoplesafe2027_nav_seed_image( $path ) {
 	require_once ABSPATH . 'wp-admin/includes/media.php';
 	require_once ABSPATH . 'wp-admin/includes/image.php';
 
-	$tmp = wp_tempnam( basename( $path ) );
-	copy( $path, $tmp );
+	$tmp = '';
+
+	foreach ( array_filter( array_map( 'trim', explode( ',', (string) $dir ) ) ) as $folder ) {
+		if ( file_exists( trailingslashit( $folder ) . $img ) ) {
+			$tmp = wp_tempnam( basename( $img ) );
+			copy( trailingslashit( $folder ) . $img, $tmp );
+			break;
+		}
+	}
+
+	if ( '' === $tmp ) {
+		$url = cb_peoplesafe2027_nav_seed_remote_url( $img );
+		$tmp = $url ? download_url( $url ) : '';
+
+		if ( is_wp_error( $tmp ) || '' === $tmp ) {
+			cb_peoplesafe2027_seed_log( 'No image for ' . $img );
+			return 0;
+		}
+	}
 
 	$id = media_handle_sideload(
 		array(
-			'name'     => basename( $path ),
+			'name'     => basename( $img ),
 			'tmp_name' => $tmp,
 		),
 		0
@@ -297,7 +331,7 @@ function cb_peoplesafe2027_nav_seed_image( $path ) {
 		return 0;
 	}
 
-	update_post_meta( $id, '_cb_nav_seed', basename( $path ) );
+	update_post_meta( $id, '_cb_nav_seed', basename( $img ) );
 
 	return (int) $id;
 }
@@ -364,196 +398,275 @@ function cb_peoplesafe2027_nav_seed_content( $section, $dir ) {
 }
 
 /**
- * The wp cb-nav command.
+ * Say what the setup did: to the terminal under WP-CLI, otherwise into a list
+ * the Tools page shows.
+ *
+ * @param string $message Message.
+ * @return void
  */
-class CB_Peoplesafe_2027_Nav_CLI {
-
-	/**
-	 * Create the navigation sections of the 2024 site.
-	 *
-	 * ## OPTIONS
-	 *
-	 * [--images-from=<dirs>]
-	 * : Folders to find the menu images in, comma separated. The 2024 theme's img folder, and any folder of files downloaded from the live site.
-	 *
-	 * [--replace]
-	 * : Overwrite sections that already exist.
-	 *
-	 * @param array $args       Positional arguments (none).
-	 * @param array $assoc_args Flags.
-	 * @return void
-	 */
-	public function seed( $args, $assoc_args ) {
-		$dir     = isset( $assoc_args['images-from'] ) ? $assoc_args['images-from'] : '';
-		$replace = ! empty( $assoc_args['replace'] );
-		$order   = 1;
-
-		foreach ( cb_peoplesafe2027_nav_seed_data() as $slug => $section ) {
-			$existing = get_posts(
-				array(
-					'name'        => $slug,
-					'post_type'   => 'nav_section',
-					'post_status' => 'any',
-					'numberposts' => 1,
-				)
-			);
-			$post     = array(
-				'post_type'    => 'nav_section',
-				'post_status'  => 'publish',
-				'post_name'    => $slug,
-				'post_title'   => $section['title'],
-				'menu_order'   => $order++,
-				'post_content' => wp_slash( cb_peoplesafe2027_nav_seed_content( $section, $dir ) ),
-			);
-
-			if ( $existing && ! $replace ) {
-				WP_CLI::log( 'Skipped ' . $slug . ' (exists)' );
-				continue;
-			}
-
-			if ( $existing ) {
-				$post['ID'] = $existing[0]->ID;
-			}
-
-			$id = wp_insert_post( $post, true );
-
-			if ( is_wp_error( $id ) ) {
-				WP_CLI::warning( $slug . ': ' . $id->get_error_message() );
-				continue;
-			}
-
-			if ( ! $existing && function_exists( 'pll_set_post_language' ) ) {
-				pll_set_post_language( $id, pll_default_language() );
-			}
-
-			WP_CLI::log( ( $existing ? 'Updated ' : 'Created ' ) . $slug );
-		}
-
-		WP_CLI::success( 'Navigation seeded.' );
+function cb_peoplesafe2027_seed_log( $message ) {
+	if ( defined( 'WP_CLI' ) && WP_CLI ) {
+		WP_CLI::log( $message );
+		return;
 	}
+
+	$GLOBALS['cb_peoplesafe2027_seed_log'][] = $message;
 }
 
 /**
- * The wp cb-footer command.
+ * Create the navigation sections of the 2024 site.
+ *
+ * @param string $dir     Comma-separated folders to find menu images in (may be empty).
+ * @param bool   $replace Overwrite sections that already exist.
+ * @return void
  */
-class CB_Peoplesafe_2027_Footer_CLI {
+function cb_peoplesafe2027_nav_seed_run( $dir = '', $replace = false ) {
+	$order = 1;
 
-	/**
-	 * Create the footer menus of the 2024 site, assign them to their locations and
-	 * fill in the social links. Links are the default region's URLs, which the
-	 * theme turns into each region's own. A menu that already exists is left alone.
-	 *
-	 * @param array $args       Positional arguments (none).
-	 * @param array $assoc_args Flags (none).
-	 * @return void
-	 */
-	public function seed( $args, $assoc_args ) {
-		$home = function_exists( 'cb_peoplesafe2027_region_url' ) && function_exists( 'pll_default_language' )
-			? cb_peoplesafe2027_region_url( pll_default_language() )
-			: trailingslashit( home_url() );
-
-		$menus = array(
-			'footer_products'  => array(
-				'name'  => 'Footer: Products',
-				'items' => array(
-					'MySOS'             => 'products/mysos/',
-					'Twig Ex'           => 'products/twig-ex-atex/',
-					'Standard Mobile'   => 'products/standard-mobile/',
-					'SPOT X'            => 'products/spot-x/',
-					'SPOT Gen4'         => 'products/spot-gen4/',
-					'Personal Safety App' => 'products/sos-app/',
-					'Smart Button'      => 'products/smart-button/',
-					'MySOS ID Badge 4G' => 'products/mysos-id-badge-4g/',
-					'Lone Worker App'   => 'products/lone-worker-app/',
-					'Body Worn Camera'  => 'products/body-worn-camera/',
-				),
-			),
-			'footer_about'     => array(
-				'name'  => 'Footer: About us',
-				'items' => array(
-					'About Peoplesafe' => 'about/',
-					'Contact Us'       => 'contact-us/',
-					'Our Team'         => 'about/senior-management/',
-					'Our History'      => 'about/our-history/',
-					'Accreditations'   => 'accreditations/',
-					'Careers'          => 'careers/',
-				),
-			),
-			'footer_resources' => array(
-				'name'  => 'Footer: Resources',
-				'items' => array(
-					'Blogs'                => 'blogs/',
-					'News'                 => 'news/',
-					'Real Life Stories'    => 'stories/',
-					'Case Studies'         => 'case-studies/',
-					'Guides'               => 'guides/',
-					'Brochures'            => 'brochures/',
-					'Whitepapers'          => 'whitepapers/',
-					'Legislation'          => 'legislation/',
-					'Partnerships'         => 'partnerships/',
-					'Service Status'       => 'service-status/',
-					'Privacy Policy'       => 'privacy-policy/',
-					'Whistleblowing Policy' => 'peoplesafe-whistleblowing-policy/',
-				),
-			),
+	foreach ( cb_peoplesafe2027_nav_seed_data() as $slug => $section ) {
+		$existing = get_posts(
+			array(
+				'name'        => $slug,
+				'post_type'   => 'nav_section',
+				'post_status' => 'any',
+				'numberposts' => 1,
+			)
+		);
+		$post     = array(
+			'post_type'    => 'nav_section',
+			'post_status'  => 'publish',
+			'post_name'    => $slug,
+			'post_title'   => $section['title'],
+			'menu_order'   => $order++,
+			'post_content' => wp_slash( cb_peoplesafe2027_nav_seed_content( $section, $dir ) ),
 		);
 
-		$locations = get_theme_mod( 'nav_menu_locations', array() );
-
-		foreach ( $menus as $location => $menu ) {
-			$existing = wp_get_nav_menu_object( $menu['name'] );
-
-			if ( $existing ) {
-				WP_CLI::log( 'Skipped ' . $menu['name'] . ' (exists)' );
-				$locations[ $location ] = $existing->term_id;
-				continue;
-			}
-
-			$id = wp_create_nav_menu( $menu['name'] );
-
-			if ( is_wp_error( $id ) ) {
-				WP_CLI::warning( $menu['name'] . ': ' . $id->get_error_message() );
-				continue;
-			}
-
-			foreach ( $menu['items'] as $label => $path ) {
-				wp_update_nav_menu_item(
-					$id,
-					0,
-					array(
-						'menu-item-title'  => $label,
-						'menu-item-url'    => $home . $path,
-						'menu-item-type'   => 'custom',
-						'menu-item-status' => 'publish',
-					)
-				);
-			}
-
-			$locations[ $location ] = $id;
-			WP_CLI::log( 'Created ' . $menu['name'] );
+		if ( $existing && ! $replace ) {
+			cb_peoplesafe2027_seed_log( 'Skipped ' . $slug . ' (exists)' );
+			continue;
 		}
 
-		set_theme_mod( 'nav_menu_locations', $locations );
-
-		$settings = get_option( CB_PEOPLESAFE2027_SETTINGS_OPTION, array() );
-		$settings = is_array( $settings ) ? $settings : array();
-		$social   = array(
-			'linkedin_url' => 'https://www.linkedin.com/company/peoplesafe-ltd/',
-			'youtube_url'  => 'https://www.youtube.com/channel/UCRT8D1BWOHpR9Gt8jZukZSQ',
-			'x_url'        => 'https://twitter.com/peoplesafe',
-		);
-
-		foreach ( $social as $key => $url ) {
-			if ( empty( $settings[ $key ] ) ) {
-				$settings[ $key ] = $url;
-			}
+		if ( $existing ) {
+			$post['ID'] = $existing[0]->ID;
 		}
 
-		update_option( CB_PEOPLESAFE2027_SETTINGS_OPTION, $settings );
+		$id = wp_insert_post( $post, true );
 
-		WP_CLI::success( 'Footer seeded.' );
+		if ( is_wp_error( $id ) ) {
+			cb_peoplesafe2027_seed_log( $slug . ': ' . $id->get_error_message() );
+			continue;
+		}
+
+		if ( ! $existing && function_exists( 'pll_set_post_language' ) ) {
+			pll_set_post_language( $id, pll_default_language() );
+		}
+
+		cb_peoplesafe2027_seed_log( ( $existing ? 'Updated ' : 'Created ' ) . $slug );
 	}
+
 }
 
-WP_CLI::add_command( 'cb-nav', 'CB_Peoplesafe_2027_Nav_CLI' );
-WP_CLI::add_command( 'cb-footer', 'CB_Peoplesafe_2027_Footer_CLI' );
+/**
+ * Create the footer menus of the 2024 site, assign them to their locations and
+ * fill in the social links. A menu that already exists is left alone.
+ *
+ * @return void
+ */
+function cb_peoplesafe2027_footer_seed_run() {
+	$home = function_exists( 'cb_peoplesafe2027_region_url' ) && function_exists( 'pll_default_language' )
+		? cb_peoplesafe2027_region_url( pll_default_language() )
+		: trailingslashit( home_url() );
+
+	$menus = array(
+		'footer_products'  => array(
+			'name'  => 'Footer: Products',
+			'items' => array(
+				'MySOS'             => 'products/mysos/',
+				'Twig Ex'           => 'products/twig-ex-atex/',
+				'Standard Mobile'   => 'products/standard-mobile/',
+				'SPOT X'            => 'products/spot-x/',
+				'SPOT Gen4'         => 'products/spot-gen4/',
+				'Personal Safety App' => 'products/sos-app/',
+				'Smart Button'      => 'products/smart-button/',
+				'MySOS ID Badge 4G' => 'products/mysos-id-badge-4g/',
+				'Lone Worker App'   => 'products/lone-worker-app/',
+				'Body Worn Camera'  => 'products/body-worn-camera/',
+			),
+		),
+		'footer_about'     => array(
+			'name'  => 'Footer: About us',
+			'items' => array(
+				'About Peoplesafe' => 'about/',
+				'Contact Us'       => 'contact-us/',
+				'Our Team'         => 'about/senior-management/',
+				'Our History'      => 'about/our-history/',
+				'Accreditations'   => 'accreditations/',
+				'Careers'          => 'careers/',
+			),
+		),
+		'footer_resources' => array(
+			'name'  => 'Footer: Resources',
+			'items' => array(
+				'Blogs'                => 'blogs/',
+				'News'                 => 'news/',
+				'Real Life Stories'    => 'stories/',
+				'Case Studies'         => 'case-studies/',
+				'Guides'               => 'guides/',
+				'Brochures'            => 'brochures/',
+				'Whitepapers'          => 'whitepapers/',
+				'Legislation'          => 'legislation/',
+				'Partnerships'         => 'partnerships/',
+				'Service Status'       => 'service-status/',
+				'Privacy Policy'       => 'privacy-policy/',
+				'Whistleblowing Policy' => 'peoplesafe-whistleblowing-policy/',
+			),
+		),
+	);
+
+	$locations = get_theme_mod( 'nav_menu_locations', array() );
+
+	foreach ( $menus as $location => $menu ) {
+		$existing = wp_get_nav_menu_object( $menu['name'] );
+
+		if ( $existing ) {
+			cb_peoplesafe2027_seed_log( 'Skipped ' . $menu['name'] . ' (exists)' );
+			$locations[ $location ] = $existing->term_id;
+			continue;
+		}
+
+		$id = wp_create_nav_menu( $menu['name'] );
+
+		if ( is_wp_error( $id ) ) {
+			cb_peoplesafe2027_seed_log( $menu['name'] . ': ' . $id->get_error_message() );
+			continue;
+		}
+
+		foreach ( $menu['items'] as $label => $path ) {
+			wp_update_nav_menu_item(
+				$id,
+				0,
+				array(
+					'menu-item-title'  => $label,
+					'menu-item-url'    => $home . $path,
+					'menu-item-type'   => 'custom',
+					'menu-item-status' => 'publish',
+				)
+			);
+		}
+
+		$locations[ $location ] = $id;
+		cb_peoplesafe2027_seed_log( 'Created ' . $menu['name'] );
+	}
+
+	set_theme_mod( 'nav_menu_locations', $locations );
+
+	$settings = get_option( CB_PEOPLESAFE2027_SETTINGS_OPTION, array() );
+	$settings = is_array( $settings ) ? $settings : array();
+	$social   = array(
+		'linkedin_url' => 'https://www.linkedin.com/company/peoplesafe-ltd/',
+		'youtube_url'  => 'https://www.youtube.com/channel/UCRT8D1BWOHpR9Gt8jZukZSQ',
+		'x_url'        => 'https://twitter.com/peoplesafe',
+	);
+
+	foreach ( $social as $key => $url ) {
+		if ( empty( $settings[ $key ] ) ) {
+			$settings[ $key ] = $url;
+		}
+	}
+
+	update_option( CB_PEOPLESAFE2027_SETTINGS_OPTION, $settings );
+
+}
+
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+
+	/**
+	 * The wp cb-nav command.
+	 */
+	class CB_Peoplesafe_2027_Nav_CLI {
+
+		/**
+		 * Create the navigation sections of the 2024 site.
+		 *
+		 * ## OPTIONS
+		 *
+		 * [--images-from=<dirs>]
+		 * : Folders to find the menu images in, comma separated. Images not found are fetched from the live site.
+		 *
+		 * [--replace]
+		 * : Overwrite sections that already exist.
+		 *
+		 * @param array $args       Positional arguments (none).
+		 * @param array $assoc_args Flags.
+		 * @return void
+		 */
+		public function seed( $args, $assoc_args ) {
+			cb_peoplesafe2027_nav_seed_run( isset( $assoc_args['images-from'] ) ? $assoc_args['images-from'] : '', ! empty( $assoc_args['replace'] ) );
+			WP_CLI::success( 'Navigation seeded.' );
+		}
+	}
+
+	/**
+	 * The wp cb-footer command.
+	 */
+	class CB_Peoplesafe_2027_Footer_CLI {
+
+		/**
+		 * Create the footer menus of the 2024 site.
+		 *
+		 * @param array $args       Positional arguments (none).
+		 * @param array $assoc_args Flags (none).
+		 * @return void
+		 */
+		public function seed( $args, $assoc_args ) {
+			cb_peoplesafe2027_footer_seed_run();
+			WP_CLI::success( 'Footer seeded.' );
+		}
+	}
+
+	WP_CLI::add_command( 'cb-nav', 'CB_Peoplesafe_2027_Nav_CLI' );
+	WP_CLI::add_command( 'cb-footer', 'CB_Peoplesafe_2027_Footer_CLI' );
+}
+
+/**
+ * Tools, Navigation setup: the same setup as the WP-CLI commands, for an
+ * environment with no command line (Kinsta staging and live).
+ *
+ * @return void
+ */
+function cb_peoplesafe2027_seed_admin_menu() {
+	add_management_page( 'Navigation setup', 'Navigation setup', 'manage_options', 'cb-nav-setup', 'cb_peoplesafe2027_seed_admin_page' );
+}
+add_action( 'admin_menu', 'cb_peoplesafe2027_seed_admin_menu' );
+
+/**
+ * The Navigation setup page.
+ *
+ * @return void
+ */
+function cb_peoplesafe2027_seed_admin_page() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	$GLOBALS['cb_peoplesafe2027_seed_log'] = array();
+
+	if ( isset( $_POST['cb_nav_setup'] ) && check_admin_referer( 'cb_nav_setup' ) ) {
+		set_time_limit( 300 );
+		cb_peoplesafe2027_nav_seed_run( '', false );
+		cb_peoplesafe2027_footer_seed_run();
+	}
+	?>
+	<div class="wrap">
+		<h1>Navigation setup</h1>
+		<p>Creates the header navigation sections (Navigation) and the three footer menus, assigns the footer menus to their locations and fills in the social links, all from the 2024 site. Menu images are downloaded from the live site. Anything that already exists is left alone, so running it twice is safe.</p>
+		<?php if ( ! empty( $GLOBALS['cb_peoplesafe2027_seed_log'] ) ) { ?>
+			<div class="notice notice-success"><p><?php echo implode( '<br>', array_map( 'esc_html', $GLOBALS['cb_peoplesafe2027_seed_log'] ) ); ?></p></div>
+		<?php } ?>
+		<form method="post">
+			<?php wp_nonce_field( 'cb_nav_setup' ); ?>
+			<p><button type="submit" name="cb_nav_setup" value="1" class="button button-primary">Create navigation and footer menus</button></p>
+		</form>
+	</div>
+	<?php
+}
