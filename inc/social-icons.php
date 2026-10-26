@@ -17,6 +17,9 @@ add_shortcode(
 		$atts = shortcode_atts( array( 'class' => '' ), $atts, 'social_icons' );
 
 		$platforms = array(
+			'linkedin'  => 'LinkedIn',
+			'youtube'   => 'YouTube',
+			'x'         => 'X',
 			'facebook'  => 'Facebook',
 			'instagram' => 'Instagram',
 		);

@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/nav-section",
+	"title": "Navigation section",
+	"category": "cb-peoplesafe2027",
+	"description": "One item of the site navigation, and the panel it opens. Used only inside the Navigation post type.",
+	"icon": "menu",
+	"attributes": {
+		"layout": { "type": "string", "default": "link" },
+		"position": { "type": "string", "default": "main" },
+		"width": { "type": "number", "default": 0 },
+		"link": { "type": "object", "default": {} },
+		"dialog": { "type": "string", "default": "" },
+		"icon": { "type": "string", "default": "" },
+		"items": { "type": "array", "default": [] },
+		"more": { "type": "object", "default": {} },
+		"panels": { "type": "array", "default": [] }
+	},
+	"supports": {
+		"inserter": false,
+		"html": false,
+		"multiple": false,
+		"reusable": false
+	},
+	"editorScript": "file:./build/index.js"
+}

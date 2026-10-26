@@ -34,7 +34,7 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'captio
 		<?php if ( $cb_heading ) { ?>
 			<h2 class="caption-slider__title"><?php echo esc_html( $cb_heading ); ?></h2>
 		<?php } ?>
-		<div class="slider" data-slider data-slider-loop="true" data-slider-label="<?php echo esc_attr( $cb_heading ? $cb_heading : __( 'Related pages', 'cb-peoplesafe2027' ) ); ?>" data-animate="fade-up">
+		<div class="slider" data-slider data-slider-loop="true" data-slider-step="1" data-slider-label="<?php echo esc_attr( $cb_heading ? $cb_heading : __( 'Related pages', 'cb-peoplesafe2027' ) ); ?>" data-animate="fade-up">
 			<div class="slider__viewport">
 				<div class="slider__track">
 					<?php foreach ( $cb_cards as $cb_card ) { ?>

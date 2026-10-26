@@ -26,8 +26,10 @@ function cb_peoplesafe2027_setup() {
 	// Rename/extend per project.
 	register_nav_menus(
 		array(
-			'primary' => __( 'Primary Menu', 'cb-peoplesafe2027' ),
-			'footer'  => __( 'Footer Menu', 'cb-peoplesafe2027' ),
+			'primary'          => __( 'Primary Menu', 'cb-peoplesafe2027' ),
+			'footer_products'  => __( 'Footer: Products', 'cb-peoplesafe2027' ),
+			'footer_about'     => __( 'Footer: About us', 'cb-peoplesafe2027' ),
+			'footer_resources' => __( 'Footer: Resources', 'cb-peoplesafe2027' ),
 		)
 	);
 }

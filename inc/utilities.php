@@ -180,6 +180,23 @@ function cb_peoplesafe2027_get_breadcrumbs( $post_id = 0 ) {
 		}
 	}
 
+	// A custom post type sits under its base (/uk/products/): a crumb for the listing between Home and the item.
+	$type = get_post_type( $post_id );
+
+	if ( ! in_array( $type, array( 'page', 'post' ), true ) ) {
+		$parent = dirname( untrailingslashit( get_permalink( $post_id ) ) );
+		$home   = untrailingslashit( $breadcrumbs[0]['url'] );
+
+		if ( $parent && $parent !== $home && 0 === strpos( $parent, $home ) ) {
+			$object = get_post_type_object( $type );
+
+			$breadcrumbs[] = array(
+				'label' => ( $object && $object->has_archive ) ? $object->labels->name : ucfirst( str_replace( '-', ' ', basename( $parent ) ) ),
+				'url'   => trailingslashit( $parent ),
+			);
+		}
+	}
+
 	$breadcrumbs[] = array(
 		'label' => get_the_title( $post_id ),
 		'url'   => '',
@@ -394,4 +411,83 @@ function cb_peoplesafe2027_rich_paragraphs_inline( $html ) {
 	$html = preg_replace( '#</?p[^>]*>#i', '', $html );
 
 	return trim( preg_replace( '#(?:\s*<br\s*/?>\s*)+#i', ' ', $html ) );
+}
+
+/**
+ * Print one of the footer's menus: a plain list, nothing when the location has no menu.
+ *
+ * @param string $location Menu location.
+ * @return void
+ */
+function cb_peoplesafe2027_footer_menu( $location ) {
+	wp_nav_menu(
+		array(
+			'theme_location' => $location,
+			'container'      => false,
+			'menu_class'     => 'menu',
+			'depth'          => 1,
+			'fallback_cb'    => false,
+		)
+	);
+}
+
+/**
+ * The pages under the Sectors page, in the current region, in page order.
+ *
+ * @return WP_Post[]
+ */
+function cb_peoplesafe2027_footer_sectors() {
+	$args = array(
+		'post_type'      => 'page',
+		'name'           => 'sectors',
+		'post_status'    => 'publish',
+		'posts_per_page' => 1,
+	);
+
+	if ( function_exists( 'pll_current_language' ) && pll_current_language() ) {
+		$args['lang'] = pll_current_language();
+	}
+
+	$parent = get_posts( $args );
+
+	if ( ! $parent ) {
+		return array();
+	}
+
+	return get_pages(
+		array(
+			'parent'      => $parent[0]->ID,
+			'sort_column' => 'menu_order,post_title',
+			'post_status' => 'publish',
+		)
+	);
+}
+
+/**
+ * A sector's name for the footer: its title, with the one long title shortened.
+ *
+ * @param WP_Post $page Sector page.
+ * @return string
+ */
+function cb_peoplesafe2027_footer_sector_title( $page ) {
+	$title = html_entity_decode( get_the_title( $page ) );
+
+	return 'Professional Services & Government' === $title ? 'Prof. Services & Government' : $title;
+}
+
+/**
+ * A product's intro for a card: the intro of its Hero block, with any list
+ * left out, as plain text. Falls back to the product's excerpt, then its text.
+ *
+ * @param WP_Post $product Product.
+ * @return string
+ */
+function cb_peoplesafe2027_product_intro( $product ) {
+	foreach ( parse_blocks( $product->post_content ) as $block ) {
+		if ( 'cb-peoplesafe2027/hero' === $block['blockName'] && ! empty( $block['attrs']['intro'] ) ) {
+			return trim( wp_strip_all_tags( preg_replace( '#<(ul|ol)\b.*?</\1>#is', '', $block['attrs']['intro'] ) ) );
+		}
+	}
+
+	return wp_trim_words( has_excerpt( $product ) ? $product->post_excerpt : wp_strip_all_tags( strip_shortcodes( excerpt_remove_blocks( $product->post_content ) ) ), 20 );
 }

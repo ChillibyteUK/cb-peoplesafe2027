@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
-import { Button } from '@wordpress/components';
+import { Button, SelectControl } from '@wordpress/components';
 import EditorBlockShell from '../../_shared/EditorBlockShell';
 import ImagePicker from '../../_shared/ImagePicker';
 import RichField from '../../_shared/RichField';
@@ -11,7 +11,7 @@ const MAX_ITEMS = 4;
 const EMPTY_ITEM = { image: 0, imageUrl: '', text: '' };
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
-	const { items } = attributes;
+	const { items, style } = attributes;
 	const blockProps = useBlockProps( { className: 'container cb-peoplesafe2027-editor-block' } );
 	const rows = items || [];
 
@@ -37,6 +37,15 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					{ __( 'The title and introduction go above this block as an ordinary heading and paragraph.', 'cb-peoplesafe2027' ) }
 				</p>
 			</div>
+			<SelectControl
+				label={ __( 'Style', 'cb-peoplesafe2027' ) }
+				value={ style }
+				options={ [
+					{ value: 'plain', label: __( 'Plain: centred text under each image', 'cb-peoplesafe2027' ) },
+					{ value: 'cards', label: __( 'Cards: image on white, left-aligned text on yellow', 'cb-peoplesafe2027' ) },
+				] }
+				onChange={ ( value ) => setAttributes( { style: value } ) }
+			/>
 			<div className="cb-peoplesafe2027-faq-rows">
 				<label className="cb-peoplesafe2027-editor-field__label">{ __( 'Columns (2 to 4)', 'cb-peoplesafe2027' ) }</label>
 				{ rows.map( ( row, index ) => (

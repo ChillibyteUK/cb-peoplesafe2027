@@ -30,6 +30,7 @@
   --col-blue-400: #0484a0;
   --col-teal-400: #06bea9;
   --col-navy-400: #043950;
+  --col-navy-900: #0a0f1c; /* the footer: near black, with the pattern a shade lighter */
 
   /* Tints — carried over from the earlier palette; remove at the end if unused */
   --col-yellow-100: #ffe4bd;
@@ -604,6 +605,544 @@ mark.has-inline-color {
 }
 
 /*
+ * Site navigation (header). Fixed over the page, white once scrolled. From the
+ * xl breakpoint down (1199px) it is a burger and a full-screen list of links;
+ * above that the links open the panels in .site-nav__menus. Markup is built by
+ * inc/nav-render.php, behaviour is src/js/site-nav.js.
+ *
+ * 1199px is hardcoded: it is one below the first desktop width the design was
+ * made for, not the "xl" breakpoint in src/build/tokens.config.js (1240). If it
+ * changes here, change it in src/js/site-nav.js too.
+ */
+
+.site-header {
+	position: relative;
+	z-index: var(--z-overlay);
+}
+
+.site-header::before {
+		content: "";
+		position: fixed;
+		inset: 0 0 auto;
+		height: 98px;
+		background-color: transparent;
+		transition: background-color var(--transition);
+		z-index: var(--z-overlay);
+	}
+
+.site-header.scrolled::before {
+		background-color: var(--col-white);
+	}
+
+/* The nav is fixed over the page, so the page starts below it. */
+#main {
+	padding-top: 100px;
+}
+
+.site-nav {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	padding-top: var(--space-1);
+	z-index: var(--z-overlay);
+}
+
+.site-nav__bar {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-template-areas:
+		"logo top"
+		"logo main";
+	column-gap: var(--space-3);
+	row-gap: var(--space-2);
+	align-items: center;
+}
+
+.site-nav__burger {
+	display: none;
+	padding: 0;
+	border: 0;
+	background: none;
+	cursor: pointer;
+}
+
+.site-nav__logo {
+	grid-area: logo;
+	align-self: end;
+	width: 250px;
+	padding-bottom: 0.75rem;
+}
+
+.site-nav__logo img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+/* Two rows beside the logo: the extras above, the links below. */
+.site-nav__items {
+	display: contents;
+}
+
+.site-nav__main {
+	grid-area: main;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: var(--space-2);
+}
+
+.site-nav__main .button {
+		height: auto;
+		margin-bottom: 0.75rem;
+		padding-block: var(--space-1);
+		font-size: var(--fs-small);
+		font-weight: var(--fw-700);
+		white-space: nowrap;
+	}
+
+.site-nav__extras {
+	grid-area: top;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: var(--space-3);
+}
+
+.site-nav__extras .button {
+		height: auto;
+		padding-block: var(--space-1);
+		font-size: var(--fs-small);
+		font-weight: var(--fw-700);
+		white-space: nowrap;
+	}
+
+/* The top row is secondary: quieter than the links below. */
+
+.site-nav__extras .site-nav__toggle {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-1);
+		padding-bottom: 0;
+		color: var(--col-body-muted);
+		font-size: var(--fs-tiny);
+		font-weight: var(--fw-400);
+	}
+
+:is(.site-nav__extras .site-nav__toggle)::after {
+			content: none;
+		}
+
+:is(.site-nav__extras .site-nav__toggle):hover {
+			color: var(--col-blue-400);
+		}
+
+/* The underline that grows on hover, shared by every link in the bar. */
+.site-nav__toggle {
+	position: relative;
+	align-self: center;
+	padding-inline: var(--space-3);
+	padding-bottom: 0.75rem;
+	white-space: nowrap;
+	color: var(--col-black);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-700);
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+}
+.site-nav__toggle::after {
+		content: "";
+		position: absolute;
+		bottom: -2px;
+		left: 0;
+		width: 0;
+		height: 2px;
+		background-color: var(--col-blue-400);
+		transition: width var(--transition);
+	}
+.site-nav__toggle:hover,.site-nav__toggle.active,.site-nav__toggle[aria-expanded="true"] {
+		color: var(--col-blue-400);
+	}
+:is(.site-nav__toggle:hover,.site-nav__toggle.active,.site-nav__toggle[aria-expanded="true"])::after {
+			width: 100%;
+		}
+
+/* Panels */
+
+.site-nav__panel {
+	display: none;
+	width: var(--panel-width, 800px);
+	max-width: 100%;
+	margin-left: var(--panel-left, 0);
+	border-radius: var(--radius-lg);
+	overflow: clip;
+	background-color: var(--col-white);
+	box-shadow: var(--shadow-out);
+}
+
+.site-nav__panel.active {
+		display: block;
+	}
+
+.site-nav__panel a {
+		color: var(--col-black);
+		text-decoration: none;
+	}
+
+.site-nav__panel .h3 {
+		font-size: var(--fs-h3);
+		font-weight: var(--fw-700);
+		line-height: var(--line-height-heading);
+	}
+
+.site-nav__panel .item {
+		display: grid;
+		gap: 0.75rem;
+	}
+
+.site-nav__panel .item__image {
+		border-radius: var(--radius-lg);
+		overflow: clip;
+		background-color: var(--col-neutral);
+	}
+
+.site-nav__panel .item__title {
+		display: flex;
+		justify-content: space-between;
+		position: relative;
+		font-size: var(--fs-base);
+		font-weight: var(--fw-700);
+		transition: color var(--transition);
+	}
+
+.site-nav__panel .item__desc {
+		color: var(--col-body-muted);
+		font-size: var(--fs-tiny);
+	}
+
+.site-nav__panel .item:hover .item__title {
+		color: var(--col-blue-400);
+	}
+
+.site-nav__panel .more__link {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		font-size: var(--fs-small);
+		font-weight: var(--fw-700);
+		transition: color var(--transition);
+	}
+
+:is(.site-nav__panel .more__link):hover {
+			color: var(--col-blue-400);
+		}
+
+.site-nav__arrow {
+	flex: none;
+}
+
+/* A plain list of links. */
+.site-nav__panel--list {
+	--panel-width: 200px;
+	padding: var(--space-3);
+}
+.site-nav__panel--list ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+.site-nav__panel--list a {
+		display: block;
+		padding-block: 0.2rem;
+		font-weight: var(--fw-700);
+		transition: color var(--transition);
+	}
+:is(.site-nav__panel--list a):hover {
+			color: var(--col-blue-400);
+		}
+
+/* Tiles, two to a row, and a link below. */
+.site-nav__panel--tiles {
+	--panel-width: 600px;
+	padding: var(--space-3);
+}
+.site-nav__panel--tiles .items {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--space-1) var(--space-3);
+	}
+.site-nav__panel--tiles .item {
+		grid-template-columns: 48px auto;
+		align-items: center;
+		gap: var(--space-3);
+		padding: var(--space-2);
+		border-radius: var(--radius-md);
+		transition: background-color var(--transition);
+	}
+:is(.site-nav__panel--tiles .item):hover {
+			background-color: var(--col-neutral);
+		}
+.site-nav__panel--tiles .item__image {
+		display: block;
+		width: 48px;
+		height: 48px;
+		border-radius: 0;
+		background: none;
+		object-fit: contain;
+	}
+.site-nav__panel--tiles .more {
+		margin-top: var(--space-2);
+		padding-top: var(--space-2);
+		border-top: 1px solid var(--col-blue-200);
+	}
+.site-nav__panel--tiles .more__link {
+		padding-inline: var(--space-2);
+	}
+
+/* A list on the left, content on the right. */
+.site-nav__panel--panels {
+	grid-template-columns: 190px auto;
+}
+.site-nav__panel--panels.active {
+		display: grid;
+	}
+.site-nav__panel--panels .left {
+		margin: 0;
+		padding: var(--space-3);
+		list-style: none;
+		background-color: var(--col-neutral);
+	}
+:is(.site-nav__panel--panels .left) li {
+			margin-bottom: var(--space-2);
+		}
+:is(.site-nav__panel--panels .left) button {
+			display: block;
+			width: 100%;
+			padding: var(--space-2);
+			border: 0;
+			border-radius: var(--radius-md);
+			background: none;
+			color: inherit;
+			font: inherit;
+			font-size: var(--fs-small);
+			font-weight: var(--fw-700);
+			text-align: left;
+			cursor: pointer;
+		}
+:is(:is(.site-nav__panel--panels .left) button):hover,[aria-expanded="true"]:is(:is(.site-nav__panel--panels .left) button) {
+				background-color: var(--col-border);
+			}
+.site-nav__panel--panels .right {
+		display: none;
+		padding: var(--space-3) var(--space-5);
+	}
+.active:is(.site-nav__panel--panels .right) {
+			display: grid;
+		}
+/* Image tiles. */
+.site-nav__panel--panels .right--products {
+		gap: var(--space-3);
+	}
+:is(.site-nav__panel--panels .right--products) .items {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: var(--space-5);
+			margin-bottom: var(--space-3);
+		}
+:is(.site-nav__panel--panels .right--products) .item {
+			grid-template-columns: 50px auto;
+			break-inside: avoid;
+		}
+/* Cards with a large image. */
+.site-nav__panel--panels .right--cards {
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: auto auto;
+		gap: var(--space-4);
+	}
+:is(.site-nav__panel--panels .right--cards) .item {
+			grid-template-rows: auto auto 1fr;
+		}
+/* Links in two columns. */
+.site-nav__panel--panels .right--cols {
+		grid-template-rows: 1fr 1fr auto;
+		gap: var(--space-3);
+	}
+:is(.site-nav__panel--panels .right--cols) ul {
+			margin: 0;
+			padding: 0;
+			columns: 2;
+			column-gap: var(--space-5);
+			list-style: none;
+		}
+:is(.site-nav__panel--panels .right--cols) li {
+			break-inside: avoid;
+		}
+:is(.site-nav__panel--panels .right--cols) a {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding-block: 0.2rem;
+			font-weight: var(--fw-700);
+		}
+:is(:is(.site-nav__panel--panels .right--cols) a):hover {
+				color: var(--col-blue-400);
+			}
+.site-nav__panel--panels .more {
+		width: 50%;
+		margin-left: auto;
+	}
+
+/* Burger: four bars that fold into a cross. */
+.site-nav__burger {
+	position: relative;
+	width: 30px;
+	height: 30px;
+}
+.site-nav__burger span {
+		position: absolute;
+		left: 0;
+		display: block;
+		width: 100%;
+		height: 5px;
+		border-radius: 9px;
+		background: var(--col-black);
+		opacity: 1;
+		transition: var(--transition);
+	}
+:is(.site-nav__burger span):nth-child(1) {
+			top: 0;
+		}
+:is(.site-nav__burger span):nth-child(2),:is(.site-nav__burger span):nth-child(3) {
+			top: 13px;
+		}
+:is(.site-nav__burger span):nth-child(4) {
+			bottom: 0;
+		}
+.site-nav__burger[aria-expanded="true"] span:nth-child(1) {
+			top: 18px;
+			left: 50%;
+			width: 0;
+		}
+.site-nav__burger[aria-expanded="true"] span:nth-child(2) {
+			transform: rotate(45deg);
+		}
+.site-nav__burger[aria-expanded="true"] span:nth-child(3) {
+			transform: rotate(-45deg);
+		}
+.site-nav__burger[aria-expanded="true"] span:nth-child(4) {
+			top: 13px;
+			left: 50%;
+			width: 0;
+		}
+
+@media (max-width: 1199px) {
+	.site-nav .container {
+		margin: 0;
+		padding: 0;
+	}
+
+	.site-nav__bar {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.site-nav__burger {
+		display: block;
+		position: absolute;
+		top: var(--space-3);
+		left: var(--space-3);
+		z-index: var(--z-nav);
+	}
+
+	.site-nav__logo {
+		align-self: auto;
+		margin-inline: auto;
+		z-index: var(--z-nav);
+	}
+
+	.site-nav__main {
+		flex-direction: column;
+		gap: 0;
+	}
+
+	.site-nav__items {
+		display: none;
+		position: fixed;
+		inset: 0;
+		flex-direction: column;
+		gap: 0;
+		width: 100dvw;
+		height: 100dvh;
+		padding-top: 5rem;
+		overflow-y: auto;
+		background-color: var(--col-white);
+	}
+
+		.site-nav__items.active {
+			display: flex;
+		}
+
+		/* Links go to their page: the panels are for larger screens. */
+		.site-nav__items .site-nav__toggle {
+			align-self: auto;
+			padding: var(--space-3);
+			border-bottom: 1px solid var(--col-border);
+			text-align: left;
+		}
+
+			:is(.site-nav__items .site-nav__toggle)::after {
+				content: none;
+			}
+
+	.site-nav__extras {
+		display: block;
+		width: 100%;
+		margin: 0;
+	}
+
+		.site-nav__extras .site-nav__toggle {
+			display: block;
+			padding: var(--space-3);
+			border-bottom: 1px solid var(--col-border);
+			color: var(--col-black);
+			font-size: var(--fs-small);
+			font-weight: var(--fw-700);
+		}
+
+	.site-nav__main .button,
+	.site-nav__extras .button {
+		display: block;
+		width: 80vw;
+		margin: var(--space-3) auto 0;
+		text-align: center;
+	}
+
+	.site-nav__menus {
+		display: none !important;
+	}
+}
+
+/* Root hub: the logo alone. */
+.site-nav--logo-only .site-nav__bar {
+	display: block;
+}
+
+.site-nav--logo-only .site-nav__logo {
+	display: block;
+}
+
+
+/* Logged in: sit below the WordPress admin bar. */
+.admin-bar .site-nav {
+		top: var(--wp-admin--admin-bar--height, 32px);
+	}
+.admin-bar .site-header::before {
+		top: var(--wp-admin--admin-bar--height, 32px);
+	}
+/*
  * Region switcher: a flag and code button that opens a list of regions.
  * Open and close behaviour is the theme's dropdown script
  * (src/js/nav-dropdown.js), which toggles .is-open on the menu.
@@ -814,6 +1353,171 @@ html.lenis body {
 	transition-property: overflow;
 	transition-duration: 1ms;
 	transition-behavior: allow-discrete;
+}
+
+/*
+ * Footer: navy with the pattern behind, four columns on a wide screen, two on
+ * a tablet, one on a phone (centred). Markup is footer.php.
+ */
+
+.site-footer {
+	position: relative;
+	background-color: var(--col-navy-900);
+	background-image: url("../img/footer-background.svg");
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	background-size: 100% 80%;
+	color: var(--col-white);
+	font-size: var(--fs-small);
+}
+
+.site-footer a:not(.button) {
+		color: var(--col-white);
+		text-decoration: none;
+		transition: color var(--transition);
+	}
+
+:is(.site-footer a:not(.button)):hover {
+			color: var(--col-yellow-400);
+		}
+
+.site-footer__main {
+	padding-block: var(--space-6);
+}
+
+.site-footer__grid {
+	display: grid;
+	gap: var(--space-5);
+	padding-inline: var(--space-3);
+	text-align: center;
+}
+
+.site-footer__intro img {
+	max-width: 200px;
+	height: auto;
+}
+
+.site-footer__intro p {
+	margin-block: var(--space-4);
+}
+
+.site-footer__title {
+	margin-bottom: var(--space-3);
+	font-size: var(--fs-h4);
+	font-weight: var(--fw-700);
+}
+
+.site-footer__col nav + nav {
+		margin-top: var(--space-4);
+	}
+
+.site-footer__col .menu {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		line-height: 1.1;
+	}
+
+:is(.site-footer__col .menu) li {
+			margin-bottom: var(--space-2);
+		}
+
+.site-footer__social {
+	display: flex;
+	justify-content: center;
+	gap: var(--space-3);
+	margin-block: var(--space-4);
+}
+
+.site-footer__social a {
+		display: block;
+		width: 1.5rem;
+		height: 1.5rem;
+	}
+
+.site-footer__social svg {
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
+.site-footer__help {
+	margin: 0 0 var(--space-2);
+	font-size: var(--fs-tiny);
+}
+
+.site-footer .site-footer__field {
+	display: flex;
+	max-width: 22rem;
+	margin-inline: auto;
+}
+
+:is(.site-footer .site-footer__field) input {
+		flex: 1;
+		min-width: 0;
+		padding: var(--space-2) var(--space-3);
+		/* !important: the base input rule in forms.css is an eight-:not() selector no ordinary rule outranks. */
+		border: 0 !important;
+		border-radius: var(--radius-sm) 0 0 var(--radius-sm) !important;
+		font: inherit;
+	}
+
+:is(.site-footer .site-footer__field) .button {
+		border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+	}
+
+.site-footer__colophon {
+	padding-block: var(--space-2);
+	font-size: var(--fs-tiny);
+}
+
+.site-footer__colophon .container {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: center;
+		gap: var(--space-3);
+	}
+
+.site-footer__colophon p {
+		margin: 0;
+	}
+
+.site-footer__credit {
+	opacity: 0.6;
+	transition: opacity var(--transition);
+}
+
+.site-footer__credit:hover {
+		opacity: 1;
+	}
+
+.site-footer__credit img {
+		display: block;
+		width: 33px;
+		height: 16px;
+	}
+
+@media (min-width: 768px) {
+	.site-footer__grid {
+		grid-template-columns: 1fr 1fr;
+		padding-inline: 0;
+		text-align: left;
+	}
+
+	.site-footer__social {
+		justify-content: flex-start;
+	}
+
+	.site-footer__field {
+		margin-inline: 0;
+	}
+}
+
+@media (min-width: 992px) {
+	.site-footer__grid {
+		grid-template-columns: repeat(4, 1fr);
+	}
 }
 
 /* Minimal, deliberately unopinionated form base — expected to be overridden per project. */
@@ -1062,7 +1766,7 @@ select {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: var(--space-3);
+	gap: var(--space-2);
 	margin-top: var(--space-3);
 }
 
@@ -1073,48 +1777,53 @@ select {
 .slider__dots {
 	display: flex;
 	align-items: center;
-	gap: var(--space-3);
+	gap: var(--space-2);
 }
 
+/* Quiet by default: small light dots, with the current one a longer navy pill. */
 .slider__dot {
 	position: relative;
-	width: 0.75rem;
-	height: 0.75rem;
+	width: 0.5rem;
+	height: 0.5rem;
 	padding: 0;
-	border: var(--border-width) solid var(--col-navy-400);
-	border-radius: 50%;
-	background: transparent;
+	border: 0;
+	border-radius: var(--radius-pill);
+	background: var(--col-blue-300);
 	cursor: pointer;
-	transition: background-color var(--transition);
+	transition: background-color var(--transition), width var(--transition);
+}
+
+.slider__dot:hover {
+	background: var(--col-blue-400);
 }
 
 .slider__dot[aria-current="true"] {
+	width: 1.25rem;
 	background: var(--col-navy-400);
 }
 
+/* Arrows are bare chevrons, no ring; the target stays 2.5rem square. */
 .slider__arrow {
 	display: grid;
 	place-items: center;
 	width: 2.5rem;
 	height: 2.5rem;
 	padding: 0;
-	border: var(--border-width) solid var(--col-navy-400);
-	border-radius: 50%;
+	border: 0;
 	background: transparent;
-	color: var(--col-navy-400);
-	font-size: var(--fs-h4);
+	color: var(--col-body-muted);
+	font-size: var(--fs-title-sm);
 	line-height: 1;
 	cursor: pointer;
-	transition: background-color var(--transition), color var(--transition);
+	transition: color var(--transition);
 }
 
 .slider__arrow:hover:not(:disabled) {
-	background: var(--col-navy-400);
-	color: var(--col-white);
+	color: var(--col-blue-400);
 }
 
 .slider__arrow:disabled {
-	opacity: 0.4;
+	opacity: 0.25;
 	cursor: default;
 }
 
@@ -1129,20 +1838,18 @@ select {
 .slider__pause {
 	display: grid;
 	place-items: center;
-	width: 2.5rem;
-	height: 2.5rem;
+	width: 2rem;
+	height: 2rem;
 	padding: 0;
-	border: var(--border-width) solid var(--col-navy-400);
-	border-radius: 50%;
+	border: 0;
 	background: transparent;
-	color: var(--col-navy-400);
+	color: var(--col-body-muted);
 	cursor: pointer;
-	transition: background-color var(--transition), color var(--transition);
+	transition: color var(--transition);
 }
 
 .slider__pause:hover {
-	background: var(--col-navy-400);
-	color: var(--col-white);
+	color: var(--col-blue-400);
 }
 
 .slider__pause span {
@@ -2922,12 +3629,16 @@ a.caption-slider__card:hover {
 	text-align: center;
 }
 
+.image-columns__media {
+	margin: 0 auto var(--space-3);
+}
+
 .image-columns__image {
 	display: block;
 	width: auto; /* at its own size, never stretched: these are often small illustrations */
 	max-width: 100%;
 	height: auto;
-	margin: 0 auto var(--space-3);
+	margin: 0 auto;
 }
 
 .image-columns__text > :last-child {
@@ -2952,6 +3663,45 @@ a.caption-slider__card:hover {
 	.image-columns--4 .image-columns__grid {
 		grid-template-columns: repeat(4, 1fr);
 	}
+}
+
+/* Cards: the image on white, the text left-aligned on yellow below it. */
+.image-columns--cards .image-columns__grid {
+	align-items: stretch;
+	text-align: left;
+}
+
+.image-columns--cards .image-columns__item {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	border-radius: var(--radius-sm);
+	background-color: var(--col-primary);
+	box-shadow: var(--shadow-in);
+}
+
+.image-columns--cards .image-columns__media {
+	display: flex;
+	flex: none;
+	align-items: center;
+	justify-content: center;
+	height: 14rem;
+	margin: 0;
+	padding: var(--space-4);
+	background-color: var(--col-white);
+}
+
+.image-columns--cards .image-columns__image {
+	width: auto;
+	height: 100%;
+	max-height: 100%;
+	object-fit: contain;
+}
+
+.image-columns--cards .image-columns__text {
+	flex: 1;
+	padding: var(--space-3);
+	color: var(--col-black);
 }
 
 /* --- src/blocks/logo-slider.css --- */
@@ -3019,6 +3769,97 @@ a.caption-slider__card:hover {
 	}
 }
 
+/* --- src/blocks/product-cards.css --- */
+/*
+ * Product cards. Filter buttons over a grid of cards, one per product: the
+ * same card as Related content (.related-card), four across from lg, two from
+ * md, one on a phone. The cards in a row share a height.
+ */
+
+.product-cards {
+	padding-block: var(--space-6);
+}
+
+.product-cards__filters {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: var(--space-2);
+	margin-bottom: var(--space-4);
+}
+
+.product-cards__filters[hidden] {
+	display: none;
+}
+
+.product-cards__filter {
+	padding: var(--space-2) var(--space-3);
+	border: 0;
+	border-radius: var(--radius-md);
+	background-color: var(--col-blue-200);
+	color: var(--col-black);
+	cursor: pointer;
+	transition: background-color var(--transition);
+}
+
+.product-cards__filter:hover {
+	background-color: var(--col-blue-300);
+}
+
+.product-cards__filter.is-active {
+	background-color: var(--col-yellow-400);
+}
+
+.product-cards__grid {
+	display: grid;
+	gap: var(--space-4);
+}
+
+.product-cards__card[hidden] {
+	display: none;
+}
+
+/*
+ * The photo sits on a teal gradient whose bottom edge is curved (a shallow
+ * curve), so the text area below has a curved top. The curve
+ * is on a layer behind the photo, so a wide product is never cut by it.
+ */
+.product-cards__media {
+	position: relative;
+	aspect-ratio: 1;
+}
+
+.product-cards__media::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(var(--col-blue-400), var(--col-teal-400));
+	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 100' preserveAspectRatio='none'%3E%3Cpath fill='%23fff' d='m400,0v85c-62,10-130,15-200,15S62,95,0,85V0h400Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+
+/* Product photos are cut-outs: show them whole, above the gradient. */
+.product-cards__card .related-card__image {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	aspect-ratio: auto;
+	padding: var(--space-3);
+	object-fit: contain;
+}
+
+@media (min-width: 768px) {
+	.product-cards__grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (min-width: 992px) {
+	.product-cards__grid {
+		grid-template-columns: repeat(4, 1fr);
+	}
+}
+
 /* --- src/blocks/quote.css --- */
 /*
  * Quote. A white card with the quote on the left (two thirds from lg up) and an
@@ -3037,13 +3878,12 @@ a.caption-slider__card:hover {
 
 .quote .slider--ready .slider__viewport {
 	/*
-	 * The card's shadow falls outside the card, and the slider clips whatever is
-	 * outside its viewport. Room for it below (padding, pulled back with a negative
-	 * margin so the layout does not move) and to the sides (a clip margin no wider
-	 * than the gap, so the next card's edge is still not shown).
+	 * The card's shadow falls mostly below it, so there is room for it below
+	 * (padding, pulled back with a negative margin so the layout does not move).
+	 * The sides are clipped at the card's edge: any more and the neighbouring
+	 * card's shadow shows in the gap between slides.
 	 */
 	overflow: clip;
-	overflow-clip-margin: var(--slider-gap);
 	padding-bottom: var(--space-6);
 	margin-bottom: calc(-1 * var(--space-6));
 }
@@ -3100,10 +3940,11 @@ a.caption-slider__card:hover {
 }
 
 .quote__text p {
-	font-size: var(--fs-h3);
+	font-size: var(--fs-h4);
+	text-wrap: pretty;
 }
 
-.quote__text > :last-child {
+.quote__text> :last-child {
 	margin-bottom: 0;
 }
 
@@ -3402,7 +4243,6 @@ a.caption-slider__card:hover {
 
 .side-tabs__tab {
 	interpolate-size: allow-keywords;
-	padding: var(--space-3);
 	border: var(--border-width) solid var(--col-navy-400);
 	border-radius: var(--radius-md);
 	background-color: var(--col-navy-400);
@@ -3437,6 +4277,7 @@ a.caption-slider__card:hover {
 	align-items: center;
 	justify-content: space-between;
 	gap: var(--space-3);
+	padding: var(--space-3);
 	list-style: none;
 	cursor: pointer;
 }
@@ -3464,7 +4305,7 @@ a.caption-slider__card:hover {
 }
 
 .side-tabs__content {
-	padding-top: var(--space-3);
+	padding: 0 var(--space-3) var(--space-3);
 }
 
 .side-tabs__content > :last-child {

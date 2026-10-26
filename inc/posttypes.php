@@ -66,7 +66,7 @@ function cb_peoplesafe2027_register_post_types() {
 				'slug'       => 'products',
 				'with_front' => false,
 			),
-			'archive' => true,
+			'archive' => false, // /products/ is an ordinary page holding the Product cards block.
 			'taxes'   => array( 'product_type' ),
 		),
 		'case_study'   => array(

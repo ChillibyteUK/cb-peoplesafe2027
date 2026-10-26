@@ -26,6 +26,7 @@
 	 * Optional data attributes on the .slider element:
 	 *   data-slider-loop="true"   loop round (the slides must fill the viewport)
 	 *   data-slider-autoplay="ms" move on by itself every ms milliseconds
+	 *   data-slider-step="1"      the arrows and dots move one slide at a time, not a screenful
 	 *   data-slider-controls="none" no arrows, dots or pause button (a logo row that just drifts by)
 	 *
 	 * Slides per view and the gap between slides are CSS: set --slides-per-view
@@ -63,7 +64,7 @@
 	      align: 'start',
 	      containScroll: 'trimSnaps',
 	      // A rotating row moves one slide at a time, and a little slower; the rest move a screenful.
-	      slidesToScroll: root.hasAttribute('data-slider-autoplay') ? 1 : 'auto',
+	      slidesToScroll: root.hasAttribute('data-slider-autoplay') || '1' === root.getAttribute('data-slider-step') ? 1 : 'auto',
 	      inViewThreshold: 0.5,
 	      duration: REDUCED.matches ? 0 : root.hasAttribute('data-slider-autoplay') ? 40 : 25
 	    });

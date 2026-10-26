@@ -38,7 +38,7 @@ $cb_allowed = array(
 	),
 );
 
-$cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'image-columns image-columns--' . count( $cb_items ) ) );
+$cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'image-columns image-columns--' . count( $cb_items ) . ( 'cards' === ( isset( $attributes['style'] ) ? $attributes['style'] : '' ) ? ' image-columns--cards' : '' ) ) );
 ?>
 <section <?php echo $cb_wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
 	<div class="container">
@@ -51,6 +51,7 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'image-
 				<div class="image-columns__item">
 					<?php
 					if ( $cb_image_id ) {
+						echo '<div class="image-columns__media">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo wp_get_attachment_image(
 							$cb_image_id,
 							'large',
@@ -60,6 +61,7 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'image-
 								'loading' => 'lazy',
 							)
 						); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						echo '</div>';
 					}
 
 					if ( $cb_text ) {

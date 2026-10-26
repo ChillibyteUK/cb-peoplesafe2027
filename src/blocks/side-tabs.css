@@ -38,7 +38,6 @@
 
 .side-tabs__tab {
 	interpolate-size: allow-keywords;
-	padding: var(--space-3);
 	border: var(--border-width) solid var(--col-navy-400);
 	border-radius: var(--radius-md);
 	background-color: var(--col-navy-400);
@@ -73,6 +72,7 @@
 	align-items: center;
 	justify-content: space-between;
 	gap: var(--space-3);
+	padding: var(--space-3);
 	list-style: none;
 	cursor: pointer;
 }
@@ -100,7 +100,7 @@
 }
 
 .side-tabs__content {
-	padding-top: var(--space-3);
+	padding: 0 var(--space-3) var(--space-3);
 }
 
 .side-tabs__content > :last-child {

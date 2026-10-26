@@ -18,33 +18,44 @@
 <?php wp_body_open(); ?>
 
 <!-- HEADER-NAV:START -->
-<header id="masthead">
-	<nav class="navbar container" aria-label="Primary navigation">
-		<a href="<?php echo esc_url( function_exists( 'cb_peoplesafe2027_region_url' ) && pll_current_language() ? cb_peoplesafe2027_region_url( pll_current_language() ) : home_url( '/' ) ); ?>" class="navbar-brand">
-			<?php bloginfo( 'name' ); ?>
-		</a>
-
-		<button class="navbar-toggler" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Toggle navigation">
-			<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-				<path d="M2 5h16M2 10h16M2 15h16" />
-			</svg>
-		</button>
-
-		<div class="navbar-collapse" id="primary-menu" data-lenis-prevent>
-			<?php
-			wp_nav_menu(
-				array(
-					'theme_location' => 'primary',
-					'menu_class'     => 'navbar-nav',
-					'container'      => false,
-					'fallback_cb'    => false,
-					'walker'         => new CB_Peoplesafe_2027_Nav_Walker(),
-				)
-			);
-			?>
+<?php
+// The root hub (region chooser) shows the logo only.
+$cb_logo_only = is_singular( 'root_hub' );
+$cb_nav       = $cb_logo_only ? array() : cb_peoplesafe2027_nav_parts();
+?>
+<header id="masthead" class="site-header">
+	<nav class="site-nav<?php echo $cb_logo_only ? ' site-nav--logo-only' : ''; ?>" aria-label="Primary navigation">
+		<div class="container">
+			<div class="site-nav__bar">
+				<?php if ( ! $cb_logo_only ) { ?>
+				<button class="site-nav__burger" id="site-nav-burger" type="button" aria-expanded="false" aria-controls="site-nav-items" aria-label="<?php esc_attr_e( 'Menu', 'cb-peoplesafe2027' ); ?>">
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+				</button>
+				<?php } ?>
+				<a href="<?php echo esc_url( function_exists( 'cb_peoplesafe2027_region_url' ) && pll_current_language() ? cb_peoplesafe2027_region_url( pll_current_language() ) : home_url( '/' ) ); ?>" class="site-nav__logo">
+					<img src="<?php echo esc_url( get_template_directory_uri() . '/img/ps-logo-full--dark.svg' ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" width="200" height="45">
+				</a>
+				<?php if ( ! $cb_logo_only ) { ?>
+				<div class="site-nav__items" id="site-nav-items">
+					<div class="site-nav__main">
+						<?php echo $cb_nav['main']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped when built, see inc/nav-render.php. ?>
+					</div>
+					<div class="site-nav__extras">
+						<?php echo $cb_nav['extras']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped when built, see inc/nav-render.php. ?>
+						<?php cb_peoplesafe2027_language_switcher(); ?>
+					</div>
+				</div>
+				<?php } ?>
+			</div>
+			<?php if ( ! $cb_logo_only ) { ?>
+			<div class="site-nav__menus" id="site-nav-menus">
+				<?php echo $cb_nav['menus']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped when built, see inc/nav-render.php. ?>
+			</div>
+			<?php } ?>
 		</div>
-
-		<?php cb_peoplesafe2027_language_switcher(); ?>
 	</nav>
 </header>
 <!-- HEADER-NAV:END -->

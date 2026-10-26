@@ -80,12 +80,7 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'relate
 						$cb_excerpt = '';
 
 						if ( 'product' === $cb_item->post_type ) {
-							foreach ( parse_blocks( $cb_item->post_content ) as $cb_block ) {
-								if ( 'cb-peoplesafe2027/product-header' === $cb_block['blockName'] && ! empty( $cb_block['attrs']['intro'] ) ) {
-									$cb_excerpt = wp_strip_all_tags( $cb_block['attrs']['intro'] );
-									break;
-								}
-							}
+							$cb_excerpt = cb_peoplesafe2027_product_intro( $cb_item );
 						}
 
 						if ( '' === $cb_excerpt ) {

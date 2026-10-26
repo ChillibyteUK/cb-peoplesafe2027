@@ -1,0 +1,584 @@
+/*
+ * Site navigation (header). Fixed over the page, white once scrolled. From the
+ * xl breakpoint down (1199px) it is a burger and a full-screen list of links;
+ * above that the links open the panels in .site-nav__menus. Markup is built by
+ * inc/nav-render.php, behaviour is src/js/site-nav.js.
+ *
+ * 1199px is hardcoded: it is one below the first desktop width the design was
+ * made for, not the "xl" breakpoint in src/build/tokens.config.js (1240). If it
+ * changes here, change it in src/js/site-nav.js too.
+ */
+
+.site-header {
+	position: relative;
+	z-index: var(--z-overlay);
+
+	&::before {
+		content: "";
+		position: fixed;
+		inset: 0 0 auto;
+		height: 98px;
+		background-color: transparent;
+		transition: background-color var(--transition);
+		z-index: var(--z-overlay);
+	}
+
+	&.scrolled::before {
+		background-color: var(--col-white);
+	}
+}
+
+/* The nav is fixed over the page, so the page starts below it. */
+#main {
+	padding-top: 100px;
+}
+
+.site-nav {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	padding-top: var(--space-1);
+	z-index: var(--z-overlay);
+}
+
+.site-nav__bar {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-template-areas:
+		"logo top"
+		"logo main";
+	column-gap: var(--space-3);
+	row-gap: var(--space-2);
+	align-items: center;
+}
+
+.site-nav__burger {
+	display: none;
+	padding: 0;
+	border: 0;
+	background: none;
+	cursor: pointer;
+}
+
+.site-nav__logo {
+	grid-area: logo;
+	align-self: end;
+	width: 250px;
+	padding-bottom: 0.75rem;
+
+	img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+}
+
+/* Two rows beside the logo: the extras above, the links below. */
+.site-nav__items {
+	display: contents;
+}
+
+.site-nav__main {
+	grid-area: main;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: var(--space-2);
+
+	.button {
+		height: auto;
+		margin-bottom: 0.75rem;
+		padding-block: var(--space-1);
+		font-size: var(--fs-small);
+		font-weight: var(--fw-700);
+		white-space: nowrap;
+	}
+}
+
+.site-nav__extras {
+	grid-area: top;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: var(--space-3);
+
+	.button {
+		height: auto;
+		padding-block: var(--space-1);
+		font-size: var(--fs-small);
+		font-weight: var(--fw-700);
+		white-space: nowrap;
+	}
+
+	/* The top row is secondary: quieter than the links below. */
+	.site-nav__toggle {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-1);
+		padding-bottom: 0;
+		color: var(--col-body-muted);
+		font-size: var(--fs-tiny);
+		font-weight: var(--fw-400);
+
+		&::after {
+			content: none;
+		}
+
+		&:hover {
+			color: var(--col-blue-400);
+		}
+	}
+}
+
+/* The underline that grows on hover, shared by every link in the bar. */
+.site-nav__toggle {
+	position: relative;
+	align-self: center;
+	padding-inline: var(--space-3);
+	padding-bottom: 0.75rem;
+	white-space: nowrap;
+	color: var(--col-black);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-700);
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+
+	&::after {
+		content: "";
+		position: absolute;
+		bottom: -2px;
+		left: 0;
+		width: 0;
+		height: 2px;
+		background-color: var(--col-blue-400);
+		transition: width var(--transition);
+	}
+
+	&:hover,
+	&.active,
+	&[aria-expanded="true"] {
+		color: var(--col-blue-400);
+
+		&::after {
+			width: 100%;
+		}
+	}
+}
+
+/* Panels */
+
+.site-nav__panel {
+	display: none;
+	width: var(--panel-width, 800px);
+	max-width: 100%;
+	margin-left: var(--panel-left, 0);
+	border-radius: var(--radius-lg);
+	overflow: clip;
+	background-color: var(--col-white);
+	box-shadow: var(--shadow-out);
+
+	&.active {
+		display: block;
+	}
+
+	a {
+		color: var(--col-black);
+		text-decoration: none;
+	}
+
+	.h3 {
+		font-size: var(--fs-h3);
+		font-weight: var(--fw-700);
+		line-height: var(--line-height-heading);
+	}
+
+	.item {
+		display: grid;
+		gap: 0.75rem;
+	}
+
+	.item__image {
+		border-radius: var(--radius-lg);
+		overflow: clip;
+		background-color: var(--col-neutral);
+	}
+
+	.item__title {
+		display: flex;
+		justify-content: space-between;
+		position: relative;
+		font-size: var(--fs-base);
+		font-weight: var(--fw-700);
+		transition: color var(--transition);
+	}
+
+	.item__desc {
+		color: var(--col-body-muted);
+		font-size: var(--fs-tiny);
+	}
+
+	.item:hover .item__title {
+		color: var(--col-blue-400);
+	}
+
+	.more__link {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		font-size: var(--fs-small);
+		font-weight: var(--fw-700);
+		transition: color var(--transition);
+
+		&:hover {
+			color: var(--col-blue-400);
+		}
+	}
+}
+
+.site-nav__arrow {
+	flex: none;
+}
+
+/* A plain list of links. */
+.site-nav__panel--list {
+	--panel-width: 200px;
+	padding: var(--space-3);
+
+	ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	a {
+		display: block;
+		padding-block: 0.2rem;
+		font-weight: var(--fw-700);
+		transition: color var(--transition);
+
+		&:hover {
+			color: var(--col-blue-400);
+		}
+	}
+}
+
+/* Tiles, two to a row, and a link below. */
+.site-nav__panel--tiles {
+	--panel-width: 600px;
+	padding: var(--space-3);
+
+	.items {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--space-1) var(--space-3);
+	}
+
+	.item {
+		grid-template-columns: 48px auto;
+		align-items: center;
+		gap: var(--space-3);
+		padding: var(--space-2);
+		border-radius: var(--radius-md);
+		transition: background-color var(--transition);
+
+		&:hover {
+			background-color: var(--col-neutral);
+		}
+	}
+
+	.item__image {
+		display: block;
+		width: 48px;
+		height: 48px;
+		border-radius: 0;
+		background: none;
+		object-fit: contain;
+	}
+
+	.more {
+		margin-top: var(--space-2);
+		padding-top: var(--space-2);
+		border-top: 1px solid var(--col-blue-200);
+	}
+
+	.more__link {
+		padding-inline: var(--space-2);
+	}
+}
+
+/* A list on the left, content on the right. */
+.site-nav__panel--panels {
+	grid-template-columns: 190px auto;
+
+	&.active {
+		display: grid;
+	}
+
+	.left {
+		margin: 0;
+		padding: var(--space-3);
+		list-style: none;
+		background-color: var(--col-neutral);
+
+		li {
+			margin-bottom: var(--space-2);
+		}
+
+		button {
+			display: block;
+			width: 100%;
+			padding: var(--space-2);
+			border: 0;
+			border-radius: var(--radius-md);
+			background: none;
+			color: inherit;
+			font: inherit;
+			font-size: var(--fs-small);
+			font-weight: var(--fw-700);
+			text-align: left;
+			cursor: pointer;
+
+			&:hover,
+			&[aria-expanded="true"] {
+				background-color: var(--col-border);
+			}
+		}
+	}
+
+	.right {
+		display: none;
+		padding: var(--space-3) var(--space-5);
+
+		&.active {
+			display: grid;
+		}
+	}
+
+	/* Image tiles. */
+	.right--products {
+		gap: var(--space-3);
+
+		.items {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: var(--space-5);
+			margin-bottom: var(--space-3);
+		}
+
+		.item {
+			grid-template-columns: 50px auto;
+			break-inside: avoid;
+		}
+	}
+
+	/* Cards with a large image. */
+	.right--cards {
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: auto auto;
+		gap: var(--space-4);
+
+		.item {
+			grid-template-rows: auto auto 1fr;
+		}
+	}
+
+	/* Links in two columns. */
+	.right--cols {
+		grid-template-rows: 1fr 1fr auto;
+		gap: var(--space-3);
+
+		ul {
+			margin: 0;
+			padding: 0;
+			columns: 2;
+			column-gap: var(--space-5);
+			list-style: none;
+		}
+
+		li {
+			break-inside: avoid;
+		}
+
+		a {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding-block: 0.2rem;
+			font-weight: var(--fw-700);
+
+			&:hover {
+				color: var(--col-blue-400);
+			}
+		}
+	}
+
+	.more {
+		width: 50%;
+		margin-left: auto;
+	}
+}
+
+/* Burger: four bars that fold into a cross. */
+.site-nav__burger {
+	position: relative;
+	width: 30px;
+	height: 30px;
+
+	span {
+		position: absolute;
+		left: 0;
+		display: block;
+		width: 100%;
+		height: 5px;
+		border-radius: 9px;
+		background: var(--col-black);
+		opacity: 1;
+		transition: var(--transition);
+
+		&:nth-child(1) {
+			top: 0;
+		}
+
+		&:nth-child(2),
+		&:nth-child(3) {
+			top: 13px;
+		}
+
+		&:nth-child(4) {
+			bottom: 0;
+		}
+	}
+
+	&[aria-expanded="true"] {
+		span:nth-child(1) {
+			top: 18px;
+			left: 50%;
+			width: 0;
+		}
+
+		span:nth-child(2) {
+			transform: rotate(45deg);
+		}
+
+		span:nth-child(3) {
+			transform: rotate(-45deg);
+		}
+
+		span:nth-child(4) {
+			top: 13px;
+			left: 50%;
+			width: 0;
+		}
+	}
+}
+
+@media (max-width: 1199px) {
+	.site-nav .container {
+		margin: 0;
+		padding: 0;
+	}
+
+	.site-nav__bar {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.site-nav__burger {
+		display: block;
+		position: absolute;
+		top: var(--space-3);
+		left: var(--space-3);
+		z-index: var(--z-nav);
+	}
+
+	.site-nav__logo {
+		align-self: auto;
+		margin-inline: auto;
+		z-index: var(--z-nav);
+	}
+
+	.site-nav__main {
+		flex-direction: column;
+		gap: 0;
+	}
+
+	.site-nav__items {
+		display: none;
+		position: fixed;
+		inset: 0;
+		flex-direction: column;
+		gap: 0;
+		width: 100dvw;
+		height: 100dvh;
+		padding-top: 5rem;
+		overflow-y: auto;
+		background-color: var(--col-white);
+
+		&.active {
+			display: flex;
+		}
+
+		/* Links go to their page: the panels are for larger screens. */
+		.site-nav__toggle {
+			align-self: auto;
+			padding: var(--space-3);
+			border-bottom: 1px solid var(--col-border);
+			text-align: left;
+
+			&::after {
+				content: none;
+			}
+		}
+	}
+
+	.site-nav__extras {
+		display: block;
+		width: 100%;
+		margin: 0;
+
+		.site-nav__toggle {
+			display: block;
+			padding: var(--space-3);
+			border-bottom: 1px solid var(--col-border);
+			color: var(--col-black);
+			font-size: var(--fs-small);
+			font-weight: var(--fw-700);
+		}
+	}
+
+	.site-nav__main .button,
+	.site-nav__extras .button {
+		display: block;
+		width: 80vw;
+		margin: var(--space-3) auto 0;
+		text-align: center;
+	}
+
+	.site-nav__menus {
+		display: none !important;
+	}
+}
+
+/* Root hub: the logo alone. */
+.site-nav--logo-only .site-nav__bar {
+	display: block;
+}
+
+.site-nav--logo-only .site-nav__logo {
+	display: block;
+}
+
+
+/* Logged in: sit below the WordPress admin bar. */
+.admin-bar {
+	.site-nav {
+		top: var(--wp-admin--admin-bar--height, 32px);
+	}
+
+	.site-header::before {
+		top: var(--wp-admin--admin-bar--height, 32px);
+	}
+}

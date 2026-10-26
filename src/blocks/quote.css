@@ -15,13 +15,12 @@
 
 .quote .slider--ready .slider__viewport {
 	/*
-	 * The card's shadow falls outside the card, and the slider clips whatever is
-	 * outside its viewport. Room for it below (padding, pulled back with a negative
-	 * margin so the layout does not move) and to the sides (a clip margin no wider
-	 * than the gap, so the next card's edge is still not shown).
+	 * The card's shadow falls mostly below it, so there is room for it below
+	 * (padding, pulled back with a negative margin so the layout does not move).
+	 * The sides are clipped at the card's edge: any more and the neighbouring
+	 * card's shadow shows in the gap between slides.
 	 */
 	overflow: clip;
-	overflow-clip-margin: var(--slider-gap);
 	padding-bottom: var(--space-6);
 	margin-bottom: calc(-1 * var(--space-6));
 }
@@ -78,10 +77,11 @@
 }
 
 .quote__text p {
-	font-size: var(--fs-h3);
+	font-size: var(--fs-h4);
+	text-wrap: pretty;
 }
 
-.quote__text > :last-child {
+.quote__text> :last-child {
 	margin-bottom: 0;
 }
 

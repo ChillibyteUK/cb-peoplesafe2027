@@ -96,6 +96,12 @@
           "origin": "theme"
         },
         {
+          "name": "navy-900",
+          "slug": "navy-900",
+          "color": "#0a0f1c",
+          "origin": "theme"
+        },
+        {
           "name": "yellow-100",
           "slug": "yellow-100",
           "color": "#ffe4bd",

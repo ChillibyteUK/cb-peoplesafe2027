@@ -82,6 +82,27 @@ function cb_peoplesafe2027_register_settings_page() {
 			'type'    => 'text',
 			'section' => 'cb_peoplesafe2027_general',
 		),
+		'linkedin_url'                   => array(
+			'label'       => 'LinkedIn URL',
+			'type'        => 'url',
+			'section'     => 'cb_peoplesafe2027_social',
+			'placeholder' => 'https://linkedin.com/company/...',
+			'description' => 'Leave blank to hide this icon from [social_icons].',
+		),
+		'youtube_url'                    => array(
+			'label'       => 'YouTube URL',
+			'type'        => 'url',
+			'section'     => 'cb_peoplesafe2027_social',
+			'placeholder' => 'https://youtube.com/...',
+			'description' => 'Leave blank to hide this icon from [social_icons].',
+		),
+		'x_url'                          => array(
+			'label'       => 'X URL',
+			'type'        => 'url',
+			'section'     => 'cb_peoplesafe2027_social',
+			'placeholder' => 'https://x.com/...',
+			'description' => 'Leave blank to hide this icon from [social_icons].',
+		),
 		'facebook_url'                   => array(
 			'label'       => 'Facebook URL',
 			'type'        => 'url',

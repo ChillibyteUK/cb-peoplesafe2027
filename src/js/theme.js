@@ -1,5 +1,6 @@
 import { initNavToggle } from './nav-toggle';
 import { initNavDropdowns } from './nav-dropdown';
+import { initSiteNav } from './site-nav';
 import { initDialogs } from './dialog';
 import { initVideoFacades } from './video-facade';
 import { initScrollAnimate } from './scroll-animate';
@@ -8,11 +9,13 @@ import { initSideTabs } from './side-tabs';
 import { initTopTabs } from './top-tabs';
 import { initStatsCounters } from './stats-counter';
 import { initSectorFilters } from './sector-filter';
+import { initProductFilters } from './product-filter';
 
 document.addEventListener('DOMContentLoaded', () => {
 	initSmoothScroll();
 	initNavToggle();
 	initNavDropdowns();
+	initSiteNav();
 	initDialogs();
 	initVideoFacades();
 	initScrollAnimate();
@@ -20,4 +23,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	initTopTabs();
 	initStatsCounters();
 	initSectorFilters();
+	initProductFilters();
 });

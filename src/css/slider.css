@@ -43,7 +43,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: var(--space-3);
+	gap: var(--space-2);
 	margin-top: var(--space-3);
 }
 
@@ -54,48 +54,53 @@
 .slider__dots {
 	display: flex;
 	align-items: center;
-	gap: var(--space-3);
+	gap: var(--space-2);
 }
 
+/* Quiet by default: small light dots, with the current one a longer navy pill. */
 .slider__dot {
 	position: relative;
-	width: 0.75rem;
-	height: 0.75rem;
+	width: 0.5rem;
+	height: 0.5rem;
 	padding: 0;
-	border: var(--border-width) solid var(--col-navy-400);
-	border-radius: 50%;
-	background: transparent;
+	border: 0;
+	border-radius: var(--radius-pill);
+	background: var(--col-blue-300);
 	cursor: pointer;
-	transition: background-color var(--transition);
+	transition: background-color var(--transition), width var(--transition);
+}
+
+.slider__dot:hover {
+	background: var(--col-blue-400);
 }
 
 .slider__dot[aria-current="true"] {
+	width: 1.25rem;
 	background: var(--col-navy-400);
 }
 
+/* Arrows are bare chevrons, no ring; the target stays 2.5rem square. */
 .slider__arrow {
 	display: grid;
 	place-items: center;
 	width: 2.5rem;
 	height: 2.5rem;
 	padding: 0;
-	border: var(--border-width) solid var(--col-navy-400);
-	border-radius: 50%;
+	border: 0;
 	background: transparent;
-	color: var(--col-navy-400);
-	font-size: var(--fs-h4);
+	color: var(--col-body-muted);
+	font-size: var(--fs-title-sm);
 	line-height: 1;
 	cursor: pointer;
-	transition: background-color var(--transition), color var(--transition);
+	transition: color var(--transition);
 }
 
 .slider__arrow:hover:not(:disabled) {
-	background: var(--col-navy-400);
-	color: var(--col-white);
+	color: var(--col-blue-400);
 }
 
 .slider__arrow:disabled {
-	opacity: 0.4;
+	opacity: 0.25;
 	cursor: default;
 }
 
@@ -110,20 +115,18 @@
 .slider__pause {
 	display: grid;
 	place-items: center;
-	width: 2.5rem;
-	height: 2.5rem;
+	width: 2rem;
+	height: 2rem;
 	padding: 0;
-	border: var(--border-width) solid var(--col-navy-400);
-	border-radius: 50%;
+	border: 0;
 	background: transparent;
-	color: var(--col-navy-400);
+	color: var(--col-body-muted);
 	cursor: pointer;
-	transition: background-color var(--transition), color var(--transition);
+	transition: color var(--transition);
 }
 
 .slider__pause:hover {
-	background: var(--col-navy-400);
-	color: var(--col-white);
+	color: var(--col-blue-400);
 }
 
 .slider__pause span {

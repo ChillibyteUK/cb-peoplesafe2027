@@ -41,3 +41,6 @@ require_once CB_PEOPLESAFE2027_DIR . '/inc/video.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/faq.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/regions.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/sectors.php';
+require_once CB_PEOPLESAFE2027_DIR . '/inc/nav.php';
+require_once CB_PEOPLESAFE2027_DIR . '/inc/nav-render.php';
+require_once CB_PEOPLESAFE2027_DIR . '/inc/nav-seed.php';

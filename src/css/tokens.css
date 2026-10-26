@@ -30,6 +30,7 @@
   --col-blue-400: #0484a0;
   --col-teal-400: #06bea9;
   --col-navy-400: #043950;
+  --col-navy-900: #0a0f1c; /* the footer: near black, with the pattern a shade lighter */
 
   /* Tints — carried over from the earlier palette; remove at the end if unused */
   --col-yellow-100: #ffe4bd;
