@@ -10,6 +10,7 @@ import { initTopTabs } from './top-tabs';
 import { initStatsCounters } from './stats-counter';
 import { initSectorFilters } from './sector-filter';
 import { initProductFilters } from './product-filter';
+import { initFormFrames } from './form-frame';
 
 document.addEventListener('DOMContentLoaded', () => {
 	initSmoothScroll();
@@ -24,4 +25,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	initStatsCounters();
 	initSectorFilters();
 	initProductFilters();
+	initFormFrames();
 });

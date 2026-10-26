@@ -61,12 +61,13 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'top-ta
 						<?php } ?>
 						<?php echo wp_kses_post( $cb_text ); ?>
 						<?php
-						if ( ! empty( $cb_tab['link'] ) && ! empty( $cb_tab['linkText'] ) ) {
+						if ( ( ! empty( $cb_tab['link'] ) || ! empty( $cb_tab['dialog'] ) ) && ! empty( $cb_tab['linkText'] ) ) {
 							cb_peoplesafe2027_cta_buttons(
 								array(
 									array(
 										'linkText'   => $cb_tab['linkText'],
-										'link'       => $cb_tab['link'],
+										'link'       => empty( $cb_tab['dialog'] ) ? $cb_tab['link'] : '',
+										'dialog'     => ! empty( $cb_tab['dialog'] ) ? $cb_tab['dialog'] : '',
 										'linkTarget' => ! empty( $cb_tab['linkTarget'] ),
 										'variant'    => 'outline',
 									),

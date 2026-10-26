@@ -3,14 +3,14 @@
   <defs>
     <style>
       .cls-1 {
-        fill: #f1f7f8;
+        fill: #f5f9fa;
       }
       .cls-1, .cls-2 {
         stroke-width: 0px;
       }
 
       .cls-2 {
-        fill: rgba(227, 238, 241, .8);
+        fill: rgba(233, 242, 245, .8);
         fill-rule: evenodd;
       }
 

@@ -133,7 +133,7 @@ function cb_peoplesafe2027_register_post_types() {
 			'archive'  => false,
 			'public'   => false, // Attribution only: no URLs, no archive (DEC-014).
 			'taxes'    => array( 'team' ),
-			'supports' => array( 'title', 'thumbnail' ),
+			'supports' => array( 'title', 'editor', 'thumbnail' ), // The editor holds the bio; the role is a field (inc/people.php).
 		),
 	);
 

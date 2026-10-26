@@ -1,0 +1,40 @@
+/* Download panel: a preview image beside a title and a download button. */
+
+.download-panel {
+	padding-block: var(--space-5);
+}
+
+.download-panel__card {
+	display: grid;
+	gap: var(--space-4);
+	align-items: center;
+	max-width: 48rem;
+	margin-inline: auto;
+	padding: var(--space-4);
+	border-radius: var(--radius-lg);
+	background-color: var(--col-white);
+	box-shadow: var(--shadow-in);
+}
+
+.download-panel__image img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: var(--radius-md);
+}
+
+.download-panel__title {
+	font-size: var(--fs-h3);
+}
+
+.download-panel__meta {
+	margin: var(--space-2) 0 0;
+	color: var(--col-body-muted);
+	font-size: var(--fs-small);
+}
+
+@media (min-width: 768px) {
+	.download-panel__card {
+		grid-template-columns: 1fr 2fr;
+	}
+}

@@ -1,0 +1,17 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/team",
+	"title": "Team",
+	"category": "cb-peoplesafe2027",
+	"description": "People from the People list: as profiles (photo, name, role and bio) or as photo cards (photo with name and role).",
+	"icon": "groups",
+	"attributes": {
+		"layout": { "type": "string", "default": "profiles" },
+		"title": { "type": "string", "default": "" },
+		"people": { "type": "array", "default": [] }
+	},
+	"supports": { "anchor": true, "className": true },
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

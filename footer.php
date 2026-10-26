@@ -76,6 +76,19 @@ $cb_home   = $cb_region && function_exists( 'cb_peoplesafe2027_region_url' ) ? c
 	</div>
 </footer>
 
+<?php if ( cb_peoplesafe2027_demo_form_url() ) { ?>
+<dialog id="demo-dialog" class="site-dialog" aria-labelledby="demo-dialog-title">
+	<div class="site-dialog__header">
+		<h2 class="site-dialog__title" id="demo-dialog-title"><?php esc_html_e( 'Book a Demo', 'cb-peoplesafe2027' ); ?></h2>
+		<button type="button" class="site-dialog__close" data-dialog-close aria-label="<?php esc_attr_e( 'Close', 'cb-peoplesafe2027' ); ?>">&times;</button>
+	</div>
+	<div class="site-dialog__body">
+		<p><?php esc_html_e( 'To book a demo of any of our solutions or a consultation with one of our personal safety experts, please fill in the form below.', 'cb-peoplesafe2027' ); ?></p>
+		<iframe class="is-in-dialog" data-form-src="<?php echo esc_url( cb_peoplesafe2027_demo_form_url() ); ?>" title="<?php esc_attr_e( 'Book a Demo', 'cb-peoplesafe2027' ); ?>" width="100%" height="1200" style="border:0"></iframe>
+	</div>
+</dialog>
+<?php } ?>
+
 <?php wp_footer(); ?>
 </body>
 </html>

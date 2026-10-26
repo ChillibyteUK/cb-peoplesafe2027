@@ -10,6 +10,7 @@
 @import "smooth-scroll.css";
 @import "footer.css";
 @import "forms.css";
+@import "dialog.css";
 @import "buttons.css";
 @import "slider.css";
 @import "utilities.css"; /* generated — see src/build/generate-utilities.js, run `npm run css-generate` */

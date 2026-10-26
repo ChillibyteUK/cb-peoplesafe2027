@@ -35,6 +35,21 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				onChange={ ( value ) => setAttributes( { content: value } ) }
 			/>
 			<CtaButtonsField value={ buttons } onChange={ ( rows ) => setAttributes( { buttons: rows } ) } />
+			<TextControl
+				type="url"
+				label={ __( 'Form address (optional)', 'cb-peoplesafe2027' ) }
+				value={ attributes.formUrl }
+				onChange={ ( value ) => setAttributes( { formUrl: value } ) }
+				help={ __( 'A Pardot form shown inside the banner, under the text.', 'cb-peoplesafe2027' ) }
+			/>
+			{ attributes.formUrl ? (
+				<TextControl
+					type="number"
+					label={ __( 'Form height in px', 'cb-peoplesafe2027' ) }
+					value={ attributes.formHeight }
+					onChange={ ( value ) => setAttributes( { formHeight: Number( value ) || 550 } ) }
+				/>
+			) : null }
 			<div className="cb-peoplesafe2027-editor-field">
 				<label className="cb-peoplesafe2027-editor-field__label">{ __( 'Image', 'cb-peoplesafe2027' ) }</label>
 				<MediaUploadCheck>

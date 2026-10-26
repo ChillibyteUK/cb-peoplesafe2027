@@ -9,7 +9,7 @@ import useRowMotion from '../../_shared/useRowMotion';
 
 const MIN_TABS = 2;
 const MAX_TABS = 5;
-const EMPTY_TAB = { title: '', icon: 0, iconUrl: '', preTitle: '', heading: '', content: '', linkText: '', link: '', linkTarget: false, image: 0, imageUrl: '' };
+const EMPTY_TAB = { title: '', icon: 0, iconUrl: '', preTitle: '', heading: '', content: '', linkText: '', link: '', linkTarget: false, dialog: '', image: 0, imageUrl: '' };
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
 	const { tabs } = attributes;
@@ -85,6 +85,12 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 										value={ row.link }
 										onChange={ ( url ) => updateRow( index, { link: url } ) }
 										placeholder={ __( 'Search pages and posts, or type a URL', 'cb-peoplesafe2027' ) }
+									/>
+									<ToggleControl
+										label={ __( 'Open the Book a Demo form instead', 'cb-peoplesafe2027' ) }
+										checked={ 'demo-dialog' === row.dialog }
+										onChange={ ( value ) => updateRow( index, { dialog: value ? 'demo-dialog' : '' } ) }
+										__nextHasNoMarginBottom
 									/>
 									<ToggleControl
 										label={ __( 'Open in a new tab', 'cb-peoplesafe2027' ) }

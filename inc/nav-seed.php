@@ -202,6 +202,7 @@ function cb_peoplesafe2027_nav_seed_data() {
 		'nav-demo'      => array(
 			'title'    => 'Book a Demo',
 			'layout'   => 'button',
+			'dialog'   => 'demo-dialog',
 			'url'      => '/contact-us/',
 		),
 	);
@@ -331,6 +332,14 @@ function cb_peoplesafe2027_nav_seed_image( $img, $dir = '' ) {
 		return 0;
 	}
 
+	// Keep the image's own address from taking over a page's address (an attachment with the same slug redirects the page to the file).
+	wp_update_post(
+		array(
+			'ID'        => $id,
+			'post_name' => sanitize_title( pathinfo( $img, PATHINFO_FILENAME ) ) . '-image',
+		)
+	);
+
 	update_post_meta( $id, '_cb_nav_seed', basename( $img ) );
 
 	return (int) $id;
@@ -368,6 +377,7 @@ function cb_peoplesafe2027_nav_seed_content( $section, $dir ) {
 		'layout'   => $section['layout'],
 		'position' => isset( $section['position'] ) ? $section['position'] : 'main',
 		'icon'     => isset( $section['icon'] ) ? $section['icon'] : '',
+		'dialog'   => isset( $section['dialog'] ) ? $section['dialog'] : '',
 		'width'    => isset( $section['width'] ) ? $section['width'] : 0,
 		'link'     => $link( $section['url'] ),
 		'items'    => $rows( isset( $section['items'] ) ? $section['items'] : array() ),

@@ -72,10 +72,6 @@
 }
 
 @media (min-width: 992px) {
-	.cta-banner::before {
-		background-size: contain;
-	}
-
 	.cta-banner__grid {
 		grid-template-columns: 5fr 7fr;
 		align-items: center;
@@ -98,4 +94,12 @@
 	.cta-banner__content {
 		grid-column: 2;
 	}
+}
+
+/* A form inside the banner, under the text. */
+.cta-banner__form {
+	display: block;
+	width: 100%;
+	margin-top: var(--space-3);
+	border: 0;
 }

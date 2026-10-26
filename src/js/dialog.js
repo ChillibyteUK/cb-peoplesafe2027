@@ -10,6 +10,8 @@
  *     ...
  *   </dialog>
  */
+import { loadFormFrame } from './form-frame';
+
 export function initDialogs() {
 	document.querySelectorAll('[data-dialog-target]').forEach((trigger) => {
 		const dialog = document.getElementById(trigger.getAttribute('data-dialog-target'));
@@ -17,6 +19,7 @@ export function initDialogs() {
 
 		trigger.addEventListener('click', () => {
 			dialog.showModal();
+			dialog.querySelectorAll('iframe[data-form-src]').forEach(loadFormFrame);
 
 			// Lenis would keep scrolling the page behind the dialog.
 			if (window.cbLenis) {

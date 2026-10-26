@@ -44,3 +44,5 @@ require_once CB_PEOPLESAFE2027_DIR . '/inc/sectors.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/nav.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/nav-render.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/nav-seed.php';
+require_once CB_PEOPLESAFE2027_DIR . '/inc/product-import.php';
+require_once CB_PEOPLESAFE2027_DIR . '/inc/people.php';

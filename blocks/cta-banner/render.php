@@ -57,6 +57,9 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'cta-ba
 				)
 			);
 			?>
+			<?php if ( ! empty( $attributes['formUrl'] ) ) { ?>
+				<iframe class="cta-banner__form" data-form-src="<?php echo esc_url( $attributes['formUrl'] ); ?>" title="<?php echo esc_attr( $cb_heading ? $cb_heading : __( 'Form', 'cb-peoplesafe2027' ) ); ?>" loading="lazy" width="100%" height="<?php echo esc_attr( ! empty( $attributes['formHeight'] ) ? (int) $attributes['formHeight'] : 550 ); ?>" style="border:0"></iframe>
+			<?php } ?>
 		</div>
 	</div>
 </section>

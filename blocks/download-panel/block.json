@@ -1,0 +1,24 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/download-panel",
+	"title": "Download panel",
+	"category": "cb-peoplesafe2027",
+	"description": "A file to download with a preview image, a title and a button. The file type and size are worked out from the file.",
+	"icon": "download",
+	"attributes": {
+		"file": { "type": "number", "default": 0 },
+		"fileName": { "type": "string", "default": "" },
+		"image": { "type": "number", "default": 0 },
+		"imageUrl": { "type": "string", "default": "" },
+		"title": { "type": "string", "default": "" },
+		"buttonLabel": { "type": "string", "default": "" }
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"color": { "background": true, "text": false, "link": false, "gradients": false }
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

@@ -1,0 +1,62 @@
+/*
+ * Site dialogs: the native <dialog> used for pop-ups (src/js/dialog.js), such as
+ * the Book a Demo form. showModal() supplies the backdrop, focus trap and Escape.
+ */
+
+.site-dialog {
+	width: min(48rem, calc(100vw - 2rem));
+	max-height: calc(100dvh - 2rem);
+	padding: 0;
+	overflow: auto;
+	border: 0;
+	border-radius: var(--radius-lg);
+	background-color: var(--col-white);
+	box-shadow: var(--shadow-lift);
+	color: var(--col-black);
+}
+
+.site-dialog::backdrop {
+	background-color: var(--overlay);
+}
+
+.site-dialog__header {
+	position: sticky;
+	top: 0;
+	z-index: var(--z-raised);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: var(--space-3) var(--space-4);
+	background-color: var(--col-white);
+}
+
+.site-dialog__title {
+	margin: 0;
+	font-size: var(--fs-h3);
+}
+
+.site-dialog__close {
+	width: 2.5rem;
+	height: 2.5rem;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--col-body-muted);
+	font-size: var(--fs-title-sm);
+	line-height: 1;
+	cursor: pointer;
+	transition: color var(--transition);
+}
+
+.site-dialog__close:hover {
+	color: var(--col-blue-400);
+}
+
+.site-dialog__body {
+	padding: 0 var(--space-4) var(--space-4);
+}
+
+.site-dialog__body iframe {
+	display: block;
+	width: 100%;
+}

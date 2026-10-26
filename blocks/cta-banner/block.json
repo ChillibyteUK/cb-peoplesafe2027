@@ -12,7 +12,9 @@
 		"content": { "type": "string", "default": "" },
 		"buttons": { "type": "array", "default": [] },
 		"imageId": { "type": "number", "default": 0 },
-		"imageUrl": { "type": "string", "default": "" }
+		"imageUrl": { "type": "string", "default": "" },
+		"formUrl": { "type": "string", "default": "" },
+		"formHeight": { "type": "number", "default": 550 }
 	},
 	"supports": {
 		"anchor": true,

@@ -75,13 +75,14 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'side-t
 							$cb_body .= '<ul>' . $cb_items . '</ul>';
 						}
 
-						if ( ! empty( $cb_tab['link'] ) && ! empty( $cb_tab['linkText'] ) ) {
+						if ( ( ! empty( $cb_tab['link'] ) || ! empty( $cb_tab['dialog'] ) ) && ! empty( $cb_tab['linkText'] ) ) {
 							ob_start();
 							cb_peoplesafe2027_cta_buttons(
 								array(
 									array(
 										'linkText'   => $cb_tab['linkText'],
-										'link'       => $cb_tab['link'],
+										'link'       => empty( $cb_tab['dialog'] ) ? $cb_tab['link'] : '',
+										'dialog'     => ! empty( $cb_tab['dialog'] ) ? $cb_tab['dialog'] : '',
 										'linkTarget' => ! empty( $cb_tab['linkTarget'] ),
 										'variant'    => 'outline-white',
 									),

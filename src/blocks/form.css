@@ -1,0 +1,24 @@
+/* Form: a Pardot iframe under an optional title and introduction. */
+
+.form-embed {
+	padding-block: var(--space-6);
+}
+
+.form-embed__title,
+.form-embed__intro {
+	max-width: 48rem;
+	margin-inline: auto;
+	text-align: center;
+}
+
+.form-embed__intro {
+	margin-bottom: var(--space-4);
+}
+
+.form-embed__frame {
+	display: block;
+	width: 100%;
+	max-width: 48rem;
+	margin-inline: auto;
+	border: 0;
+}

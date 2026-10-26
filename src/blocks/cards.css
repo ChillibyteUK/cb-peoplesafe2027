@@ -1,0 +1,94 @@
+/*
+ * Cards. Two to four cards in a row (one per row on a phone, two from md, the
+ * full row from lg): an image, then a coloured panel holding the title, text and
+ * an optional link. The cards in a row share a height.
+ */
+
+.cards {
+	padding-block: var(--space-5);
+}
+
+.cards__title {
+	margin-bottom: var(--space-4);
+	text-align: center;
+}
+
+.cards__grid {
+	display: grid;
+	gap: var(--space-4);
+}
+
+.cards__card {
+	--card-bg: var(--col-white);
+	--card-fg: var(--col-black);
+
+	display: flex;
+	flex-direction: column;
+	overflow: clip;
+	border-radius: var(--radius-lg);
+	background-color: var(--card-bg);
+	box-shadow: var(--shadow-in);
+	color: var(--card-fg);
+}
+
+.cards__card--yellow {
+	--card-bg: var(--col-yellow-400);
+}
+
+.cards__card--green {
+	--card-bg: var(--col-teal-400);
+}
+
+.cards__card--red {
+	--card-bg: var(--col-orange-400);
+	--card-fg: var(--col-white);
+}
+
+.cards__card--blue {
+	--card-bg: var(--col-blue-400);
+	--card-fg: var(--col-white);
+}
+
+.cards__image img {
+	display: block;
+	width: 100%;
+	aspect-ratio: 3 / 2;
+	object-fit: cover;
+}
+
+.cards__content {
+	flex: 1;
+	padding: var(--space-4);
+}
+
+.cards__card-title {
+	margin-bottom: var(--space-2);
+	font-size: var(--fs-h3);
+}
+
+.cards__text > :last-child {
+	margin-bottom: 0;
+}
+
+.cards__link {
+	display: inline-block;
+	margin-top: var(--space-3);
+	color: inherit;
+	font-weight: var(--fw-700);
+}
+
+@media (min-width: 768px) {
+	.cards__grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (min-width: 992px) {
+	.cards--3 .cards__grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	.cards--4 .cards__grid {
+		grid-template-columns: repeat(4, 1fr);
+	}
+}

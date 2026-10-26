@@ -82,6 +82,13 @@ function cb_peoplesafe2027_register_settings_page() {
 			'type'    => 'text',
 			'section' => 'cb_peoplesafe2027_general',
 		),
+		'demo_form_url'                  => array(
+			'label'       => 'Book a Demo form URL',
+			'type'        => 'url',
+			'section'     => 'cb_peoplesafe2027_general',
+			'placeholder' => 'https://safe.peoplesafe.co.uk/l/...',
+			'description' => 'The Pardot form used by the Book a Demo pop-up and by any Form block with no address of its own. Change it here to change it everywhere.',
+		),
 		'linkedin_url'                   => array(
 			'label'       => 'LinkedIn URL',
 			'type'        => 'url',

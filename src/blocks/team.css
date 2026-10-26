@@ -1,0 +1,84 @@
+/*
+ * Team. Profiles: a photo beside name, role and bio, one person per row with a
+ * rule between. Photo cards: three across, the photo with the name and role
+ * over a fade at its foot.
+ */
+
+.team {
+	padding-block: var(--space-5);
+}
+
+.team__title {
+	margin-bottom: var(--space-4);
+	text-align: center;
+}
+
+.team__photo {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.team__name {
+	margin: 0;
+}
+
+.team__bio > :last-child {
+	margin-bottom: 0;
+}
+
+/* Profiles */
+.team--profiles .team__person {
+	display: grid;
+	gap: var(--space-4);
+	padding-block: var(--space-4);
+	border-bottom: 1px solid var(--col-blue-300);
+}
+
+.team--profiles .team__image {
+	max-width: 16rem;
+}
+
+.team--profiles .team__role {
+	margin-bottom: var(--space-3);
+	font-size: var(--fs-h4);
+	font-weight: var(--fw-400);
+}
+
+@media (min-width: 768px) {
+	.team--profiles .team__person {
+		grid-template-columns: 1fr 2fr;
+		align-items: start;
+	}
+}
+
+/* Photo cards */
+.team--cards .team__list {
+	display: grid;
+	gap: var(--space-4);
+}
+
+.team--cards .team__person {
+	position: relative;
+	overflow: clip;
+	border-radius: var(--radius-lg);
+}
+
+.team--cards .team__details {
+	position: absolute;
+	inset: auto 0 0;
+	padding: var(--space-5) var(--space-3) var(--space-3);
+	background: linear-gradient(transparent, rgb(0 0 0 / 0.75));
+	color: var(--col-white);
+	text-align: center;
+}
+
+.team--cards .team__name {
+	font-weight: var(--fw-700);
+}
+
+@media (min-width: 768px) {
+	.team--cards .team__list {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}

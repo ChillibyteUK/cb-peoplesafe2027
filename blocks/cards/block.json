@@ -1,0 +1,23 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/cards",
+	"title": "Cards",
+	"category": "cb-peoplesafe2027",
+	"description": "Two to four cards side by side: an image, a title, text or a list, an optional link, and a colour.",
+	"icon": "columns",
+	"attributes": {
+		"title": { "type": "string", "default": "" },
+		"cards": {
+			"type": "array",
+			"default": [
+				{ "image": 0, "imageUrl": "", "title": "", "content": "", "linkText": "", "link": "", "linkTarget": false, "colour": "white" },
+				{ "image": 0, "imageUrl": "", "title": "", "content": "", "linkText": "", "link": "", "linkTarget": false, "colour": "white" },
+				{ "image": 0, "imageUrl": "", "title": "", "content": "", "linkText": "", "link": "", "linkTarget": false, "colour": "white" }
+			]
+		}
+	},
+	"supports": { "anchor": true, "className": true },
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

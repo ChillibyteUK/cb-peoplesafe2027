@@ -88,8 +88,10 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'relate
 						}
 						?>
 						<div class="slider__slide">
-							<article class="related-card">
+							<?php $cb_is_product = 'product' === $cb_item->post_type; ?>
+							<article class="related-card<?php echo $cb_is_product ? ' product-cards__card' : ''; ?>">
 								<?php if ( has_post_thumbnail( $cb_item ) ) { ?>
+									<?php echo $cb_is_product ? '<div class="product-cards__media">' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 									<?php
 									echo get_the_post_thumbnail(
 										$cb_item,
@@ -101,6 +103,7 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'relate
 										)
 									); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
 									?>
+									<?php echo $cb_is_product ? '</div>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 								<?php } ?>
 								<div class="related-card__inner">
 									<h3 class="related-card__title"><a class="related-card__link" href="<?php echo esc_url( get_permalink( $cb_item ) ); ?>"><?php echo esc_html( get_the_title( $cb_item ) ); ?></a></h3>

@@ -491,3 +491,36 @@ function cb_peoplesafe2027_product_intro( $product ) {
 
 	return wp_trim_words( has_excerpt( $product ) ? $product->post_excerpt : wp_strip_all_tags( strip_shortcodes( excerpt_remove_blocks( $product->post_content ) ) ), 20 );
 }
+
+/**
+ * The Book a Demo form address, from Site-Wide Settings. Falls back to the
+ * live form so the pop-up works before the setting has been saved.
+ *
+ * @return string
+ */
+function cb_peoplesafe2027_demo_form_url() {
+	return (string) cb_peoplesafe2027_get_setting( 'demo_form_url', 'https://safe.peoplesafe.co.uk/l/830213/2022-06-22/rgxm4' ) ?: 'https://safe.peoplesafe.co.uk/l/830213/2022-06-22/rgxm4';
+}
+
+/**
+ * Load Turtl's embed script, once, in the footer. A Turtl link on the page
+ * (blocks/embed) becomes the document viewer when it runs.
+ *
+ * @return void
+ */
+function cb_peoplesafe2027_enqueue_turtl() {
+	if ( wp_script_is( 'turtl-embed', 'enqueued' ) ) {
+		return;
+	}
+
+	wp_enqueue_script( 'turtl-embed', 'https://app-static.turtl.co/embed/turtl.embed.v1.js', array(), null, array( 'in_footer' => true, 'strategy' => 'async' ) ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- third-party script, version set by Turtl.
+}
+
+add_filter(
+	'script_loader_tag',
+	function ( $tag, $handle ) {
+		return 'turtl-embed' === $handle ? str_replace( '<script ', '<script data-turtl-script="embed" data-turtl-assets-hostname="https://assets.turtl.co" ', $tag ) : $tag;
+	},
+	10,
+	2
+);
