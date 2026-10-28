@@ -155,6 +155,10 @@ Every slider uses one shared wrapper (`src/js/slider.js`, built to `js/slider.mi
 
 `blocks/caption-slider` is a slider of white cards (an icon in a pale orange circle over a caption, the whole card a link) in the shared slider: two across on a phone, up to five on a wide screen, looping with dots and arrows, and a still row when everything fits. Attributes: `title` (optional) and `cards` (`image`, `caption`, `link`, `linkTarget`). It replaces the legacy caption slider ("Industries using MySOS").
 
+### Service status
+
+A list of services, each operational, degraded or down, under an overall banner worked out from them: every service operational is "Fully operational", every service down is "Down", anything else is "Partly degraded". The "Last updated" line is the page's own modified date, so changing a status and saving the page is the whole workflow. State is written as text as well as shown in colour (teal, yellow, orange). An optional Message field (bold, italic, links; Enter starts a new paragraph) shows above the banner for an incident notice. It renders nothing without services.
+
 ### Feature list
 
 `blocks/feature-list` is an optional pre-title and a title over a checklist of terms, each with a short definition (links allowed), as ticks in one column, or two from lg. It supports a background colour through the native Color panel. It replaces the legacy feature-list block and the hand-built native "benefits" lists (the NHS page).
@@ -169,7 +173,50 @@ Every slider uses one shared wrapper (`src/js/slider.js`, built to `js/slider.mi
 
 ### Image columns
 
-`blocks/image-columns` is two to four images side by side, each with centred text below it (`items`: image and text; the column count follows the number of items). Images show at their natural size, never stretched, so they are uploaded at the size wanted; alt text comes from the media library. The text is a shared RichField limited to bold, italic, links and text colour (`mark` is allowed through `wp_kses` for the colour). It has an optional background colour (`supports.color.background`) and no title or intro of its own: put an ordinary heading and paragraph above it. Used for the three-image section on Retail.
+`blocks/image-columns` is two to five images side by side, each with an optional bold title and centred text below it (`items`: image, title and text; the column count follows the number of items, five across from lg). Images show at their natural size, never stretched, so they are uploaded at the size wanted; alt text comes from the media library. The text is a shared RichField limited to bold, italic, links and text colour (`mark` is allowed through `wp_kses` for the colour). It has an optional background colour (`supports.color.background`) and no title or intro of its own: put an ordinary heading and paragraph above it. Used for the three-image section on Retail and the five values on Careers.
+
+### Benefits panel
+
+`blocks/benefits-panel` is a tinted panel (the block's own background colour, a pale tint by default) with a title and introduction over a 12-column mosaic, and an optional footnote under it. Each of the `items` is a benefit card (icon, title, text) or a photo and is a quarter, a third or half of the row wide (`span` 3, 4 or 6), optionally starting a quarter in (`offset`); a card with `stack` set sits under the card before it, so two small cards share one tile. Photos fill their tile; one column on a phone. Built for the Careers page, where the live page had it as hand-written HTML.
+
+### Principle tiles
+
+`blocks/principle-tiles` is a centred title and introduction over two to six colour tiles, each with a heart and a short line of text (`tiles`: `text`, `colour` of yellow, teal, blue, pink or orange). Six across from lg, three from md, one on a phone. The colours are the brand tokens, and the text is white on them and black on yellow for contrast. Built for "How We Think About Customers" on Careers, where the live page had it as hand-written HTML.
+
+### Case studies and stories
+
+Case studies and user stories are one post type, `case_study`: a story has the User story case study type. Paths come from `routing.php`: `/uk/case-studies/{slug}/` and `/uk/stories/{slug}/`. Sectors are the `sector` taxonomy; what a story was about (verbal abuse, medical, entrapment) is the `incident` taxonomy, translatable in code (`inc/taxonomies.php`). The featured image is the customer's logo, and the excerpt is the short description shown on the cards (the live site's hover text).
+
+`single-case_study.php` shows a Hero (title, breadcrumbs, the logo) over the post's own blocks. `archive-case_study.php` serves both archives: `/uk/case-studies/` is a grid of cards (12 a page) with a sector filter (`?sector=`), and `/uk/stories/` is an intro, a video and the incident types as tiles, with `?incident=` listing those stories in full. The intro text, the stories text under the video and the video address are in Site-Wide Settings, Case studies and stories (`inc/options.php`); the page styling is `src/blocks/case-hub.css`.
+
+`blocks/case-story-pair` is two or three chosen case studies as cards beside a navy panel that moves through chosen user stories (up to six) in the shared slider, one story in full at a time (`caseStudies` and `stories` hold post IDs; the two titles default to Case Studies and User Stories). It replaces the legacy case-user-combo block on the NHS, Councils and Utilities sector pages.
+
+The pages are built from the clone by `checks/build_case_studies.py` (outside the theme): the legacy quotes, calls to action, related products, file downloads and feature lists become our blocks, and the images and PDFs are copied across.
+
+### Pull quote
+
+`blocks/pullquote` is one large quote on a rounded coloured panel (`theme`: yellow, navy or light) with a big translucent opening quote mark and the attribution (`attribution`) bold on the right. It is for the quotes in the middle of a case study (the live site's big quote block); the Quote block is the one with logos, photos and a slider. The case studies importer (`checks/build_case_studies.py`) makes the live big quotes into Pull quotes.
+
+### Pushthrough and Newsletter signup
+
+- **Pushthrough** (`blocks/pushthrough`): a call to action inside an article, at the width of the text. Layout "panel" (label, title, text, a line of short facts, button) or "strip" (title and text beside the button), in navy, teal, orange or light. The title is an `h3`, so it never joins an article's Quick links. Buttons are the shared CTA buttons.
+- **Newsletter signup** (`blocks/newsletter-signup`): a teal gradient panel with a title, text, an email box and a Sign Up button, and the illustration on the right. Submitting opens the signup page (`/newsletter-signup/` in the visitor's region, or the address set on the block) with `?email=`; `src/js/form-frame.js` passes that to the Pardot form on that page. The signup page is a draft until it has a form address (a Form block needs a Pardot URL).
+
+### List styles
+
+The core List block has five styles: Ticks, Ticks orange, Ticks two columns, Two columns and Numbered steps (circled numbers, a bold first line when an item starts with bold text). They are registered in `inc/blocks.php`; the look is in `src/css/typography.css`.
+
+### Blogs, news and single posts
+
+- Blogs and News are posts (News is a post in the News category), at `/uk/blogs/{slug}/` and `/uk/news/{slug}/`; `single.php` shows one. `archive.php` lists them as a grid of cards (a lead card, two halves, then thirds), with a search box, Load more and (blogs) category pills. The cards are drawn in `inc/posts-index.php`, which also serves `cb/v1/posts` (stream, region, category, q, offset, lead) so the first page and every batch match; `src/js/posts-index.js` wires the search, pills and button. Without JavaScript the pills are `?category=` links and the pages are numbered.
+- The author is a Person post picked in the Author box on the post (meta `cb_author`); it is not shown on the page. It feeds the schema, and a post with none is credited to the organisation. Authors have the "Authors" team term so they are easy to tell from the senior management on the team page.
+- A single post has a meta row (category, date, reading time, author), a 9/3 layout with a sticky Quick links sidebar of its h2s (two or more; `src/js/post-toc.js` marks the one in view), related products or resources at the full width under the article, the next and previous posts, the newsletter signup and three related posts (the same kind, sharing the most categories, topped up with the newest).
+- Share (`inc/share.php`, `src/js/share.js`): a Share button in the post's meta row opens the site's native dialog with X, LinkedIn, Facebook, WhatsApp, email, Copy link and, on phones, the device's own share sheet. Each network is a plain link to its share address: no plugin and nothing loaded from them until chosen. `cb_peoplesafe2027_share_button()` and `cb_peoplesafe2027_share_dialog( $url, $title )` can go on any template.
+- Schema (`inc/posts.php`): BlogPosting or NewsArticle with the section, author and time required; the author as a Person; CollectionPage and ItemList on the listings. The News listing is made indexable and given its own canonical address (Yoast treats it as the News category). The listings' SEO titles and descriptions are in Site-Wide Settings.
+
+### Knowledge Hub
+
+`/uk/resources/` is `archive-resource.php` drawing `inc/knowledge-hub.php` (the other paths under it, such as `/guides/`, stay listings). From the top: the Hero with the introduction (Site-Wide Settings), a search over everything (`cb/v1/posts` with `stream=all`: blogs, news, resources and case studies, each card badged with its kind and the matched words highlighted; the rest of the page steps aside while a search is showing), a tile for each kind of content with how many there are, the latest three across blogs, news, guides and whitepapers, a row of the newest four guides, videos, infographics, whitepapers and case studies, each with View all, and the newsletter signup. The schema is a CollectionPage whose list is the tiles. Its SEO title and description are in Site-Wide Settings.
 
 ### Entrance animations
 

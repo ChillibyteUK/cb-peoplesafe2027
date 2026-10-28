@@ -1,14 +1,14 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
-import { Button, SelectControl } from '@wordpress/components';
+import { Button, SelectControl, TextControl } from '@wordpress/components';
 import EditorBlockShell from '../../_shared/EditorBlockShell';
 import ImagePicker from '../../_shared/ImagePicker';
 import RichField from '../../_shared/RichField';
 import useRowMotion from '../../_shared/useRowMotion';
 
 const MIN_ITEMS = 2;
-const MAX_ITEMS = 4;
-const EMPTY_ITEM = { image: 0, imageUrl: '', text: '' };
+const MAX_ITEMS = 5;
+const EMPTY_ITEM = { image: 0, imageUrl: '', title: '', text: '' };
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
 	const { items, style } = attributes;
@@ -47,7 +47,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				onChange={ ( value ) => setAttributes( { style: value } ) }
 			/>
 			<div className="cb-peoplesafe2027-faq-rows">
-				<label className="cb-peoplesafe2027-editor-field__label">{ __( 'Columns (2 to 4)', 'cb-peoplesafe2027' ) }</label>
+				<label className="cb-peoplesafe2027-editor-field__label">{ __( 'Columns (2 to 5)', 'cb-peoplesafe2027' ) }</label>
 				{ rows.map( ( row, index ) => (
 					<div
 						className={ 'cb-peoplesafe2027-related-items__row' + ( keys[ index ] === movedKey ? ' is-moved' : '' ) }
@@ -65,8 +65,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 									onRemove={ () => updateRow( index, { image: 0, imageUrl: '' } ) }
 								/>
 							</div>
+							<TextControl
+								label={ __( 'Title', 'cb-peoplesafe2027' ) }
+								value={ row.title || '' }
+								onChange={ ( value ) => updateRow( index, { title: value } ) }
+							/>
 							<RichField
-								label={ __( 'Text below the image', 'cb-peoplesafe2027' ) }
+								label={ __( 'Content', 'cb-peoplesafe2027' ) }
 								value={ row.text }
 								onChange={ ( value ) => updateRow( index, { text: value } ) }
 								allowedFormats={ [ 'core/bold', 'core/italic', 'core/link', 'core/text-color' ] }

@@ -46,6 +46,47 @@ function cb_peoplesafe2027_get_setting( $key, $default = '' ) {
 }
 
 /**
+ * Give the Case studies and Real life stories hubs their own Yoast title and
+ * description, from Site-Wide Settings. Blank leaves Yoast's archive setting.
+ *
+ * @param string $value   Yoast's value.
+ * @param string $suffix  The settings key suffix: seo_title or seo_description.
+ * @return string
+ */
+function cb_peoplesafe2027_hub_seo( $value, $suffix ) {
+	if ( ! is_post_type_archive( 'case_study' ) ) {
+		return $value;
+	}
+	$prefix = 'stories' === get_query_var( 'cb_term_base' ) ? 'stories' : 'case_studies';
+	return cb_peoplesafe2027_get_setting( $prefix . '_' . $suffix, $value );
+}
+
+add_filter(
+	'wpseo_title',
+	function ( $title ) {
+		return cb_peoplesafe2027_hub_seo( $title, 'seo_title' );
+	}
+);
+add_filter(
+	'wpseo_opengraph_title',
+	function ( $title ) {
+		return cb_peoplesafe2027_hub_seo( $title, 'seo_title' );
+	}
+);
+add_filter(
+	'wpseo_metadesc',
+	function ( $desc ) {
+		return cb_peoplesafe2027_hub_seo( $desc, 'seo_description' );
+	}
+);
+add_filter(
+	'wpseo_opengraph_desc',
+	function ( $desc ) {
+		return cb_peoplesafe2027_hub_seo( $desc, 'seo_description' );
+	}
+);
+
+/**
  * Register the settings page, section, and fields.
  *
  * @return void
@@ -65,6 +106,7 @@ function cb_peoplesafe2027_register_settings_page() {
 
 	add_settings_section( 'cb_peoplesafe2027_general', 'General', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'cb_peoplesafe2027_social', 'Social', '__return_false', 'theme-general-settings' );
+	add_settings_section( 'cb_peoplesafe2027_hubs', 'Case studies and stories', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'cb_peoplesafe2027_tracking', 'Tracking & Verification', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'cb_peoplesafe2027_trustpilot', 'Trustpilot', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'cb_peoplesafe2027_scripts', 'Scripts', '__return_false', 'theme-general-settings' );
@@ -88,6 +130,103 @@ function cb_peoplesafe2027_register_settings_page() {
 			'section'     => 'cb_peoplesafe2027_general',
 			'placeholder' => 'https://safe.peoplesafe.co.uk/l/...',
 			'description' => 'The Pardot form used by the Book a Demo pop-up and by any Form block with no address of its own. Change it here to change it everywhere.',
+		),
+		'case_studies_intro'             => array(
+			'label'       => 'Case studies intro',
+			'type'        => 'textarea',
+			'section'     => 'cb_peoplesafe2027_hubs',
+			'description' => 'The paragraph under the title on the Case studies page.',
+		),
+		'stories_intro'                  => array(
+			'label'       => 'Stories intro',
+			'type'        => 'textarea',
+			'section'     => 'cb_peoplesafe2027_hubs',
+			'description' => 'The paragraph under the title on the Real life stories page.',
+		),
+		'stories_video_url'              => array(
+			'label'       => 'Stories video URL',
+			'type'        => 'url',
+			'section'     => 'cb_peoplesafe2027_hubs',
+			'placeholder' => 'https://www.youtube.com/watch?v=...',
+			'description' => 'The video above the incident types on the Real life stories page. Leave blank for none.',
+		),
+		'stories_prompt'                 => array(
+			'label'       => 'Stories text under the video',
+			'type'        => 'textarea',
+			'section'     => 'cb_peoplesafe2027_hubs',
+			'description' => 'The line above the incident types on the Real life stories page.',
+		),
+		'knowledge_hub_intro'            => array(
+			'label'       => 'Knowledge Hub intro',
+			'type'        => 'textarea',
+			'section'     => 'cb_peoplesafe2027_hubs',
+			'description' => 'The paragraphs under the title on the Knowledge Hub page. A blank line starts a new paragraph.',
+		),
+		'knowledge_hub_seo_title'        => array(
+			'label'       => 'Knowledge Hub SEO title',
+			'type'        => 'text',
+			'section'     => 'cb_peoplesafe2027_hubs',
+			'description' => 'The search result title for the Knowledge Hub. Leave blank for "Knowledge Hub - site name".',
+		),
+		'knowledge_hub_seo_description'  => array(
+			'label'       => 'Knowledge Hub SEO description',
+			'type'        => 'textarea',
+			'section'     => 'cb_peoplesafe2027_hubs',
+			'description' => 'The search result description for the Knowledge Hub.',
+		),
+		'blogs_seo_title'                => array(
+			'label'       => 'Blogs SEO title',
+			'type'        => 'text',
+			'section'     => 'cb_peoplesafe2027_hubs',
+			'description' => 'The search result title for the Blogs page. Leave blank to use the Yoast setting.',
+		),
+		'blogs_seo_description'          => array(
+			'label'       => 'Blogs SEO description',
+			'type'        => 'textarea',
+			'section'     => 'cb_peoplesafe2027_hubs',
+			'description' => 'The search result description for the Blogs page.',
+		),
+		'news_seo_title'                 => array(
+			'label'       => 'News SEO title',
+			'type'        => 'text',
+			'section'     => 'cb_peoplesafe2027_hubs',
+			'description' => 'The search result title for the News page. Leave blank to use the Yoast setting.',
+		),
+		'news_seo_description'           => array(
+			'label'       => 'News SEO description',
+			'type'        => 'textarea',
+			'section'     => 'cb_peoplesafe2027_hubs',
+			'description' => 'The search result description for the News page.',
+		),
+		'infographics_intro'             => array(
+			'label'       => 'Infographics intro',
+			'type'        => 'textarea',
+			'section'     => 'cb_peoplesafe2027_hubs',
+			'description' => 'The paragraph under the title on the Infographics page.',
+		),
+		'case_studies_seo_title'         => array(
+			'label'       => 'Case studies SEO title',
+			'type'        => 'text',
+			'section'     => 'cb_peoplesafe2027_hubs',
+			'description' => 'The search result title for the Case studies page. Leave blank to use the Yoast archive setting.',
+		),
+		'case_studies_seo_description'   => array(
+			'label'       => 'Case studies SEO description',
+			'type'        => 'textarea',
+			'section'     => 'cb_peoplesafe2027_hubs',
+			'description' => 'The search result description for the Case studies page.',
+		),
+		'stories_seo_title'              => array(
+			'label'       => 'Stories SEO title',
+			'type'        => 'text',
+			'section'     => 'cb_peoplesafe2027_hubs',
+			'description' => 'The search result title for the Real life stories page. Leave blank to use the Yoast archive setting.',
+		),
+		'stories_seo_description'        => array(
+			'label'       => 'Stories SEO description',
+			'type'        => 'textarea',
+			'section'     => 'cb_peoplesafe2027_hubs',
+			'description' => 'The search result description for the Real life stories page.',
 		),
 		'linkedin_url'                   => array(
 			'label'       => 'LinkedIn URL',

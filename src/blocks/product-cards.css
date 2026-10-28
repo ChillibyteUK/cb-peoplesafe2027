@@ -8,36 +8,6 @@
 	padding-block: var(--space-6);
 }
 
-.product-cards__filters {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	gap: var(--space-2);
-	margin-bottom: var(--space-4);
-}
-
-.product-cards__filters[hidden] {
-	display: none;
-}
-
-.product-cards__filter {
-	padding: var(--space-2) var(--space-3);
-	border: 0;
-	border-radius: var(--radius-md);
-	background-color: var(--col-blue-200);
-	color: var(--col-black);
-	cursor: pointer;
-	transition: background-color var(--transition);
-}
-
-.product-cards__filter:hover {
-	background-color: var(--col-blue-300);
-}
-
-.product-cards__filter.is-active {
-	background-color: var(--col-yellow-400);
-}
-
 .product-cards__grid {
 	display: grid;
 	gap: var(--space-4);

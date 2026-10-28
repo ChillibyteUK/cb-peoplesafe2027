@@ -1,0 +1,17 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/pullquote",
+	"title": "Pull quote",
+	"category": "cb-peoplesafe2027",
+	"description": "A large quote on a coloured panel, with a big opening quote mark and the attribution on the right. For a quote in the middle of a case study or article.",
+	"icon": "format-quote",
+	"attributes": {
+		"quote": { "type": "string", "default": "" },
+		"attribution": { "type": "string", "default": "" },
+		"theme": { "type": "string", "default": "yellow" }
+	},
+	"supports": { "anchor": true, "className": true },
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

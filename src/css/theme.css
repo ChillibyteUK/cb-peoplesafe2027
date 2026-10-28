@@ -16,4 +16,8 @@
 @import "utilities.css"; /* generated — see src/build/generate-utilities.js, run `npm run css-generate` */
 /* @import "tables.css"; -- uncomment if this project actually needs styled tables */
 @import "accordion.css";
+@import "filters.css";
+@import "single.css";
+@import "posts-index.css";
+@import "knowledge-hub.css";
 @import "blocks.css"; /* generated — concatenation of src/blocks/*.css, see src/build/generate-utilities.js */

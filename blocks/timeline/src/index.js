@@ -8,11 +8,11 @@ import RichField from '../../_shared/RichField';
 import metadata from '../block.json';
 
 const COLOURS = [
-	{ value: 'yellow', label: __( 'Yellow', 'cb-peoplesafe2027' ) },
-	{ value: 'pink', label: __( 'Pink', 'cb-peoplesafe2027' ) },
-	{ value: 'orange', label: __( 'Orange', 'cb-peoplesafe2027' ) },
-	{ value: 'green', label: __( 'Green', 'cb-peoplesafe2027' ) },
-	{ value: 'grey', label: __( 'Grey', 'cb-peoplesafe2027' ) },
+	{ value: 'yellow', label: __( 'Yellow: a milestone', 'cb-peoplesafe2027' ) },
+	{ value: 'pink', label: __( 'Teal: a product', 'cb-peoplesafe2027' ) },
+	{ value: 'orange', label: __( 'Orange: our people', 'cb-peoplesafe2027' ) },
+	{ value: 'green', label: __( 'Navy: a partnership', 'cb-peoplesafe2027' ) },
+	{ value: 'grey', label: __( 'Grey: the founding', 'cb-peoplesafe2027' ) },
 ];
 
 const EMPTY = { year: '', content: '', icon: 0, iconUrl: '', colour: 'yellow' };

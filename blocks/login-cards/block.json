@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/login-cards",
+	"title": "Login cards",
+	"category": "cb-peoplesafe2027",
+	"description": "Two or three gradient cards, each with a screenshot rising above the top edge, a title and a white button: one card per portal login.",
+	"icon": "admin-network",
+	"attributes": {
+		"cards": {
+			"type": "array",
+			"default": [
+				{ "image": 0, "imageUrl": "", "title": "", "buttonLabel": "Login", "link": "", "linkTarget": false, "colour": "blue" },
+				{ "image": 0, "imageUrl": "", "title": "", "buttonLabel": "Login", "link": "", "linkTarget": false, "colour": "pink" }
+			]
+		}
+	},
+	"supports": { "anchor": true, "className": true },
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

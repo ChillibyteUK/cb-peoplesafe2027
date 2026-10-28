@@ -2,10 +2,10 @@
  * Header navigation (markup: inc/nav-render.php, styles: src/css/site-nav.css).
  *
  * Phones and small screens: the burger opens a full-screen list of plain links.
- * Larger screens: a link that has a panel opens it, and a panel with a list on
- * its left shows the content for the list item chosen. The links stay real
- * links, so without JavaScript they go to their page. Escape or a click
- * elsewhere closes the open panel.
+ * Larger screens: a button that has a panel opens it, and a panel with a list on
+ * its left shows the content for the list item chosen. Escape or a click
+ * elsewhere closes the open panel. On small screens the button is replaced by a
+ * link to the section's page (see cb_peoplesafe2027_nav_toggle()).
  */
 export function initSiteNav() {
 	const header = document.querySelector('.site-header');
@@ -48,9 +48,8 @@ export function initSiteNav() {
 		const panel = document.getElementById(toggle.dataset.panel);
 		if (!panel) return;
 
-		function open(event) {
+		function open() {
 			if (!desktop.matches) return;
-			event.preventDefault();
 			const wasOpen = toggle.getAttribute('aria-expanded') === 'true';
 			closePanels();
 			if (wasOpen) return;
@@ -63,10 +62,8 @@ export function initSiteNav() {
 			if (first) showSubpanel(panel, first);
 		}
 
+		// A button: Enter and Space click it, so one handler does for the mouse and the keyboard.
 		toggle.addEventListener('click', open);
-		toggle.addEventListener('keydown', (event) => {
-			if (event.key === ' ' || (event.key === 'Enter' && !toggle.getAttribute('href'))) open(event);
-		});
 
 		panel.querySelectorAll('.left button').forEach((button) => {
 			button.addEventListener('click', () => showSubpanel(panel, button));

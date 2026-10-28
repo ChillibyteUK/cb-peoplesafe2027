@@ -1,0 +1,24 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/principle-tiles",
+	"title": "Principle tiles",
+	"category": "cb-peoplesafe2027",
+	"description": "A centred title and introduction over a row of up to six colour tiles, each with a heart and a short principle.",
+	"icon": "heart",
+	"attributes": {
+		"title": { "type": "string", "default": "" },
+		"intro": { "type": "string", "default": "" },
+		"tiles": {
+			"type": "array",
+			"default": [
+				{ "text": "", "colour": "yellow" },
+				{ "text": "", "colour": "teal" },
+				{ "text": "", "colour": "blue" }
+			]
+		}
+	},
+	"supports": { "anchor": true, "className": true },
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

@@ -99,6 +99,7 @@
 
   /* Vertical padding of a content block (top and bottom): one rhythm for every block. */
   --block-padding: var(--space-7);
+  --scroll-offset: 7rem; /* the fixed nav (about 93px) plus a gap: where an in-page link lands its target */
 
   /* Radii */
   --radius-sm: 0.25rem;

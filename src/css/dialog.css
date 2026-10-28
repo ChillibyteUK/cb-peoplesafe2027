@@ -60,3 +60,50 @@
 	display: block;
 	width: 100%;
 }
+
+/* The share dialog: a narrow one, with the ways to share as a grid of icon and label. */
+.site-dialog--narrow {
+	width: min(26rem, calc(100vw - 2rem));
+}
+
+.share-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+	gap: var(--space-2);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.share-list [hidden] {
+	display: none;
+}
+
+.share-list__item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--space-1);
+	inline-size: 100%;
+	padding: var(--space-3) var(--space-2);
+	border: 1px solid var(--col-blue-300);
+	border-radius: var(--radius-md);
+	background-color: var(--col-white);
+	color: var(--col-body);
+	font: inherit;
+	font-size: var(--fs-small);
+	text-decoration: none;
+	cursor: pointer;
+	transition: background-color var(--transition), border-color var(--transition);
+}
+
+.share-list__item svg {
+	inline-size: 1.5rem;
+	block-size: 1.5rem;
+}
+
+.share-list__item:hover,
+.share-list__item:focus-visible {
+	border-color: var(--col-primary);
+	background-color: var(--col-primary);
+}

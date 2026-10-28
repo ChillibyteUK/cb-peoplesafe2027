@@ -1,0 +1,78 @@
+/*
+ * Pull quote. A rounded panel (yellow, navy or light) with a large quote and a
+ * big translucent opening quote mark; the attribution is right-aligned and
+ * bold. The mark and the text step in from the left from lg, to leave the mark
+ * room.
+ */
+
+.pullquote {
+	padding-block: var(--space-4);
+}
+
+.pullquote__panel {
+	--pq-bg: var(--col-primary);
+	--pq-fg: var(--col-black);
+	--pq-mark: rgb(0 0 0 / 0.16);
+
+	position: relative;
+	margin: 0;
+	padding: var(--space-5) var(--space-4);
+	border-radius: var(--radius-card);
+	background-color: var(--pq-bg);
+	color: var(--pq-fg);
+}
+
+.pullquote--navy .pullquote__panel {
+	--pq-bg: var(--col-navy-400);
+	--pq-fg: var(--col-white);
+	--pq-mark: rgb(255 255 255 / 0.16);
+}
+
+.pullquote--light .pullquote__panel {
+	--pq-bg: var(--col-white);
+	box-shadow: var(--shadow-in);
+}
+
+.pullquote__panel::before {
+	content: "\201C";
+	position: absolute;
+	top: 0.5rem;
+	left: var(--space-3);
+	color: var(--pq-mark);
+	font-family: Georgia, serif;
+	font-size: 6rem;
+	font-weight: var(--fw-bold);
+	line-height: 1;
+}
+
+.pullquote__quote {
+	margin: 0;
+	padding-top: var(--space-4);
+	font-size: var(--fs-lead);
+
+	& p {
+		margin: 0;
+	}
+}
+
+.pullquote__attribution {
+	margin-top: var(--space-3);
+	font-size: var(--fs-h4);
+	font-weight: var(--fw-bold);
+	text-align: right;
+}
+
+@media (min-width: 992px) {
+	.pullquote__panel {
+		padding-inline: var(--space-6);
+	}
+
+	.pullquote__panel::before {
+		left: var(--space-4);
+	}
+
+	.pullquote__quote,
+	.pullquote__attribution {
+		padding-left: var(--space-5);
+	}
+}

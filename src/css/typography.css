@@ -31,18 +31,18 @@
  * List block, Ticks style: a checkmark in place of each bullet, teal by default and orange in the orange style. The tick is
  * an SVG mask, so it takes its colour from the background and needs no icon font.
  */
-.wp-block-list:is(.is-style-check, .is-style-check-orange) {
+.wp-block-list:is(.is-style-check, .is-style-check-orange, .is-style-check-two-columns) {
 	padding-left: 0;
 	list-style: none;
 }
 
-.wp-block-list:is(.is-style-check, .is-style-check-orange) > li {
+.wp-block-list:is(.is-style-check, .is-style-check-orange, .is-style-check-two-columns) > li {
 	position: relative;
 	margin-bottom: var(--space-2);
 	padding-left: var(--space-5);
 }
 
-.wp-block-list:is(.is-style-check, .is-style-check-orange) > li::before {
+.wp-block-list:is(.is-style-check, .is-style-check-orange, .is-style-check-two-columns) > li::before {
 	content: "";
 	position: absolute;
 	top: 0.3em;
@@ -57,6 +57,60 @@
 /* The orange ticks (the brand's yellow-orange, --col-yellow-400): the same list with the tick colour changed. */
 .wp-block-list.is-style-check-orange {
 	--tick-colour: var(--col-yellow-400);
+}
+
+
+/*
+ * List block, column styles. Two columns: the list runs down the first column, then the second, on wider screens; an
+ * item is never split across the two. Ticks, two columns: the Ticks style in two columns. Numbered steps: an ordered
+ * list as circled numbers, in two columns, with a bold first line when the item starts with <strong>.
+ */
+.wp-block-list:is(.is-style-two-columns, .is-style-check-two-columns, .is-style-steps) > li {
+	break-inside: avoid;
+}
+
+.wp-block-list.is-style-steps {
+	padding-left: 0;
+	list-style: none;
+	counter-reset: steps;
+}
+
+.wp-block-list.is-style-steps > li {
+	position: relative;
+	min-height: 2.5rem;
+	margin-bottom: var(--space-4);
+	padding-left: 3.5rem;
+	counter-increment: steps;
+}
+
+.wp-block-list.is-style-steps > li::before {
+	content: counter(steps);
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	border: 2px solid var(--col-navy-400);
+	border-radius: var(--radius-circle);
+	color: var(--col-navy-400);
+	font-weight: var(--fw-bold);
+	line-height: 1;
+}
+
+.wp-block-list.is-style-steps > li > strong:first-child {
+	display: block;
+	margin-bottom: var(--space-1);
+	color: var(--col-navy-400);
+}
+
+@media (min-width: 768px) {
+	.wp-block-list:is(.is-style-two-columns, .is-style-check-two-columns, .is-style-steps) {
+		columns: 2;
+		column-gap: var(--space-6);
+	}
 }
 
 

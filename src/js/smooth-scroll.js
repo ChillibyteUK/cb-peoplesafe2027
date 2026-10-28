@@ -41,6 +41,7 @@ export function initSmoothScroll() {
 		}
 
 		event.preventDefault();
+		// Lenis honours the target's scroll-margin-top (set on [id] in base.css), so it lands below the fixed nav.
 		lenis.scrollTo(target, {
 			onComplete: () => {
 				if (id) {

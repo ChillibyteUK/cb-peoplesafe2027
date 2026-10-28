@@ -1,0 +1,81 @@
+/*
+ * Case studies and stories. Cards for chosen case studies beside a navy panel
+ * that moves through chosen user stories in the shared slider; stacked on a
+ * phone, two columns from lg.
+ */
+
+.case-story-pair {
+	padding-block: var(--block-padding);
+}
+
+.case-story-pair__grid {
+	display: grid;
+	gap: var(--space-5);
+}
+
+.case-story-pair__title {
+	margin-bottom: var(--space-3);
+}
+
+.case-story-pair__cases {
+	display: grid;
+	align-content: start;
+	gap: var(--space-3);
+}
+
+.case-story-pair__cases .case-story-pair__title {
+	margin-bottom: 0;
+}
+
+.case-story-pair__badge {
+	display: inline-block;
+	margin-bottom: var(--space-2);
+	padding: var(--space-1) var(--space-2);
+	border-radius: var(--radius-pill);
+	background-color: var(--col-navy-400);
+	color: var(--col-white);
+	font-size: var(--fs-tiny);
+	font-weight: var(--fw-bold);
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+}
+
+.case-story-pair__logo {
+	display: block;
+	inline-size: auto;
+	max-inline-size: 50%;
+	max-block-size: 5rem;
+	margin: 0 0 var(--space-2) auto;
+	object-fit: contain;
+}
+
+.case-story-pair__story {
+	block-size: 100%;
+	padding: var(--space-4);
+	border-radius: var(--radius-card);
+	background-color: var(--col-navy-400);
+	color: var(--col-white);
+
+	& h3 {
+		margin-bottom: var(--space-3);
+		font-size: var(--fs-h4);
+	}
+
+	& > :last-child {
+		margin-bottom: 0;
+	}
+}
+
+.case-story-pair__stories .slider__slide {
+	display: flex;
+}
+
+.case-story-pair__stories .slider__slide > * {
+	flex: 1;
+}
+
+@media (min-width: 992px) {
+	.case-story-pair__grid {
+		grid-template-columns: 1fr 1fr;
+	}
+}

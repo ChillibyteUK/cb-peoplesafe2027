@@ -3,9 +3,9 @@
  * until it is wanted: a form on the page loads as it nears the screen, and the
  * Book a Demo dialog loads its form when it first opens. The page's campaign
  * parameters (utm_*, gclid, msclkid, fbclid) are passed on to the form so a
- * lead keeps its source.
+ * lead keeps its source. The newsletter signup box passes the email address the same way (?email=).
  */
-const FORWARDED = /^(utm_|gclid|msclkid|fbclid|gad_)/;
+const FORWARDED = /^(utm_|gclid|msclkid|fbclid|gad_|email$)/;
 
 export function loadFormFrame(frame) {
 	const src = frame.getAttribute('data-form-src');

@@ -59,6 +59,14 @@
 	text-align: center;
 }
 
+/* A single resource or post keeps its title on the left, as on the original. */
+.single-resource .hero--no-image .hero__content,
+.single-post .hero--no-image .hero__content {
+	max-width: none;
+	margin-inline: 0;
+	text-align: start;
+}
+
 .hero--no-image .button-group {
 	justify-content: center;
 }

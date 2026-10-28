@@ -152,23 +152,63 @@ function cb_peoplesafe2027_get_breadcrumbs( $post_id = 0 ) {
 	);
 
 	if ( ! $post_id ) {
+		// A listing (the case studies archive) has no post: its own title is the last crumb.
+		if ( is_post_type_archive() || get_query_var( 'cb_post_stream' ) ) {
+			$label = (string) apply_filters( 'cb_peoplesafe2027_archive_breadcrumb', post_type_archive_title( '', false ) );
+
+			// A filtered hub (?sector= or ?incident=) keeps the hub as a link and ends on the term.
+			$filter = '';
+			$term   = null;
+
+			if ( is_post_type_archive( 'case_study' ) ) {
+				// phpcs:disable WordPress.Security.NonceVerification.Recommended -- a public filter, no state changes.
+				foreach ( array( 'sector', 'incident' ) as $taxonomy ) {
+					if ( isset( $_GET[ $taxonomy ] ) ) {
+						$term = get_term_by( 'slug', sanitize_title( wp_unslash( $_GET[ $taxonomy ] ) ), $taxonomy );
+					}
+				}
+				// phpcs:enable WordPress.Security.NonceVerification.Recommended
+				$filter = $term && ! is_wp_error( $term ) ? html_entity_decode( $term->name ) : '';
+			}
+
+			if ( '' !== $label && ( is_post_type_archive( array( 'case_study', 'resource' ) ) || get_query_var( 'cb_post_stream' ) ) ) {
+				$breadcrumbs[] = array(
+					'label' => __( 'Knowledge Hub', 'cb-peoplesafe2027' ),
+					'url'   => trailingslashit( $breadcrumbs[0]['url'] ) . 'resources/',
+				);
+			}
+
+			if ( '' !== $label ) {
+				$request = isset( $_SERVER['REQUEST_URI'] ) ? preg_replace( '#/page/\d+/?$#', '/', strtok( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ), '?' ) ) : '';
+
+				$breadcrumbs[] = array(
+					'label' => $label,
+					'url'   => '' !== $filter ? home_url( $request ) : '',
+				);
+
+				if ( '' !== $filter ) {
+					$breadcrumbs[] = array(
+						'label' => $filter,
+						'url'   => '',
+					);
+				}
+			}
+		}
+
 		return $breadcrumbs;
 	}
 
 	if ( 'post' === get_post_type( $post_id ) ) {
-		$blog_page_id = (int) get_option( 'page_for_posts' );
-
-		if ( ! $blog_page_id ) {
-			$blog_page    = get_page_by_path( 'blog' );
-			$blog_page_id = $blog_page ? (int) $blog_page->ID : 0;
-		}
-
-		if ( $blog_page_id ) {
-			$breadcrumbs[] = array(
-				'label' => get_the_title( $blog_page_id ),
-				'url'   => get_permalink( $blog_page_id ),
-			);
-		}
+		// Home, Knowledge Hub, then Blogs or News.
+		$is_news       = function_exists( 'cb_peoplesafe2027_is_news_post' ) && cb_peoplesafe2027_is_news_post( get_post( $post_id ) );
+		$breadcrumbs[] = array(
+			'label' => __( 'Knowledge Hub', 'cb-peoplesafe2027' ),
+			'url'   => trailingslashit( $breadcrumbs[0]['url'] ) . 'resources/',
+		);
+		$breadcrumbs[] = array(
+			'label' => $is_news ? __( 'News', 'cb-peoplesafe2027' ) : __( 'Blogs', 'cb-peoplesafe2027' ),
+			'url'   => trailingslashit( $breadcrumbs[0]['url'] ) . ( $is_news ? 'news/' : 'blogs/' ),
+		);
 	} elseif ( is_page( $post_id ) || 'page' === get_post_type( $post_id ) ) {
 		$ancestor_ids = array_reverse( get_post_ancestors( $post_id ) );
 
@@ -190,8 +230,15 @@ function cb_peoplesafe2027_get_breadcrumbs( $post_id = 0 ) {
 		if ( $parent && $parent !== $home && 0 === strpos( $parent, $home ) ) {
 			$object = get_post_type_object( $type );
 
+			if ( in_array( $type, array( 'case_study', 'resource' ), true ) ) {
+				$breadcrumbs[] = array(
+					'label' => __( 'Knowledge Hub', 'cb-peoplesafe2027' ),
+					'url'   => trailingslashit( $breadcrumbs[0]['url'] ) . 'resources/',
+				);
+			}
+
 			$breadcrumbs[] = array(
-				'label' => ( $object && $object->has_archive ) ? $object->labels->name : ucfirst( str_replace( '-', ' ', basename( $parent ) ) ),
+				'label' => 'stories' === basename( $parent ) ? __( 'Real life stories', 'cb-peoplesafe2027' ) : ( ( $object && $object->has_archive ) ? $object->labels->name : ucfirst( str_replace( '-', ' ', basename( $parent ) ) ) ),
 				'url'   => trailingslashit( $parent ),
 			);
 		}
@@ -493,6 +540,37 @@ function cb_peoplesafe2027_product_intro( $product ) {
 }
 
 /**
+ * A product's intro for a related-products card: the intro of its Hero block as
+ * the live card shows it, the sentence and its short list (paragraphs, lists and
+ * line breaks only).
+ *
+ * @param WP_Post $product Product.
+ * @return string HTML, or an empty string when the product has no Hero intro.
+ */
+function cb_peoplesafe2027_product_intro_html( $product ) {
+	foreach ( parse_blocks( $product->post_content ) as $block ) {
+		if ( 'cb-peoplesafe2027/hero' === $block['blockName'] && ! empty( $block['attrs']['intro'] ) ) {
+			return trim(
+				wp_kses(
+					(string) $block['attrs']['intro'],
+					array(
+						'p'      => array(),
+						'br'     => array(),
+						'ul'     => array(),
+						'ol'     => array(),
+						'li'     => array(),
+						'strong' => array(),
+						'em'     => array(),
+					)
+				)
+			);
+		}
+	}
+
+	return '';
+}
+
+/**
  * The Book a Demo form address, from Site-Wide Settings. Falls back to the
  * live form so the pop-up works before the setting has been saved.
  *
@@ -524,3 +602,16 @@ add_filter(
 	10,
 	2
 );
+
+/**
+ * A user story's text as plain paragraphs: the post's blocks without their
+ * comments and wrappers, so it can sit inside another block's panel.
+ *
+ * @param WP_Post $post The story.
+ * @return string HTML of <p> elements.
+ */
+function cb_peoplesafe2027_story_text( $post ) {
+	$html = preg_replace( '/<!--.*?-->/s', '', (string) $post->post_content );
+
+	return trim( (string) $html );
+}

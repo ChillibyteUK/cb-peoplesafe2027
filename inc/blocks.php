@@ -42,7 +42,7 @@ function cb_peoplesafe2027_core_block_type_args( $args, $name ) {
 	$GLOBALS['cb_peoplesafe2027_original_block_categories'][ $name ] = isset( $args['category'] ) ? $args['category'] : '';
 
 	$theme_namespace = wp_get_theme()->get( 'TextDomain' ) . '/';
-	$wrapped_blocks  = array( 'core/paragraph', 'core/heading', 'core/list', 'core/separator' );
+	$wrapped_blocks  = array( 'core/paragraph', 'core/heading', 'core/list', 'core/separator', 'core/buttons', 'core/image' );
 
 	if ( 0 !== strpos( $name, $theme_namespace ) ) {
 		$args['category'] = 'gutenberg';
@@ -247,6 +247,30 @@ function cb_peoplesafe2027_register_block_styles() {
 		array(
 			'name'  => 'check-orange',
 			'label' => __( 'Ticks, orange', 'cb-peoplesafe2027' ),
+		)
+	);
+
+	register_block_style(
+		'core/list',
+		array(
+			'name'  => 'check-two-columns',
+			'label' => __( 'Ticks, two columns', 'cb-peoplesafe2027' ),
+		)
+	);
+
+	register_block_style(
+		'core/list',
+		array(
+			'name'  => 'two-columns',
+			'label' => __( 'Two columns', 'cb-peoplesafe2027' ),
+		)
+	);
+
+	register_block_style(
+		'core/list',
+		array(
+			'name'  => 'steps',
+			'label' => __( 'Numbered steps', 'cb-peoplesafe2027' ),
 		)
 	);
 }

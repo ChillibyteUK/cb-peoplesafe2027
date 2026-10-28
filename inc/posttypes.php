@@ -204,3 +204,67 @@ function cb_peoplesafe2027_use_page_template_for_cpts( $template ) {
 	return $template;
 }
 add_filter( 'template_include', 'cb_peoplesafe2027_use_page_template_for_cpts' );
+
+/**
+ * A "Hide from listing" tick on a resource: it stays published and reachable by its address, but is left off
+ * the listings (/uk/guides/, /uk/video/ and so on).
+ *
+ * @return void
+ */
+function cb_peoplesafe2027_resource_listing_box() {
+	add_meta_box(
+		'cb-resource-listing',
+		'Listing',
+		function ( $post ) {
+			wp_nonce_field( 'cb_resource_listing', 'cb_resource_listing_nonce' );
+			?>
+			<label>
+				<input type="checkbox" name="cb_hide_from_listing" value="1" <?php checked( get_post_meta( $post->ID, 'cb_hide_from_listing', true ), '1' ); ?>>
+				Hide from the listing
+			</label>
+			<?php
+		},
+		'resource',
+		'side'
+	);
+}
+add_action( 'add_meta_boxes', 'cb_peoplesafe2027_resource_listing_box' );
+
+/**
+ * Save the "Hide from listing" tick.
+ *
+ * @param int $post_id Resource being saved.
+ * @return void
+ */
+function cb_peoplesafe2027_save_resource_listing( $post_id ) {
+	if ( ! isset( $_POST['cb_resource_listing_nonce'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['cb_resource_listing_nonce'] ) ), 'cb_resource_listing' ) || ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
+	}
+
+	if ( ! empty( $_POST['cb_hide_from_listing'] ) ) {
+		update_post_meta( $post_id, 'cb_hide_from_listing', '1' );
+	} else {
+		delete_post_meta( $post_id, 'cb_hide_from_listing' );
+	}
+}
+add_action( 'save_post_resource', 'cb_peoplesafe2027_save_resource_listing' );
+
+/**
+ * A body class for the type of a single resource (single-resource-video, single-resource-guide and so on), so a
+ * type can be styled on its own.
+ *
+ * @param string[] $classes Body classes.
+ * @return string[]
+ */
+function cb_peoplesafe2027_resource_type_body_class( $classes ) {
+	if ( is_singular( 'resource' ) ) {
+		$terms = get_the_terms( get_queried_object_id(), 'resource_type' );
+
+		if ( $terms && ! is_wp_error( $terms ) ) {
+			$classes[] = 'single-resource-' . sanitize_html_class( $terms[0]->slug );
+		}
+	}
+
+	return $classes;
+}
+add_filter( 'body_class', 'cb_peoplesafe2027_resource_type_body_class' );

@@ -2,7 +2,7 @@
 /**
  * Block template for Image columns.
  *
- * Two to four images side by side, each with text centred below it. The title
+ * Two to five images side by side, each with an optional title and text centred below it. The title
  * and introduction above are ordinary heading and paragraph blocks.
  *
  * @package cb-peoplesafe2027
@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 $cb_items = array();
 
 foreach ( isset( $attributes['items'] ) ? (array) $attributes['items'] : array() as $cb_row ) {
-	if ( ! empty( $cb_row['image'] ) || ! empty( $cb_row['text'] ) ) {
+	if ( ! empty( $cb_row['image'] ) || ! empty( $cb_row['title'] ) || ! empty( $cb_row['text'] ) ) {
 		$cb_items[] = $cb_row;
 	}
 }
@@ -46,6 +46,7 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'image-
 			<?php
 			foreach ( $cb_items as $cb_item ) {
 				$cb_image_id = isset( $cb_item['image'] ) ? (int) $cb_item['image'] : 0;
+				$cb_title    = isset( $cb_item['title'] ) ? trim( wp_strip_all_tags( $cb_item['title'] ) ) : '';
 				$cb_text     = isset( $cb_item['text'] ) ? cb_peoplesafe2027_rich_paragraphs( $cb_item['text'] ) : '';
 				?>
 				<div class="image-columns__item">
@@ -62,6 +63,10 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'image-
 							)
 						); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo '</div>';
+					}
+
+					if ( '' !== $cb_title ) {
+						echo '<h3 class="image-columns__title">' . esc_html( $cb_title ) . '</h3>';
 					}
 
 					if ( $cb_text ) {

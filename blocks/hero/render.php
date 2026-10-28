@@ -60,6 +60,7 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hero' 
 				<?php if ( $cb_intro ) { ?>
 					<div class="hero__intro"><?php echo wp_kses_post( $cb_intro ); ?></div>
 				<?php } ?>
+				<?php do_action( 'cb_peoplesafe2027_hero_after_intro', $cb_source_id ); // A template can put its own line here (a post's meta row). ?>
 				<?php cb_peoplesafe2027_cta_buttons( $cb_buttons ); ?>
 			</div>
 		</div>

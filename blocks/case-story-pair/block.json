@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/case-story-pair",
+	"title": "Case studies and stories",
+	"category": "cb-peoplesafe2027",
+	"description": "Two or three chosen case studies as cards beside a navy panel that moves through chosen user stories, each story in full.",
+	"icon": "columns",
+	"attributes": {
+		"caseTitle": { "type": "string", "default": "Case Studies" },
+		"storyTitle": { "type": "string", "default": "User Stories" },
+		"caseStudies": { "type": "array", "default": [] },
+		"stories": { "type": "array", "default": [] }
+	},
+	"supports": { "anchor": true, "className": true },
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

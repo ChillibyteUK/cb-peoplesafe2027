@@ -376,7 +376,8 @@ add_action( 'untrashed_post', 'cb_peoplesafe2027_nav_flush' );
  */
 function cb_peoplesafe2027_nav_parts() {
 	$region = function_exists( 'pll_current_language' ) && pll_current_language() ? pll_current_language() : '';
-	$key    = 'cb_ps27_nav_' . cb_peoplesafe2027_nav_cache_version() . '_' . $region;
+	// The file's time is in the key, so a change to how the nav is drawn (inc/nav-render.php) shows at once on deploy.
+	$key    = 'cb_ps27_nav_' . cb_peoplesafe2027_nav_cache_version() . '_' . filemtime( __DIR__ . '/nav-render.php' ) . '_' . $region;
 	$parts  = get_transient( $key );
 
 	if ( ! is_array( $parts ) ) {

@@ -130,6 +130,19 @@
 	}
 }
 
+/* A section with a panel is a button in the bar; a small screen swaps it for a link to the page. */
+button.site-nav__toggle {
+	appearance: none;
+	border: 0;
+	background: none;
+	font-family: inherit;
+	line-height: inherit;
+}
+
+.site-nav__toggle--page {
+	display: none;
+}
+
 /* The underline that grows on hover, shared by every link in the bar. */
 .site-nav__toggle {
 	position: relative;
@@ -198,6 +211,21 @@
 		gap: 0.75rem;
 	}
 
+	/* A group of items is a list: no bullets or indent, and each link fills its list item. */
+	.items {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.items > li {
+		display: flex;
+	}
+
+	.items > li > .item {
+		flex: 1;
+	}
+
 	.item__image {
 		border-radius: var(--radius-lg);
 		overflow: clip;
@@ -206,7 +234,8 @@
 
 	.item__title {
 		display: flex;
-		justify-content: space-between;
+		justify-content: flex-start;
+		gap: var(--space-2); /* the arrow sits right after the words */
 		position: relative;
 		font-size: var(--fs-base);
 		font-weight: var(--fw-700);
@@ -224,7 +253,8 @@
 
 	.more__link {
 		display: flex;
-		justify-content: space-between;
+		justify-content: flex-end; /* the link sits at the right, with the arrow right after the words */
+		gap: var(--space-2);
 		align-items: center;
 		font-size: var(--fs-small);
 		font-weight: var(--fw-700);
@@ -374,9 +404,15 @@
 
 	/* Cards with a large image. */
 	.right--cards {
-		grid-template-columns: 1fr 1fr;
-		grid-template-rows: auto auto;
+		grid-template-columns: 1fr;
 		gap: var(--space-4);
+
+		.items {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			grid-template-rows: auto auto;
+			gap: var(--space-4);
+		}
 
 		.item {
 			grid-template-rows: auto auto 1fr;
@@ -402,7 +438,8 @@
 
 		a {
 			display: flex;
-			justify-content: space-between;
+			justify-content: flex-start;
+			gap: var(--space-2); /* the arrow sits right after the words */
 			align-items: center;
 			padding-block: 0.2rem;
 			font-weight: var(--fw-700);
@@ -474,6 +511,15 @@
 }
 
 @media (max-width: 1199px) {
+	/* Small screens use the link to the section's page, not the button that opens a panel. */
+	.site-nav__toggle--page {
+		display: block;
+	}
+
+	.site-nav__toggle--panel.has-page {
+		display: none;
+	}
+
 	.site-nav .container {
 		margin: 0;
 		padding: 0;

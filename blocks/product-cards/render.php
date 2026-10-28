@@ -45,6 +45,7 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'produc
 	<div class="container">
 		<?php if ( $cb_types ) { ?>
 			<div class="product-cards__filters" role="group" aria-label="<?php esc_attr_e( 'Filter the products', 'cb-peoplesafe2027' ); ?>" hidden>
+				<span class="product-cards__filters-label"><?php esc_html_e( 'Type', 'cb-peoplesafe2027' ); ?></span>
 				<button type="button" class="product-cards__filter is-active" data-filter="all" aria-pressed="true"><?php esc_html_e( 'All', 'cb-peoplesafe2027' ); ?></button>
 				<?php foreach ( $cb_types as $cb_slug => $cb_name ) { ?>
 					<button type="button" class="product-cards__filter" data-filter="<?php echo esc_attr( $cb_slug ); ?>" aria-pressed="false"><?php echo esc_html( $cb_name ); ?></button>

@@ -61,12 +61,12 @@ function cb_peoplesafe2027_nav_item( $item, $display ) {
 	$desc = $item['desc'] ? '<div class="item__desc">' . esc_html( $item['desc'] ) . '</div>' : '';
 
 	if ( 'cards' === $display ) {
-		return '<a class="item"' . cb_peoplesafe2027_nav_href( $item['url'], $item['target'] ) . '>' . $image
-			. '<div class="item__title"><span>' . esc_html( $item['label'] ) . '</span>' . cb_peoplesafe2027_nav_arrow() . '</div>' . $desc . '</a>';
+		return '<li><a class="item"' . cb_peoplesafe2027_nav_href( $item['url'], $item['target'] ) . '>' . $image
+			. '<div class="item__title"><span>' . esc_html( $item['label'] ) . '</span>' . cb_peoplesafe2027_nav_arrow() . '</div>' . $desc . '</a></li>';
 	}
 
-	return '<a class="item"' . cb_peoplesafe2027_nav_href( $item['url'], $item['target'] ) . '>' . $image
-		. '<div class="item__inner"><div class="item__title">' . esc_html( $item['label'] ) . '</div>' . $desc . '</div></a>';
+	return '<li><a class="item"' . cb_peoplesafe2027_nav_href( $item['url'], $item['target'] ) . '>' . $image
+		. '<div class="item__inner"><div class="item__title">' . esc_html( $item['label'] ) . '</div>' . $desc . '</div></a></li>';
 }
 
 /**
@@ -117,11 +117,12 @@ function cb_peoplesafe2027_nav_panel_body( $panel ) {
 		$items .= cb_peoplesafe2027_nav_item( $item, $panel['display'] );
 	}
 
+	// A group of links is a list, for assistive technology and for anything that reads the markup.
 	if ( 'cards' === $panel['display'] ) {
-		return $html . $items;
+		return $html . '<ul class="items">' . $items . '</ul>';
 	}
 
-	return $html . '<div class="items">' . $items . '</div>' . cb_peoplesafe2027_nav_more( $panel['more'] );
+	return $html . '<ul class="items">' . $items . '</ul>' . cb_peoplesafe2027_nav_more( $panel['more'] );
 }
 
 /**
@@ -151,7 +152,7 @@ function cb_peoplesafe2027_nav_panel( $section, $dom_id ) {
 			$items .= cb_peoplesafe2027_nav_item( $item, 'tiles' );
 		}
 
-		return '<div id="' . esc_attr( $dom_id ) . '" class="site-nav__panel site-nav__panel--tiles"' . $style . '><div class="items">' . $items . '</div>' . cb_peoplesafe2027_nav_more( $section['more'] ) . '</div>';
+		return '<div id="' . esc_attr( $dom_id ) . '" class="site-nav__panel site-nav__panel--tiles"' . $style . '><ul class="items">' . $items . '</ul>' . cb_peoplesafe2027_nav_more( $section['more'] ) . '</div>';
 	}
 
 	if ( 'panels' !== $section['layout'] ) {
@@ -192,9 +193,13 @@ function cb_peoplesafe2027_nav_toggle( $section, $dom_id, $has_panel ) {
 	}
 
 	if ( $has_panel ) {
-		$href = $section['url'] ? cb_peoplesafe2027_nav_href( $section['url'], false ) : '';
+		// A section with a panel is a button: it opens the panel and goes nowhere. On a small screen, where the panels
+		// are not used, a plain link to the section's page takes its place (the two are swapped by CSS, so only one is
+		// ever in the page for a screen reader).
+		$button = '<button type="button" class="site-nav__toggle site-nav__toggle--panel' . ( $section['url'] ? ' has-page' : '' ) . '" data-panel="' . esc_attr( $dom_id ) . '" aria-controls="' . esc_attr( $dom_id ) . '" aria-expanded="false">' . $label . '</button>';
+		$page   = $section['url'] ? '<a class="site-nav__toggle site-nav__toggle--page"' . cb_peoplesafe2027_nav_href( $section['url'], false ) . '>' . $label . '</a>' : '';
 
-		return '<a class="site-nav__toggle" data-panel="' . esc_attr( $dom_id ) . '" aria-controls="' . esc_attr( $dom_id ) . '" aria-expanded="false"' . $href . ( $section['url'] ? '' : ' role="button" tabindex="0"' ) . '>' . $label . '</a>';
+		return $button . $page;
 	}
 
 	$icon = 'lock' === $section['icon'] ? '<svg class="site-nav__icon" aria-hidden="true" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>' : '';

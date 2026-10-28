@@ -1,0 +1,351 @@
+/*
+ * Case studies and real life stories (archive-case_study.php). A sector filter
+ * over a grid of cards (the logo on white over a yellow title bar, the short
+ * description on a dark cover on hover), or the incident types as tiles, or a list of stories in full.
+ */
+
+.case-hub {
+	padding-block: var(--space-5) var(--block-padding);
+}
+
+/* Tighter gaps between the hub's hero, the stories video and the hub itself. */
+.post-type-archive-case_study .hero {
+	padding-block-end: 0;
+}
+
+.post-type-archive-case_study .text-and-media {
+	padding-block: 0;
+}
+
+.case-hub__prompt {
+	margin-bottom: var(--space-4);
+	text-align: center;
+}
+
+.case-hub__tile {
+	display: block;
+	padding: var(--space-2) var(--space-3);
+	border: 1px solid var(--col-blue-300);
+	border-radius: var(--radius-pill);
+	background-color: var(--col-white);
+	color: var(--col-body);
+	text-decoration: none;
+	transition: background-color var(--transition), border-color var(--transition);
+}
+
+.case-hub__tile:hover,
+.case-hub__tile:focus-visible {
+	border-color: var(--col-primary);
+	background-color: var(--col-primary);
+}
+
+.case-hub__grid {
+	display: grid;
+	gap: var(--space-4);
+}
+
+.case-hub__card {
+	position: relative;
+	overflow: hidden;
+	border-radius: var(--radius-sm);
+	background-color: var(--col-white);
+	box-shadow: var(--shadow-card);
+	transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.case-hub__card:hover,
+.case-hub__card:focus-within {
+	box-shadow: var(--shadow-card-hover);
+	transform: translateY(-0.3rem);
+}
+
+.case-hub__card-link {
+	display: block;
+	color: var(--col-black);
+	text-decoration: none;
+}
+
+.case-hub__image {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	aspect-ratio: 16 / 9;
+	max-block-size: 12.5rem;
+	inline-size: 100%;
+
+	& img {
+		inline-size: auto;
+		max-inline-size: 100%;
+		block-size: auto;
+		max-block-size: 100%;
+		object-fit: contain;
+	}
+}
+
+.case-hub--resources .case-hub__image {
+	position: relative;
+	max-block-size: none;
+
+	& img {
+		inline-size: 100%;
+		block-size: 100%;
+		max-block-size: none;
+		object-fit: cover;
+	}
+}
+
+.case-hub__card-title {
+	min-block-size: 4.6rem;
+	padding: var(--space-3);
+	background-color: var(--col-primary);
+	font-weight: var(--fw-bold);
+}
+
+/* The short description: a dark cover over the card on hover or focus. */
+.case-hub__desc {
+	position: absolute;
+	inset: 0;
+	padding: var(--space-3);
+	background-color: rgb(0 0 0 / 0.9);
+	color: var(--col-white);
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity var(--transition);
+}
+
+.case-hub__card:hover .case-hub__desc,
+.case-hub__card:focus-within .case-hub__desc {
+	opacity: 1;
+}
+
+.case-hub__tiles {
+	display: grid;
+	gap: var(--space-3);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.case-hub__tile {
+	padding: var(--space-4) var(--space-3);
+	border-radius: var(--radius-md);
+	text-align: center;
+}
+
+.case-hub__back {
+	margin-bottom: var(--space-4);
+}
+
+.case-hub__stories {
+	display: grid;
+	gap: var(--space-4);
+}
+
+.case-hub__story {
+	padding: var(--space-4);
+	border-radius: var(--radius-card);
+	background-color: var(--col-white);
+	box-shadow: var(--shadow-in);
+
+	& > :last-child {
+		margin-bottom: 0;
+	}
+}
+
+/* Pagination: the same pills as the sector filter, centred under the grid. */
+.case-hub .pagination {
+	margin-top: var(--space-5);
+}
+
+.case-hub .pagination .screen-reader-text {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+.case-hub .nav-links {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-2);
+}
+
+.case-hub .page-numbers {
+	display: inline-block;
+	min-inline-size: 2.25rem;
+	padding: var(--space-1) var(--space-3);
+	font-size: var(--fs-small);
+	border: 1px solid var(--col-blue-300);
+	border-radius: var(--radius-pill);
+	background-color: var(--col-white);
+	color: var(--col-body);
+	line-height: 1.5;
+	text-align: center;
+	text-decoration: none;
+	transition: background-color var(--transition), border-color var(--transition);
+}
+
+.case-hub a.page-numbers:hover,
+.case-hub a.page-numbers:focus-visible {
+	border-color: var(--col-primary);
+	background-color: var(--col-primary);
+}
+
+.case-hub .page-numbers.current {
+	border-color: var(--col-primary);
+	background-color: var(--col-primary);
+	font-weight: var(--fw-bold);
+}
+
+.case-hub .page-numbers.dots {
+	border-color: transparent;
+	background-color: transparent;
+}
+
+.case-hub .page-numbers.prev,
+.case-hub .page-numbers.next {
+	padding-inline: var(--space-4);
+}
+
+@media (min-width: 768px) {
+	.case-hub__grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.case-hub__tiles {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (min-width: 992px) {
+	.case-hub__grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	.case-hub__tiles {
+		grid-template-columns: repeat(4, 1fr);
+	}
+}
+
+/* Whitepapers and brochures: a list, the image beside the title, a short intro and Read More. */
+.resource-list__item {
+	display: grid;
+	gap: var(--space-3) var(--space-4);
+	padding-block: var(--space-4);
+	border-bottom: 1px solid var(--col-blue-300);
+}
+
+.resource-list__item:first-child {
+	padding-block-start: 0;
+}
+
+.resource-list__image img {
+	display: block;
+	inline-size: 100%;
+	block-size: auto;
+}
+
+.resource-list__title {
+	margin-bottom: var(--space-2);
+	font-size: var(--fs-h4, 1.25rem);
+}
+
+.resource-list__title a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.resource-list__text p {
+	margin-bottom: var(--space-1);
+}
+
+@media (min-width: 768px) {
+	.resource-list__item {
+		grid-template-columns: 1fr 5fr;
+		align-items: start;
+	}
+}
+
+/* A video card: the same play button as the player's, over the poster. */
+.case-hub__play {
+	position: absolute;
+	inset: 50% auto auto 50%;
+	inline-size: 3.5rem;
+	block-size: 3.5rem;
+	translate: -50% -50%;
+	border-radius: var(--radius-circle);
+	background-color: var(--col-white);
+	box-shadow: var(--shadow-out);
+	transition: scale var(--transition);
+}
+
+.case-hub__play::after {
+	content: "";
+	position: absolute;
+	inset: 50% auto auto 54%;
+	inline-size: 1.1rem;
+	block-size: 1.1rem;
+	translate: -50% -50%;
+	background-color: var(--col-orange-400);
+	clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.case-hub__card:hover .case-hub__play {
+	scale: 1.1;
+}
+
+/* Infographics: the first page of the PDF over a plain white title, in a white card. */
+.case-hub--infographics .case-hub__image {
+	aspect-ratio: 3 / 4;
+	max-block-size: none;
+	background-color: var(--col-white);
+
+	& img {
+		object-fit: cover;
+		object-position: top;
+	}
+}
+
+.case-hub--infographics .case-hub__card-title {
+	background-color: var(--col-white);
+}
+
+/* An infographic's page: the top of the PDF at A4 proportions, fading out, with the download button under it. */
+.single-resource-infographic .wp-block-image {
+	position: relative;
+	margin-bottom: var(--space-3);
+}
+
+.single-resource-infographic .wp-block-image img {
+	display: block;
+	inline-size: 100%;
+	block-size: auto;
+	aspect-ratio: 1 / 1.41;
+	object-fit: cover;
+	object-position: top;
+}
+
+.single-resource-infographic .wp-block-image::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background-image: linear-gradient(0deg, var(--col-white) 0%, transparent 20%);
+	pointer-events: none;
+}
+
+/* Blogs and news: the date (and categories) line under a title, and the posts' own pages. */
+.resource-list__meta {
+	margin-bottom: var(--space-2);
+	font-size: var(--fs-small, 0.875rem);
+	color: var(--col-body-muted, inherit);
+}
+
+
+/* A listing row with no image: the text takes the whole row. */
+.resource-list__item--no-image {
+	grid-template-columns: 1fr;
+}

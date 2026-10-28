@@ -1,0 +1,119 @@
+/*
+ * Benefits panel. A tinted panel (the block's own background colour, a pale
+ * tint by default) with a centred title and introduction over a 12-column
+ * mosaic of benefit cards and photos. A cell is 3, 4 or 6 columns wide from md
+ * up and may start three columns in; one column on a phone. Photos fill their
+ * cell; a cell of stacked cards shares its height between the cards.
+ */
+
+.benefits-panel {
+	padding-block: var(--block-padding);
+	background-color: var(--col-neutral);
+}
+
+.benefits-panel__title,
+.benefits-panel__intro {
+	text-align: center;
+}
+
+.benefits-panel__intro {
+	margin-bottom: var(--space-5);
+}
+
+.benefits-panel__grid {
+	display: grid;
+	gap: var(--space-4);
+}
+
+.benefits-panel__cell {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-3);
+	min-block-size: 0;
+}
+
+.benefits-panel__cell--photo {
+	min-block-size: 12.5rem;
+}
+
+.benefits-panel__photo {
+	flex: 1;
+	inline-size: 100%;
+	block-size: 100%;
+	min-block-size: inherit;
+	border-radius: var(--radius-sm);
+	object-fit: cover;
+}
+
+.benefits-panel__card {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: var(--space-3);
+	border-radius: var(--radius-sm);
+	background-color: var(--col-white);
+	text-align: center;
+}
+
+.benefits-panel__icon {
+	inline-size: 3.125rem;
+	block-size: 3.125rem;
+	margin-bottom: var(--space-2);
+	object-fit: contain;
+}
+
+.benefits-panel__card-title {
+	margin: 0;
+	font-size: var(--fs-base);
+	font-weight: var(--fw-bold);
+}
+
+.benefits-panel__footnote {
+	margin-top: var(--space-4);
+	font-size: var(--fs-small);
+	text-align: center;
+}
+
+.benefits-panel__footnote > :last-child {
+	margin-bottom: 0;
+}
+
+.benefits-panel__card-text {
+	margin: var(--space-1) 0 0;
+}
+
+@media (min-width: 768px) {
+	.benefits-panel__grid {
+		grid-template-columns: repeat(12, 1fr);
+	}
+
+	.benefits-panel__cell--span-3 {
+		grid-column: span 3;
+	}
+
+	.benefits-panel__cell--span-4 {
+		grid-column: span 4;
+	}
+
+	.benefits-panel__cell--span-6 {
+		grid-column: span 6;
+	}
+
+	.benefits-panel__cell--offset {
+		grid-column-start: 4;
+	}
+
+	.benefits-panel__cell--span-3.benefits-panel__cell--offset {
+		grid-column: 4 / span 3;
+	}
+
+	.benefits-panel__cell--span-4.benefits-panel__cell--offset {
+		grid-column: 4 / span 4;
+	}
+
+	.benefits-panel__cell--span-6.benefits-panel__cell--offset {
+		grid-column: 4 / span 6;
+	}
+}

@@ -29,6 +29,7 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'sector
 <section <?php echo $cb_wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
 	<div class="container">
 		<div class="sector-cards__filters" role="group" aria-label="<?php esc_attr_e( 'Filter the sectors', 'cb-peoplesafe2027' ); ?>" hidden>
+			<span class="sector-cards__filters-label"><?php esc_html_e( 'Sector type', 'cb-peoplesafe2027' ); ?></span>
 			<button type="button" class="sector-cards__filter is-active" data-filter="all" aria-pressed="true"><?php esc_html_e( 'All', 'cb-peoplesafe2027' ); ?></button>
 			<button type="button" class="sector-cards__filter" data-filter="private" aria-pressed="false"><?php esc_html_e( 'Private sector', 'cb-peoplesafe2027' ); ?></button>
 			<button type="button" class="sector-cards__filter" data-filter="public" aria-pressed="false"><?php esc_html_e( 'Public sector', 'cb-peoplesafe2027' ); ?></button>

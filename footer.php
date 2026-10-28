@@ -4,7 +4,7 @@
  *
  * Three menus (Footer: Products, About us, Resources, set under Appearance,
  * Menus), a Sectors list built from the pages under Sectors, and the intro
- * column. The menus follow the region the same way the rest of the site does
+ * column. The root hub (region chooser) shows the intro and colophon only. The menus follow the region the same way the rest of the site does
  * (inc/regions/menu.php).
  *
  * @package cb-peoplesafe2027
@@ -12,10 +12,13 @@
 
 $cb_region = function_exists( 'pll_current_language' ) && pll_current_language() ? pll_current_language() : '';
 $cb_home   = $cb_region && function_exists( 'cb_peoplesafe2027_region_url' ) ? cb_peoplesafe2027_region_url( $cb_region ) : home_url( '/' );
+
+// The root hub (region chooser) shows the logo only in the header, and no menus here.
+$cb_menus = ! is_singular( 'root_hub' );
 ?>
 </main>
 
-<footer id="footer" class="site-footer">
+<footer id="footer" class="site-footer<?php echo $cb_menus ? '' : ' site-footer--no-menus'; ?>">
 	<div class="container site-footer__main">
 		<div class="site-footer__grid">
 			<div class="site-footer__intro">
@@ -25,17 +28,18 @@ $cb_home   = $cb_region && function_exists( 'cb_peoplesafe2027_region_url' ) ? c
 				<?php echo do_shortcode( '[social_icons class="site-footer__social"]' ); ?>
 				<div class="site-footer__newsletter">
 					<div class="site-footer__title"><?php esc_html_e( 'Newsletter sign up', 'cb-peoplesafe2027' ); ?></div>
-					<form target="_blank" method="get" action="https://peoplesafe.co.uk/newsletter-signup/">
+					<form target="_blank" method="get" action="<?php echo esc_url( trailingslashit( cb_peoplesafe2027_region_url( function_exists( 'pll_current_language' ) && pll_current_language() ? pll_current_language() : 'uk' ) ) . 'newsletter-signup/' ); ?>">
 						<label class="visually-hidden" for="footer-newsletter-email"><?php esc_html_e( 'Email address', 'cb-peoplesafe2027' ); ?></label>
 						<p class="site-footer__help" id="footer-newsletter-help"><?php esc_html_e( 'We\'ll never share your email with anyone else.', 'cb-peoplesafe2027' ); ?></p>
 						<div class="site-footer__field">
-							<input type="email" id="footer-newsletter-email" name="email" aria-describedby="footer-newsletter-help" placeholder="<?php esc_attr_e( 'Email address', 'cb-peoplesafe2027' ); ?>" required>
+							<input type="email" id="footer-newsletter-email" name="email" autocomplete="email" aria-describedby="footer-newsletter-help" placeholder="<?php esc_attr_e( 'Email address', 'cb-peoplesafe2027' ); ?>" required>
 							<button class="button button--primary" type="submit"><span><?php esc_html_e( 'Sign up', 'cb-peoplesafe2027' ); ?></span></button>
 						</div>
 					</form>
 				</div>
 			</div>
 
+			<?php if ( $cb_menus ) { ?>
 			<nav class="site-footer__col" aria-labelledby="footer-products">
 				<div class="site-footer__title" id="footer-products"><?php esc_html_e( 'Products', 'cb-peoplesafe2027' ); ?></div>
 				<?php cb_peoplesafe2027_footer_menu( 'footer_products' ); ?>
@@ -60,6 +64,7 @@ $cb_home   = $cb_region && function_exists( 'cb_peoplesafe2027_region_url' ) ? c
 					<?php cb_peoplesafe2027_footer_menu( 'footer_resources' ); ?>
 				</nav>
 			</div>
+			<?php } ?>
 		</div>
 	</div>
 

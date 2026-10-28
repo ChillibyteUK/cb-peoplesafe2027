@@ -75,10 +75,10 @@
 	 * Header navigation (markup: inc/nav-render.php, styles: src/css/site-nav.css).
 	 *
 	 * Phones and small screens: the burger opens a full-screen list of plain links.
-	 * Larger screens: a link that has a panel opens it, and a panel with a list on
-	 * its left shows the content for the list item chosen. The links stay real
-	 * links, so without JavaScript they go to their page. Escape or a click
-	 * elsewhere closes the open panel.
+	 * Larger screens: a button that has a panel opens it, and a panel with a list on
+	 * its left shows the content for the list item chosen. Escape or a click
+	 * elsewhere closes the open panel. On small screens the button is replaced by a
+	 * link to the section's page (see cb_peoplesafe2027_nav_toggle()).
 	 */
 	function initSiteNav() {
 	  const header = document.querySelector('.site-header');
@@ -116,9 +116,8 @@
 	  toggles.forEach(toggle => {
 	    const panel = document.getElementById(toggle.dataset.panel);
 	    if (!panel) return;
-	    function open(event) {
+	    function open() {
 	      if (!desktop.matches) return;
-	      event.preventDefault();
 	      const wasOpen = toggle.getAttribute('aria-expanded') === 'true';
 	      closePanels();
 	      if (wasOpen) return;
@@ -128,10 +127,9 @@
 	      const first = panel.querySelector('.left button');
 	      if (first) showSubpanel(panel, first);
 	    }
+
+	    // A button: Enter and Space click it, so one handler does for the mouse and the keyboard.
 	    toggle.addEventListener('click', open);
-	    toggle.addEventListener('keydown', event => {
-	      if (event.key === ' ' || event.key === 'Enter' && !toggle.getAttribute('href')) open(event);
-	    });
 	    panel.querySelectorAll('.left button').forEach(button => {
 	      button.addEventListener('click', () => showSubpanel(panel, button));
 	      button.addEventListener('mouseenter', () => showSubpanel(panel, button));
@@ -174,9 +172,9 @@
 	 * until it is wanted: a form on the page loads as it nears the screen, and the
 	 * Book a Demo dialog loads its form when it first opens. The page's campaign
 	 * parameters (utm_*, gclid, msclkid, fbclid) are passed on to the form so a
-	 * lead keeps its source.
+	 * lead keeps its source. The newsletter signup box passes the email address the same way (?email=).
 	 */
-	const FORWARDED = /^(utm_|gclid|msclkid|fbclid|gad_)/;
+	const FORWARDED = /^(utm_|gclid|msclkid|fbclid|gad_|email$)/;
 	function loadFormFrame(frame) {
 	  const src = frame.getAttribute('data-form-src');
 	  if (!src || frame.getAttribute('src')) {
@@ -442,6 +440,7 @@
 	      return;
 	    }
 	    event.preventDefault();
+	    // Lenis honours the target's scroll-margin-top (set on [id] in base.css), so it lands below the fixed nav.
 	    lenis.scrollTo(target, {
 	      onComplete: () => {
 	        if (id) {
@@ -625,6 +624,243 @@
 	  });
 	}
 
+	/**
+	 * A single post's Quick links sidebar: marks the link for whichever h2 section is in view. An IntersectionObserver
+	 * (not a scroll listener) watches a band just below the header; the first heading is marked until one crosses it.
+	 */
+	function initPostToc() {
+	  const links = document.querySelectorAll('.post-toc__link');
+	  if (!links.length || !('IntersectionObserver' in window)) {
+	    return;
+	  }
+	  const linksById = new Map();
+	  const targets = [];
+	  links.forEach(link => {
+	    // An id can hold a literal %e2%80%9c (WordPress encodes curly quotes in a slug), so try it as written first.
+	    const raw = link.getAttribute('href').slice(1);
+	    const id = document.getElementById(raw) ? raw : decodeURIComponent(raw);
+	    const target = document.getElementById(id);
+	    if (!target) {
+	      return;
+	    }
+	    linksById.set(id, link);
+	    targets.push(target);
+	  });
+	  if (!targets.length) {
+	    return;
+	  }
+	  const setActive = id => {
+	    linksById.forEach((link, linkId) => {
+	      link.classList.toggle('is-active', linkId === id);
+	      link.toggleAttribute('aria-current', linkId === id);
+	    });
+	  };
+	  const observer = new IntersectionObserver(entries => {
+	    entries.forEach(entry => {
+	      if (entry.isIntersecting) {
+	        setActive(entry.target.id);
+	      }
+	    });
+	  }, {
+	    rootMargin: '-15% 0px -70% 0px'
+	  });
+	  targets.forEach(target => observer.observe(target));
+	  setActive(targets[0].id);
+	}
+
+	/**
+	 * The share dialog's two extras: Copy link (with a short "Link copied" confirmation) and, where the browser has one
+	 * (most phones), a More options button that opens the device's own share sheet. The network links are plain links.
+	 */
+	function initShare() {
+	  const dialog = document.getElementById('share-dialog');
+	  if (!dialog) {
+	    return;
+	  }
+	  const url = dialog.getAttribute('data-share-url') || window.location.href;
+	  const title = dialog.getAttribute('data-share-title') || document.title;
+	  const copy = dialog.querySelector('[data-share-copy]');
+	  const label = dialog.querySelector('[data-share-copy-label]');
+	  if (copy && label) {
+	    const original = label.textContent;
+	    copy.addEventListener('click', async () => {
+	      let copied = false;
+	      if (navigator.clipboard) {
+	        try {
+	          await navigator.clipboard.writeText(url);
+	          copied = true;
+	        } catch (error) {
+	          copied = false;
+	        }
+	      }
+	      if (!copied) {
+	        const field = document.createElement('textarea');
+	        field.value = url;
+	        field.setAttribute('readonly', '');
+	        field.style.position = 'absolute';
+	        field.style.left = '-9999px';
+	        document.body.appendChild(field);
+	        field.select();
+	        try {
+	          copied = document.execCommand('copy');
+	        } catch (error) {
+	          copied = false;
+	        }
+	        document.body.removeChild(field);
+	      }
+	      if (copied) {
+	        label.textContent = copy.getAttribute('data-copied') || 'Link copied';
+	        window.setTimeout(() => {
+	          label.textContent = original;
+	        }, 2000);
+	      }
+	    });
+	  }
+	  const native = dialog.querySelector('[data-share-native]');
+	  if (native && navigator.share) {
+	    native.hidden = false;
+	    native.querySelector('button').addEventListener('click', async () => {
+	      try {
+	        await navigator.share({
+	          title,
+	          url
+	        });
+	        dialog.close();
+	      } catch (error) {
+	        // The sheet was dismissed: not an error.
+	      }
+	    });
+	  }
+	}
+
+	/**
+	 * The Blogs and News listings (archive.php): the search box, the category pills and Load more all ask cb/v1/posts for
+	 * cards (inc/posts-index.php draws them, so the page and the batches match). The pills are ordinary links without
+	 * JavaScript; here they filter in place and keep the address in step. The numbered pages are only for visitors without
+	 * JavaScript, so they are hidden once this runs.
+	 */
+	function initPostsIndex() {
+	  document.querySelectorAll('[data-posts-index]').forEach(root => {
+	    const grid = root.querySelector('[data-posts-grid]');
+	    const more = root.querySelector('[data-posts-more]');
+	    const search = root.querySelector('[data-posts-search]');
+	    const status = root.querySelector('[data-posts-status]');
+	    const empty = root.querySelector('[data-posts-empty]');
+	    const pagination = root.querySelector('[data-posts-pagination]');
+	    const filters = Array.from(root.querySelectorAll('[data-posts-filter]'));
+	    const endpoint = root.getAttribute('data-endpoint');
+	    // The Knowledge Hub: the grid is only for search results, and the rest of the page steps aside while searching.
+	    const searchOnly = root.hasAttribute('data-posts-search-only');
+	    const hideSelector = root.getAttribute('data-posts-hide');
+	    if (!grid || !more || !endpoint) {
+	      return;
+	    }
+	    const state = {
+	      query: '',
+	      category: root.getAttribute('data-category') || '',
+	      loaded: parseInt(root.getAttribute('data-loaded') || '0', 10),
+	      total: parseInt(root.getAttribute('data-total') || '0', 10)
+	    };
+	    let request = null;
+	    let timer = null;
+	    if (pagination) {
+	      pagination.hidden = true;
+	    }
+	    const syncMore = () => {
+	      more.hidden = state.loaded >= state.total;
+	      more.disabled = false;
+	    };
+	    const setStatus = () => {
+	      if (empty) {
+	        empty.hidden = !(state.query && 0 === state.total);
+	      }
+	      if (status) {
+	        status.textContent = state.query ? 0 === state.total ? 'No articles found.' : `${state.total} ${1 === state.total ? 'article' : 'articles'} found` : '';
+	      }
+	    };
+	    const showResults = searching => {
+	      if (!searchOnly) {
+	        return;
+	      }
+	      grid.hidden = !searching;
+	      if (hideSelector) {
+	        document.querySelectorAll(hideSelector).forEach(element => {
+	          element.hidden = searching;
+	        });
+	      }
+	    };
+	    const load = replace => {
+	      request?.abort();
+	      if (searchOnly && !state.query) {
+	        // Search cleared: back to the page.
+	        grid.innerHTML = '';
+	        state.loaded = 0;
+	        state.total = 0;
+	        showResults(false);
+	        setStatus();
+	        syncMore();
+	        return;
+	      }
+	      request = new AbortController();
+	      const params = new URLSearchParams({
+	        stream: root.getAttribute('data-stream') || 'blogs',
+	        region: root.getAttribute('data-region') || '',
+	        category: state.category,
+	        q: state.query,
+	        offset: replace ? 0 : state.loaded,
+	        lead: !state.query && replace ? 1 : 0
+	      });
+	      grid.setAttribute('aria-busy', 'true');
+	      more.disabled = true;
+	      fetch(`${endpoint}?${params.toString()}`, {
+	        signal: request.signal
+	      }).then(response => response.ok ? response.json() : Promise.reject(new Error(response.status))).then(data => {
+	        if (replace) {
+	          grid.innerHTML = data.html;
+	          state.loaded = data.count;
+	        } else {
+	          grid.insertAdjacentHTML('beforeend', data.html);
+	          state.loaded += data.count;
+	        }
+	        state.total = data.total;
+	        showResults(true);
+	        grid.removeAttribute('aria-busy');
+	        setStatus();
+	        syncMore();
+	      }).catch(error => {
+	        if ('AbortError' !== error.name) {
+	          grid.removeAttribute('aria-busy');
+	          more.disabled = false;
+	        }
+	      });
+	    };
+	    more.addEventListener('click', () => load(false));
+	    if (search) {
+	      search.addEventListener('input', () => {
+	        clearTimeout(timer);
+	        timer = setTimeout(() => {
+	          const value = search.value.trim();
+	          state.query = value.length >= 2 ? value : '';
+	          load(true);
+	        }, 250);
+	      });
+	    }
+	    filters.forEach(link => {
+	      link.addEventListener('click', event => {
+	        event.preventDefault();
+	        state.category = link.getAttribute('data-category') || '';
+	        filters.forEach(other => {
+	          const on = other === link;
+	          other.classList.toggle('is-active', on);
+	          other.toggleAttribute('aria-current', on);
+	        });
+	        window.history.replaceState(null, '', link.getAttribute('href'));
+	        load(true);
+	      });
+	    });
+	  });
+	}
+
 	document.addEventListener('DOMContentLoaded', () => {
 	  initSmoothScroll();
 	  initNavToggle();
@@ -639,6 +875,9 @@
 	  initSectorFilters();
 	  initProductFilters();
 	  initFormFrames();
+	  initPostToc();
+	  initShare();
+	  initPostsIndex();
 	});
 
 })();

@@ -4,16 +4,16 @@
 	"name": "cb-peoplesafe2027/image-columns",
 	"title": "Image columns",
 	"category": "cb-peoplesafe2027",
-	"description": "Two to four images side by side, each with text below it: centred on the page, or left-aligned on a yellow card. Put an ordinary heading and paragraph above it for the title and introduction.",
+	"description": "Two to five images side by side, each with a bold title and text below it: centred on the page, or left-aligned on a yellow card. Put an ordinary heading and paragraph above it for the title and introduction.",
 	"icon": "columns",
 	"attributes": {
 		"style": { "type": "string", "default": "plain" },
 		"items": {
 			"type": "array",
 			"default": [
-				{ "image": 0, "imageUrl": "", "text": "" },
-				{ "image": 0, "imageUrl": "", "text": "" },
-				{ "image": 0, "imageUrl": "", "text": "" }
+				{ "image": 0, "imageUrl": "", "title": "", "text": "" },
+				{ "image": 0, "imageUrl": "", "title": "", "text": "" },
+				{ "image": 0, "imageUrl": "", "title": "", "text": "" }
 			]
 		}
 	},

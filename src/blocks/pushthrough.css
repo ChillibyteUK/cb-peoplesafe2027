@@ -1,0 +1,88 @@
+/*
+ * Pushthrough. A call to action inside an article. The panel stacks a label, title, text, a row of small facts and the
+ * button; the strip puts the title and text beside the button. Four colours: navy, teal and orange are solid with
+ * white (black on orange) text, light is a pale tint with dark text.
+ */
+
+.pushthrough {
+	padding-block: var(--space-4);
+}
+
+.pushthrough__box {
+	display: grid;
+	gap: var(--space-3);
+	padding: var(--space-5);
+	border-radius: var(--radius-sm);
+	background-color: var(--pt-bg);
+	color: var(--pt-text);
+}
+
+.pushthrough--navy {
+	--pt-bg: var(--col-navy-400);
+	--pt-text: var(--col-white);
+	--pt-accent: var(--col-teal-400);
+}
+
+.pushthrough--teal {
+	--pt-bg: var(--col-teal-400);
+	--pt-text: var(--col-black);
+	--pt-accent: var(--col-navy-400);
+}
+
+.pushthrough--orange {
+	--pt-bg: var(--col-orange-400);
+	--pt-text: var(--col-black);
+	--pt-accent: var(--col-black);
+}
+
+.pushthrough--light {
+	--pt-bg: var(--col-neutral);
+	--pt-text: var(--col-body);
+	--pt-accent: var(--col-navy-400);
+}
+
+.pushthrough__label {
+	margin-bottom: 0;
+	color: var(--pt-accent);
+	font-size: var(--fs-small, 0.875rem);
+	font-weight: var(--fw-bold);
+}
+
+.pushthrough__title {
+	margin-bottom: var(--space-2);
+	color: inherit;
+}
+
+.pushthrough__text > :last-child {
+	margin-bottom: 0;
+}
+
+.pushthrough__facts {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-1) var(--space-4);
+	margin: 0;
+	padding: 0;
+	font-size: var(--fs-small, 0.875rem);
+	list-style: none;
+	opacity: 0.85;
+}
+
+.pushthrough__facts li + li::before {
+	content: "\2022";
+	margin-inline-end: var(--space-4);
+	opacity: 0.5;
+}
+
+.pushthrough__box a:not(.button) {
+	color: inherit;
+	text-decoration: underline;
+}
+
+@media (min-width: 768px) {
+	.pushthrough--strip .pushthrough__box {
+		grid-template-columns: 1fr auto;
+		align-items: center;
+		gap: var(--space-5);
+	}
+}

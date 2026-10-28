@@ -11,6 +11,9 @@ import { initStatsCounters } from './stats-counter';
 import { initSectorFilters } from './sector-filter';
 import { initProductFilters } from './product-filter';
 import { initFormFrames } from './form-frame';
+import { initPostToc } from './post-toc';
+import { initShare } from './share';
+import { initPostsIndex } from './posts-index';
 
 document.addEventListener('DOMContentLoaded', () => {
 	initSmoothScroll();
@@ -26,4 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	initSectorFilters();
 	initProductFilters();
 	initFormFrames();
+	initPostToc();
+	initShare();
+	initPostsIndex();
 });

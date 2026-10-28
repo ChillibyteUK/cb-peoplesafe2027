@@ -1,0 +1,81 @@
+/*
+ * Newsletter signup. A square panel on a teal gradient from left to right: a large white title, a line of text and
+ * an email box beside a yellow button on the left, the illustration on the right from md up. The panel is at the
+ * width of the content, so it sits well inside an article as well as on a page.
+ */
+
+.newsletter-signup {
+	--ns-from: #308da1;
+	--ns-to: #0abba9;
+
+	padding-block: var(--space-5);
+}
+
+.newsletter-signup__box {
+	display: grid;
+	gap: var(--space-4);
+	padding: var(--space-5);
+	overflow: hidden;
+	background: linear-gradient(to right, var(--ns-from), var(--ns-to));
+	color: var(--col-white);
+}
+
+.newsletter-signup__title {
+	margin-bottom: var(--space-3);
+	color: inherit;
+	font-size: var(--fs-title-md);
+}
+
+.newsletter-signup__text {
+	margin-bottom: var(--space-4);
+	font-size: var(--fs-title-sm);
+	line-height: 1.35;
+}
+
+.newsletter-signup__text > :last-child {
+	margin-bottom: 0;
+}
+
+.newsletter-signup__form {
+	display: grid;
+	gap: var(--space-3);
+}
+
+.newsletter-signup__form input {
+	min-inline-size: 0;
+	padding: var(--space-3);
+	border: 1px solid #ced4da;
+	border-radius: 0.25rem;
+	background-color: var(--col-white);
+	color: var(--col-body);
+}
+
+.newsletter-signup__media {
+	display: none;
+}
+
+@media (min-width: 768px) {
+	.newsletter-signup__box {
+		padding: var(--space-6);
+	}
+
+	.newsletter-signup--has-image .newsletter-signup__box {
+		grid-template-columns: 6fr 5fr;
+		align-items: center;
+		gap: var(--space-6);
+	}
+
+	.newsletter-signup__form {
+		grid-template-columns: 3fr 2fr;
+	}
+
+	.newsletter-signup__media {
+		display: block;
+	}
+
+	.newsletter-signup__image {
+		display: block;
+		inline-size: 100%;
+		block-size: auto;
+	}
+}

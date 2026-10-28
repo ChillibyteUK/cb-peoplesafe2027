@@ -1,0 +1,62 @@
+/*
+ * Filter pills: the one look for every row of filters on the site (the case study, blog and news pages, the product
+ * and sector cards, and the Knowledge Hub's browse row). A small bold label, then small white pills with a soft border that
+ * turn yellow on hover, on keyboard focus and when active. Block CSS sets only what is its own (a smaller size, say).
+ */
+
+.case-hub__filters,
+.product-cards__filters,
+.sector-cards__filters,
+.knowledge-hub__tiles {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-2);
+	margin-bottom: var(--space-5);
+}
+
+.product-cards__filters[hidden],
+.sector-cards__filters[hidden] {
+	display: none;
+}
+
+.case-hub__filters-label,
+.product-cards__filters-label,
+.sector-cards__filters-label,
+.knowledge-hub__tiles-label {
+	margin-right: var(--space-2);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-bold);
+}
+
+.case-hub__filter,
+.product-cards__filter,
+.sector-cards__filter,
+.knowledge-hub__tile {
+	display: block;
+	padding: var(--space-1) var(--space-3);
+	border: 1px solid var(--col-blue-300);
+	border-radius: var(--radius-pill);
+	background-color: var(--col-white);
+	color: var(--col-body);
+	font: inherit;
+	font-size: var(--fs-small);
+	text-decoration: none;
+	cursor: pointer;
+	transition: background-color var(--transition), border-color var(--transition);
+}
+
+.case-hub__filter:hover,
+.case-hub__filter:focus-visible,
+.case-hub__filter.is-active,
+.product-cards__filter:hover,
+.product-cards__filter:focus-visible,
+.product-cards__filter.is-active,
+.sector-cards__filter:hover,
+.sector-cards__filter:focus-visible,
+.sector-cards__filter.is-active,
+.knowledge-hub__tile:hover,
+.knowledge-hub__tile:focus-visible {
+	border-color: var(--col-primary);
+	background-color: var(--col-primary);
+}

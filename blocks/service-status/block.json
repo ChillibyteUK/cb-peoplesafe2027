@@ -1,0 +1,31 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/service-status",
+	"title": "Service status",
+	"category": "cb-peoplesafe2027",
+	"description": "The state of each service (operational, degraded or down) with an overall status worked out from them and the date the page was last updated. An optional message above it carries an incident notice.",
+	"icon": "performance",
+	"attributes": {
+		"message": { "type": "string", "default": "" },
+		"title": { "type": "string", "default": "Services" },
+		"showUpdated": { "type": "boolean", "default": true },
+		"services": {
+			"type": "array",
+			"default": [
+				{ "name": "ARC Services", "status": "operational" },
+				{ "name": "Customer Support Services", "status": "operational" },
+				{ "name": "Activity Lines", "status": "operational" },
+				{ "name": "Peoplesafe Portal", "status": "operational" },
+				{ "name": "Mobile Apps", "status": "operational" },
+				{ "name": "Devices", "status": "operational" }
+			]
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

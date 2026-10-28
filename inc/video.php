@@ -152,3 +152,73 @@ function cb_peoplesafe2027_vimeo_thumbnail_url( $url ) {
 	// oEmbed returns a 295px thumbnail: ask Vimeo's CDN for a larger one.
 	return preg_replace( '/-d_\d+(x\d+)?/', '-d_1280', $thumb );
 }
+
+/**
+ * VideoObject schema for a video resource, added to Yoast's schema graph and linked from the page.
+ *
+ * Built from what the page already holds: the title, the description under the player, the poster, the date, the
+ * player's embed address, the transcript and the length (saved at import in cb_video_duration).
+ *
+ * @param array[] $graph   Yoast's schema pieces.
+ * @param object  $context Yoast's context for the page.
+ * @return array[]
+ */
+function cb_peoplesafe2027_video_schema( $graph, $context ) {
+	if ( ! is_singular( 'resource' ) || ! has_term( 'video', 'resource_type' ) ) {
+		return $graph;
+	}
+
+	$attrs = array();
+
+	foreach ( parse_blocks( get_post_field( 'post_content', get_queried_object_id() ) ) as $block ) {
+		if ( 'cb-peoplesafe2027/text-and-media' === $block['blockName'] && ! empty( $block['attrs']['videoUrl'] ) ) {
+			$attrs = $block['attrs'];
+			break;
+		}
+	}
+
+	$video = $attrs ? cb_peoplesafe2027_parse_video_url( $attrs['videoUrl'] ) : null;
+
+	if ( ! $video ) {
+		return $graph;
+	}
+
+	$id    = trailingslashit( $context->canonical ) . '#video';
+	$piece = array(
+		'@type'        => 'VideoObject',
+		'@id'          => $id,
+		'name'         => wp_strip_all_tags( get_the_title() ),
+		'description'  => wp_strip_all_tags( isset( $attrs['belowMedia'] ) ? $attrs['belowMedia'] : get_the_title() ),
+		'uploadDate'   => get_the_date( 'c' ),
+		'embedUrl'     => 'youtube' === $video['provider'] ? 'https://www.youtube.com/embed/' . $video['id'] : 'https://player.vimeo.com/video/' . $video['id'],
+		'inLanguage'   => get_bloginfo( 'language' ),
+	);
+
+	$thumb = get_the_post_thumbnail_url( get_queried_object_id(), 'large' );
+
+	if ( $thumb ) {
+		$piece['thumbnailUrl'] = $thumb;
+	}
+
+	$seconds = (int) get_post_meta( get_queried_object_id(), 'cb_video_duration', true );
+
+	if ( $seconds ) {
+		$piece['duration'] = sprintf( 'PT%dH%dM%dS', intdiv( $seconds, 3600 ), intdiv( $seconds % 3600, 60 ), $seconds % 60 );
+	}
+
+	if ( ! empty( $attrs['transcript'] ) ) {
+		$piece['transcript'] = wp_strip_all_tags( $attrs['transcript'] );
+	}
+
+	foreach ( $graph as $key => $existing ) {
+		if ( isset( $existing['@type'] ) && in_array( 'WebPage', (array) $existing['@type'], true ) ) {
+			$graph[ $key ]['video']    = array( array( '@id' => $id ) );
+			$piece['isPartOf']         = array( '@id' => $existing['@id'] );
+		}
+	}
+
+	$graph[] = $piece;
+
+	return $graph;
+}
+add_filter( 'wpseo_schema_graph', 'cb_peoplesafe2027_video_schema', 10, 2 );

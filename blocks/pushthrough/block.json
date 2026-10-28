@@ -1,0 +1,24 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cb-peoplesafe2027/pushthrough",
+	"title": "Pushthrough",
+	"category": "cb-peoplesafe2027",
+	"description": "A call to action inside an article: a panel (label, title, text, short facts and a button) or a slim strip (title and text beside a button).",
+	"icon": "megaphone",
+	"attributes": {
+		"layout": { "type": "string", "default": "panel" },
+		"theme": { "type": "string", "default": "navy" },
+		"label": { "type": "string", "default": "" },
+		"title": { "type": "string", "default": "" },
+		"content": { "type": "string", "default": "" },
+		"facts": { "type": "string", "default": "" },
+		"buttons": { "type": "array", "default": [] }
+	},
+	"supports": {
+		"anchor": true,
+		"className": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

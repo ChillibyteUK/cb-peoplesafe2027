@@ -78,12 +78,27 @@
 	}
 }
 
+/* Two cards from md, three from lg; the product row goes on to four from xl, where the cards are wide enough. */
 @media (min-width: 992px) {
 	.related-content .slider {
 		--slides-per-view: 3;
 	}
+}
 
+@media (min-width: 1200px) {
 	.related-content--four-up .slider {
 		--slides-per-view: 4;
 	}
+}
+
+/* A product card shows the intro and its short list, as the live card does. */
+.related-card__intro > :last-child {
+	margin-bottom: 0;
+}
+
+.related-card__intro ul,
+.related-card__intro ol {
+	margin: var(--space-3) 0 0;
+	padding-left: 1.5em;
+	list-style: disc;
 }

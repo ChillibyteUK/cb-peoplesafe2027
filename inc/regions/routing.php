@@ -317,7 +317,58 @@ function cb_peoplesafe2027_routing_archives( $query ) {
 		$query->set( 'tax_query', $tax_query );
 	}
 
+	// ?incident=slug lists the stories of one incident type (the Real life stories page's tiles link here).
+	if ( $term_base && 'case_study' === $type && ! $query->get( 'case_study' ) && isset( $_GET['incident'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- a public filter, no state changes.
+		$tax_query   = (array) $query->get( 'tax_query' );
+		$tax_query[] = array(
+			'taxonomy' => 'incident',
+			'field'    => 'slug',
+			'terms'    => array( sanitize_title( wp_unslash( $_GET['incident'] ) ) ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		);
+
+		$query->set( 'tax_query', $tax_query );
+		$query->set( 'posts_per_page', -1 );
+	}
+
+	if ( $term_base && 'case_study' === $type && ! $query->get( 'case_study' ) && 'stories' !== $term_base ) {
+		$query->set( 'posts_per_page', 12 );
+	}
+
+	if ( $term_base && 'resource' === $type && ! $query->get( 'resource' ) ) {
+		$query->set( 'posts_per_page', 12 );
+		$query->set(
+			'meta_query',
+			array(
+				'relation' => 'OR',
+				array(
+					'key'     => 'cb_hide_from_listing',
+					'compare' => 'NOT EXISTS',
+				),
+				array(
+					'key'     => 'cb_hide_from_listing',
+					'value'   => '1',
+					'compare' => '!=',
+				),
+			)
+		);
+	}
+
 	$stream = $query->get( 'cb_post_stream' );
+
+	// ?category=slug narrows the blogs listing to one category (its pills link here).
+	if ( 'blogs' === $stream && ! $query->get( 'name' ) && isset( $_GET['category'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- a public filter, no state changes.
+		$filtered = get_term_by( 'slug', sanitize_title( wp_unslash( $_GET['category'] ) ), 'category' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		if ( $filtered ) {
+			$query->set( 'category__in', array( $filtered->term_id ) );
+		}
+	}
+
+	// The listings load more nine at a time (inc/posts-index.php); without JavaScript the pages are the same size.
+	if ( $stream && ! $query->get( 'name' ) ) {
+		$query->set( 'posts_per_page', CB_PEOPLESAFE2027_POSTS_PER_BATCH );
+	}
+
 	if ( $stream && ! $query->get( 'name' ) && $region ) {
 		$news = cb_peoplesafe2027_region_term_id( cb_peoplesafe2027_news_category_slug(), 'category', $region );
 

@@ -1,0 +1,234 @@
+/*
+ * The Knowledge Hub page (inc/knowledge-hub.php): a search box over everything, a grid of tiles (one for each kind of
+ * content, with how many there are), the latest, and a row of the newest of the main kinds. The cards are the
+ * listings' own (posts-index.css and case-hub.css).
+ */
+
+/* The Hero and the search sit close above the page: no space under either. */
+.knowledge-hub-page .hero {
+	padding-block-end: 0;
+}
+
+.case-hub.knowledge-hub__search {
+	padding-block-end: 0;
+}
+
+/* The search's results end the page while they show, so the Load more button keeps room below it. */
+.knowledge-hub__search .posts-index__more,
+.knowledge-hub__search .posts-index__empty {
+	margin-bottom: var(--block-padding);
+}
+
+.knowledge-hub__sections[hidden] {
+	display: none;
+}
+
+.knowledge-hub__latest,
+.knowledge-hub__row {
+	padding-block: var(--space-5);
+}
+
+.knowledge-hub__types {
+	padding-block: var(--space-3) 0;
+}
+
+.knowledge-hub__heading {
+	margin-bottom: var(--space-4);
+	font-size: var(--fs-h2);
+}
+
+.knowledge-hub__row-header {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: var(--space-3);
+	margin-bottom: var(--space-4);
+}
+
+.knowledge-hub__row-header .knowledge-hub__heading {
+	margin-bottom: 0;
+}
+
+.knowledge-hub__all {
+	font-weight: var(--fw-bold);
+	white-space: nowrap;
+}
+
+/* Browse by type: the shared pills (filters.css), with no space below, so the row is quiet and not a block of its own. */
+.knowledge-hub__tiles {
+	margin-bottom: 0;
+}
+
+.knowledge-hub__tile-count {
+	margin-left: var(--space-1);
+	color: color-mix(in srgb, var(--col-black) 60%, var(--col-white));
+}
+
+.knowledge-hub__tile:hover .knowledge-hub__tile-count,
+.knowledge-hub__tile:focus-visible .knowledge-hub__tile-count {
+	color: var(--col-black);
+}
+
+/*
+ * Latest: a lead card on the left over two rows, two cards stacked on the right (image beside text), with one gap
+ * between them all.
+ */
+.knowledge-hub__latest .posts-index__grid {
+	gap: var(--space-4);
+	margin-top: 0;
+}
+
+@media (min-width: 768px) {
+	.knowledge-hub__latest .posts-index__grid {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.knowledge-hub__latest .post-card--lead {
+		grid-column: 1;
+		grid-row: span 2;
+	}
+
+	.knowledge-hub__latest .post-card--half {
+		grid-column: 2;
+	}
+
+	.knowledge-hub__latest .post-card--half {
+		display: flex;
+	}
+
+	/* The image fills the card's height on the left, so it reads as half the card rather than a thumbnail. */
+	.knowledge-hub__latest .post-card--half .post-card__link {
+		display: grid;
+		grid-template-columns: 5fr 7fr;
+		gap: var(--space-3);
+		align-items: stretch;
+		inline-size: 100%;
+	}
+
+	.knowledge-hub__latest .post-card--half .post-card__media {
+		aspect-ratio: auto;
+		min-block-size: 11rem;
+	}
+
+	.knowledge-hub__latest .post-card--half .post-card__meta {
+		margin-top: 0;
+	}
+
+	.knowledge-hub__latest .post-card--half .post-card__title {
+		font-size: var(--fs-h4);
+	}
+}
+
+/* A smaller excerpt in the latest, lead and stacked cards alike. */
+.knowledge-hub__latest .post-card__excerpt {
+	font-size: var(--fs-small);
+}
+
+/* The lead card here is narrower than on the blog index, so its title and excerpt stack. */
+.knowledge-hub__latest .post-card--lead .post-card__body {
+	display: block;
+}
+
+.knowledge-hub__latest .post-card--lead .post-card__media {
+	aspect-ratio: 16 / 10;
+}
+
+.knowledge-hub__latest .post-card--lead .post-card__title {
+	margin-top: var(--space-1);
+	font-size: var(--fs-h3);
+}
+
+.knowledge-hub__latest .post-card--lead .post-card__excerpt {
+	margin-top: var(--space-2);
+}
+
+/*
+ * A row's cards: the image with a curved bottom edge (the same curve as the product cards) and the title
+ * below, on a white card. Four across from xl.
+ */
+.knowledge-hub__cards {
+	display: grid;
+	gap: var(--space-4);
+}
+
+.hub-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	overflow: clip;
+	border-radius: var(--radius-lg);
+	background-color: var(--col-white);
+	box-shadow: var(--shadow-in);
+	transition: box-shadow var(--transition);
+}
+
+.hub-card:hover,
+.hub-card:focus-within {
+	box-shadow: var(--shadow-card-hover);
+}
+
+.hub-card__media {
+	position: relative;
+	aspect-ratio: 16 / 11;
+	background-color: var(--col-blue-200);
+	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 100' preserveAspectRatio='none'%3E%3Cpath fill='%23fff' d='m400,0v85c-62,10-130,15-200,15S62,95,0,85V0h400Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+
+.hub-card__media img {
+	position: absolute;
+	inset: 0;
+	display: block;
+	inline-size: 100%;
+	block-size: 100%;
+	object-fit: cover;
+	object-position: top;
+}
+
+/* A video's poster and a guide's cover are 16:9: the image is that shape too, so it is shown whole, not cropped at the sides. */
+.hub-card--video .hub-card__media,
+.hub-card--guides .hub-card__media {
+	aspect-ratio: 16 / 9;
+}
+
+/* An infographic is tall: the top of it fills the image. A case study's logo is shown whole on white. */
+.hub-card--case-studies .hub-card__media {
+	background-color: var(--col-white);
+}
+
+.hub-card--case-studies .hub-card__media img {
+	padding: var(--space-4) var(--space-4) var(--space-5);
+	object-fit: contain;
+	object-position: center;
+}
+
+.hub-card__body {
+	padding: var(--space-2) var(--space-3) var(--space-3);
+}
+
+.hub-card__title {
+	margin-bottom: 0;
+	font-size: var(--fs-h4);
+}
+
+.hub-card__link {
+	color: inherit;
+	text-decoration: none;
+}
+
+.hub-card__link::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+}
+
+@media (min-width: 768px) {
+	.knowledge-hub__cards {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (min-width: 1200px) {
+	.knowledge-hub__cards {
+		grid-template-columns: repeat(4, 1fr);
+	}
+}

@@ -107,7 +107,10 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'relate
 								<?php } ?>
 								<div class="related-card__inner">
 									<h3 class="related-card__title"><a class="related-card__link" href="<?php echo esc_url( get_permalink( $cb_item ) ); ?>"><?php echo esc_html( get_the_title( $cb_item ) ); ?></a></h3>
-									<?php if ( $cb_excerpt ) { ?>
+									<?php $cb_intro_html = $cb_is_product ? cb_peoplesafe2027_product_intro_html( $cb_item ) : ''; ?>
+									<?php if ( $cb_intro_html ) { ?>
+										<div class="related-card__excerpt related-card__intro"><?php echo $cb_intro_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- filtered by wp_kses() in cb_peoplesafe2027_product_intro_html(). ?></div>
+									<?php } elseif ( $cb_excerpt ) { ?>
 										<p class="related-card__excerpt"><?php echo esc_html( $cb_excerpt ); ?></p>
 									<?php } ?>
 								</div>

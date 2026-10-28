@@ -1,5 +1,5 @@
 /*
- * Image columns. Two to four images side by side with text centred below each;
+ * Image columns. Two to five images side by side with text centred below each;
  * one column on a phone. The heading and introduction above are ordinary blocks.
  */
 
@@ -25,6 +25,12 @@
 	margin: 0 auto;
 }
 
+.image-columns__title {
+	margin-bottom: var(--space-2);
+	font-size: var(--fs-base);
+	font-weight: var(--fw-bold);
+}
+
 .image-columns__text > :last-child {
 	margin-bottom: 0;
 }
@@ -41,11 +47,19 @@
 	.image-columns--4 .image-columns__grid {
 		grid-template-columns: repeat(2, 1fr);
 	}
+
+	.image-columns--5 .image-columns__grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
 }
 
 @media (min-width: 992px) {
 	.image-columns--4 .image-columns__grid {
 		grid-template-columns: repeat(4, 1fr);
+	}
+
+	.image-columns--5 .image-columns__grid {
+		grid-template-columns: repeat(5, 1fr);
 	}
 }
 

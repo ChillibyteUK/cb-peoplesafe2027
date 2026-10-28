@@ -24,3 +24,25 @@
 .embed-block--turtl .embed-block__frame a {
 	width: 100% !important; /* Turtl's own script sizes its link inline. */
 }
+
+/* Beside text in a column: no top padding on desktop, so it lines up with the text. */
+@media (min-width: 782px) {
+	.wp-block-column > .embed-block {
+		padding-block-start: 0;
+	}
+}
+
+/* A flipper on its own on a resource: the size of the original's (450px), on the left, not the full width. */
+.single-resource .embed-block--turtl .embed-block__frame {
+	max-width: 28rem;
+	margin-inline: 0;
+}
+
+.single-resource .wp-block-column .embed-block--turtl .embed-block__frame {
+	max-width: none;
+}
+
+/* Room under it for the flip, which tilts below the thumbnail on hover. */
+.single-resource .embed-block--turtl {
+	padding-block-end: var(--space-7);
+}

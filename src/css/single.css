@@ -1,0 +1,211 @@
+/*
+ * A single post (single.php): the meta row under the title (category, date, reading time, author as small text with
+ * small icons), then the article with a sticky Quick links sidebar beside it from lg up (nine columns and three).
+ * The sidebar shows only when the post has two or more h2s.
+ */
+
+.post-meta {
+	padding-block: var(--space-3) 0;
+}
+
+.post-meta__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-1) var(--space-4);
+	margin: 0;
+	padding: 0;
+	color: color-mix(in srgb, var(--col-black) 60%, var(--col-white)); /* a lighter grey (#666), still 5:1 on the page */
+	font-size: var(--fs-small, 0.875rem);
+	list-style: none;
+}
+
+.post-meta__item {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-1);
+}
+
+.post-meta__item svg {
+	inline-size: 1rem;
+	block-size: 1rem;
+	flex: none;
+}
+
+.post-meta__item a {
+	color: inherit;
+}
+
+.post-layout {
+	display: grid;
+	gap: var(--space-5);
+}
+
+.post-toc {
+	display: none;
+}
+
+@media (min-width: 992px) {
+	.post-layout--with-toc {
+		grid-template-columns: 9fr 3fr;
+		align-items: start;
+	}
+
+	.post-layout--with-toc .post-toc {
+		position: sticky;
+		inset-block-start: var(--scroll-offset); /* clear of the fixed nav */
+		display: block;
+		padding-block: 0 var(--space-4);
+	}
+}
+
+/* Signed in, the admin bar sits above the nav and pushes it down by its own height. */
+@media (min-width: 992px) {
+	.admin-bar .post-layout--with-toc .post-toc {
+		inset-block-start: calc(var(--scroll-offset) + var(--wp-admin--admin-bar--height, 32px));
+	}
+}
+
+.post-toc__title {
+	margin-bottom: var(--space-2);
+	font-size: var(--fs-small, 0.875rem);
+	font-weight: var(--fw-bold);
+}
+
+.post-toc__list {
+	margin: 0;
+	padding: 0;
+	border-inline-start: 2px solid var(--col-blue-300);
+	list-style: none;
+}
+
+.post-toc__link {
+	display: block;
+	padding: var(--space-1) var(--space-3);
+	margin-inline-start: -2px;
+	border-inline-start: 2px solid transparent;
+	color: var(--col-body);
+	font-size: var(--fs-small, 0.875rem);
+	line-height: 1.4;
+	text-decoration: none;
+	transition: color var(--transition), border-color var(--transition);
+}
+
+.post-toc__link:hover,
+.post-toc__link.is-active {
+	border-inline-start-color: var(--col-orange-400);
+	color: var(--col-black);
+	font-weight: var(--fw-bold);
+}
+
+/* The Share button in the meta row: the same small text as the rest of it, with a pointer. */
+.post-meta__item--share {
+	margin-inline-start: 0;
+}
+
+.share-button {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-1);
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
+	cursor: pointer;
+}
+
+.share-button svg {
+	inline-size: 1rem;
+	block-size: 1rem;
+}
+
+.share-button:hover {
+	color: var(--col-blue-400);
+}
+
+/*
+ * The next and previous posts: two cards side by side, a small label over the title, the next one on the right. On a
+ * small screen only the labels show ("Previous", "Next"); the title stays for screen readers.
+ */
+.post-nav {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: var(--space-3);
+	padding-block: var(--space-5);
+}
+
+.post-nav__link {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-1);
+	padding: var(--space-3) var(--space-4);
+	border: 1px solid var(--col-blue-300);
+	border-radius: var(--radius-md);
+	background-color: var(--col-white);
+	color: var(--col-body);
+	text-decoration: none;
+	transition: background-color var(--transition), border-color var(--transition);
+}
+
+.post-nav__link--next {
+	grid-column: 2;
+	text-align: end;
+}
+
+.post-nav__label {
+	color: var(--col-body-muted, inherit);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-bold);
+}
+
+.post-nav__title {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+	color: var(--col-black);
+	font-weight: var(--fw-bold);
+	text-wrap: pretty;
+}
+
+@media (min-width: 768px) {
+	.post-nav__title {
+		position: static;
+		inline-size: auto;
+		block-size: auto;
+		overflow: visible;
+		clip-path: none;
+		white-space: normal;
+	}
+}
+
+.post-nav__link:hover,
+.post-nav__link:focus-visible {
+	border-color: var(--col-primary);
+	background-color: var(--col-primary);
+}
+
+.post-nav__link:hover .post-nav__label,
+.post-nav__link:focus-visible .post-nav__label {
+	color: var(--col-black);
+}
+
+/* A post's hero: the photo with rounded corners, and a title a step below the site's H1 size, since post titles run long. */
+.single-post .hero__image {
+	border-radius: var(--radius-lg);
+}
+
+.single-post .hero__title {
+	font-size: clamp(2rem, 6vw, 2.5rem);
+}
+
+.single-post .hero__grid {
+	align-items: start;
+}
+
+/* The meta row is in the hero now, so the space under the hero is the gap before the article. */
+.single-post .hero {
+	padding-block-end: var(--space-4);
+}

@@ -52,6 +52,7 @@ function cb_peoplesafe2027_register_theme_taxonomies() {
 		'product_type'    => array( 'Product types', 'Product type', 'product', false ),
 		'sector'          => array( 'Sectors', 'Sector', 'case_study', false ),
 		'case_study_type' => array( 'Case study types', 'Case study type', 'case_study', false ), // Includes User story.
+		'incident'        => array( 'Incident types', 'Incident type', 'case_study', false ), // What a user story was about: verbal abuse, medical, entrapment.
 		'resource_type'   => array( 'Resource types', 'Resource type', 'resource', true ),
 		'jurisdiction'    => array( 'Jurisdictions', 'Jurisdiction', 'legislation', true ), // Country, then state or province.
 		'partner_type'    => array( 'Partner types', 'Partner type', 'partner', false ),
@@ -93,3 +94,19 @@ function cb_peoplesafe2027_register_theme_taxonomies() {
 	}
 }
 add_action( 'init', 'cb_peoplesafe2027_register_theme_taxonomies' );
+
+/**
+ * Make the Incident types translatable (one set of terms per region).
+ *
+ * The other taxonomies are ticked in Polylang's settings; this one is added in
+ * code so it works on every site without a settings step.
+ *
+ * @param string[] $taxonomies Translatable taxonomies.
+ * @return string[]
+ */
+function cb_peoplesafe2027_translatable_incident( $taxonomies ) {
+	$taxonomies['incident'] = 'incident';
+
+	return $taxonomies;
+}
+add_filter( 'pll_get_taxonomies', 'cb_peoplesafe2027_translatable_incident' );

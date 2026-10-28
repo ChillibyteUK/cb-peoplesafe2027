@@ -1,0 +1,62 @@
+/*
+ * Login cards. Two or three gradient cards (one per portal), centred text, a
+ * screenshot that rises above each card's top edge and a white button. The room
+ * for the screenshots is the grid's top padding; the gap leaves room for them
+ * when the cards stack on a phone.
+ */
+
+.login-cards {
+	padding-block: var(--space-5);
+}
+
+.login-cards__grid {
+	display: grid;
+	gap: var(--space-7) var(--space-5);
+	padding-top: var(--space-6);
+}
+
+.login-cards__card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: var(--space-5);
+	border-radius: var(--radius-card);
+	background: var(--gradient-blue);
+	color: var(--col-white);
+	text-align: center;
+}
+
+.login-cards__card--pink {
+	background: var(--gradient-pink);
+}
+
+.login-cards__card--orange {
+	background: var(--gradient-orange);
+	color: var(--col-black);
+}
+
+.login-cards__image {
+	inline-size: min(100%, 18.75rem);
+	margin-block: calc(-1 * var(--space-7)) var(--space-3);
+
+	& img {
+		display: block;
+		inline-size: 100%;
+		block-size: auto;
+	}
+}
+
+.login-cards__title {
+	margin-bottom: var(--space-3);
+	font-size: var(--fs-h3);
+}
+
+@media (min-width: 768px) {
+	.login-cards__grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.login-cards--3 .login-cards__grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}

@@ -22,3 +22,10 @@
 	margin-inline: auto;
 	border: 0;
 }
+
+/* Beside text in a column: no top padding on desktop, so it lines up with the text. */
+@media (min-width: 782px) {
+	.wp-block-column > .form-embed {
+		padding-block-start: 0;
+	}
+}

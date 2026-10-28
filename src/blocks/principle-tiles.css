@@ -1,0 +1,77 @@
+/*
+ * Principle tiles. A centred title and introduction over a row of colour tiles,
+ * each with a heart over a short line: six across from lg, three from md, one
+ * on a phone. Text is white on the colours, black on yellow for contrast.
+ */
+
+.principle-tiles {
+	padding-block: var(--block-padding);
+}
+
+.principle-tiles__title,
+.principle-tiles__intro {
+	text-align: center;
+}
+
+.principle-tiles__intro {
+	margin-bottom: var(--space-5);
+}
+
+.principle-tiles__grid {
+	display: grid;
+	gap: var(--space-3);
+}
+
+.principle-tiles__tile {
+	--tile-bg: var(--col-yellow-400);
+	--tile-fg: var(--col-white);
+
+	padding: var(--space-3);
+	border-radius: var(--radius-sm);
+	background-color: var(--tile-bg);
+	color: var(--tile-fg);
+	text-align: center;
+
+	& p {
+		margin: 0;
+	}
+}
+
+.principle-tiles__tile--yellow {
+	--tile-fg: var(--col-black);
+}
+
+.principle-tiles__tile--teal {
+	--tile-bg: var(--col-teal-400);
+}
+
+.principle-tiles__tile--blue {
+	--tile-bg: var(--col-blue-400);
+}
+
+.principle-tiles__tile--pink {
+	--tile-bg: var(--col-pink-400);
+}
+
+.principle-tiles__tile--orange {
+	--tile-bg: var(--col-orange-400);
+}
+
+.principle-tiles__icon {
+	display: block;
+	inline-size: 1.5625rem;
+	block-size: 1.4375rem;
+	margin: 0 auto var(--space-2);
+}
+
+@media (min-width: 768px) {
+	.principle-tiles__grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+@media (min-width: 992px) {
+	.principle-tiles__grid {
+		grid-template-columns: repeat(6, 1fr);
+	}
+}

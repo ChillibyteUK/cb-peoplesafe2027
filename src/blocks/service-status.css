@@ -1,0 +1,98 @@
+/*
+ * Service status. An overall banner over a list of services. Colour is only
+ * ever a second signal: every state is also written out as text. Operational
+ * is the brand teal, degraded the brand yellow and down the brand orange.
+ */
+
+.service-status {
+	padding-block-end: var(--block-padding);
+
+	--status-colour: var(--col-teal-400);
+
+	& .service-status__dot {
+		flex: none;
+		inline-size: 1.25rem;
+		block-size: 1.25rem;
+		border-radius: var(--radius-circle);
+		background-color: var(--status-colour);
+	}
+}
+
+.service-status__message {
+	margin-bottom: var(--space-5);
+	padding: var(--space-4);
+	border: 1px solid var(--col-blue-300);
+	border-radius: var(--radius-card);
+	background-color: var(--col-neutral);
+
+	& > :last-child {
+		margin-bottom: 0;
+	}
+}
+
+.service-status__overall {
+	display: flex;
+	align-items: center;
+	gap: var(--space-3);
+	margin-bottom: var(--space-5);
+	padding: var(--space-4);
+	border: 2px solid var(--status-colour);
+	border-radius: var(--radius-card);
+	background-color: var(--col-surface);
+
+	&.service-status__overall--degraded {
+		--status-colour: var(--col-yellow-400);
+	}
+
+	&.service-status__overall--down {
+		--status-colour: var(--col-orange-400);
+	}
+
+	& p {
+		margin: 0;
+	}
+}
+
+.service-status__headline {
+	font-size: var(--fs-h3);
+	font-weight: var(--fw-bold);
+}
+
+.service-status__updated {
+	color: var(--col-body-muted);
+	font-size: var(--fs-small);
+}
+
+.service-status__title {
+	margin-bottom: var(--space-3);
+}
+
+.service-status__list {
+	display: grid;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	border-block-start: 1px solid var(--col-border);
+}
+
+.service-status__item {
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	align-items: center;
+	gap: var(--space-3);
+	padding-block: var(--space-3);
+	border-block-end: 1px solid var(--col-border);
+	--status-colour: var(--col-teal-400);
+
+	&.service-status__item--degraded {
+		--status-colour: var(--col-yellow-400);
+	}
+
+	&.service-status__item--down {
+		--status-colour: var(--col-orange-400);
+	}
+}
+
+.service-status__name {
+	font-weight: var(--fw-bold);
+}

@@ -1,6 +1,9 @@
 /*
- * Timeline. A vertical line with entries alternating left and right from md up,
- * stacked beside the line on a phone. Each card has a coloured edge and year.
+ * Timeline. A vertical line with colour-filled cards alternating left and right
+ * from md up (each with an arrow towards the line and a dot on it), stacked to
+ * the right of the line on a phone. Matches the live site: grey is the
+ * founding, yellow a milestone, pink (teal) a product, green (navy) a
+ * partnership and orange staff. The icon sits beside the text.
  */
 
 .timeline {
@@ -9,8 +12,10 @@
 
 .timeline__list {
 	position: relative;
-	margin: 0;
+	max-width: 75rem;
+	margin: 0 auto;
 	padding: 0;
+	overflow: hidden;
 	list-style: none;
 }
 
@@ -19,53 +24,74 @@
 	position: absolute;
 	top: 0;
 	bottom: 0;
-	left: 0.5rem;
-	width: 2px;
-	background-color: var(--col-blue-300);
+	left: 1.75rem;
+	z-index: 0;
+	width: 0.33rem;
+	margin-left: -0.165rem;
+	background-color: var(--col-greyish);
 }
 
 .timeline__item {
 	--tl: var(--col-yellow-400);
+	--tl-fg: var(--col-black);
 
 	position: relative;
-	padding: 0 0 var(--space-4) var(--space-5);
-}
-
-.timeline__item::before {
-	content: "";
-	position: absolute;
-	top: 1.25rem;
-	left: 0;
-	width: 1rem;
-	height: 1rem;
-	border: var(--border-width) solid var(--col-white);
-	border-radius: 50%;
-	background-color: var(--tl);
-	box-shadow: 0 0 0 2px var(--tl);
+	padding: var(--space-2) var(--space-4) var(--space-2) 3.9rem;
 }
 
 .timeline__item--pink {
-	--tl: var(--col-pink-400);
+	--tl: var(--col-teal-400);
 }
 
 .timeline__item--orange {
 	--tl: var(--col-orange-400);
+	--tl-fg: var(--col-white);
 }
 
 .timeline__item--green {
-	--tl: var(--col-teal-400);
+	--tl: var(--col-navy-400);
+	--tl-fg: var(--col-white);
 }
 
 .timeline__item--grey {
-	--tl: var(--col-border);
+	--tl: var(--col-blue-300);
+}
+
+/* The dot on the line. */
+.timeline__item::before {
+	content: "";
+	position: absolute;
+	top: 0.85rem;
+	left: 1.05rem;
+	z-index: 1;
+	width: 1.4rem;
+	height: 1.4rem;
+	box-sizing: border-box;
+	border: 0.22rem solid var(--col-greyish);
+	border-radius: var(--radius-circle);
+	background-color: var(--tl);
+}
+
+/* The arrow from the card towards the line. */
+.timeline__item::after {
+	content: "";
+	position: absolute;
+	top: 1.25rem;
+	left: 3.35rem;
+	z-index: 1;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 0.55rem 0.55rem 0.55rem 0;
+	border-color: transparent var(--tl) transparent transparent;
 }
 
 .timeline__card {
-	padding: var(--space-3);
-	border-left: 6px solid var(--tl);
-	border-radius: var(--radius-md);
-	background-color: var(--col-white);
-	box-shadow: var(--shadow-in);
+	padding: 1.1rem 1.7rem;
+	border-radius: 0.33rem;
+	background-color: var(--tl);
+	box-shadow: rgb(0 0 0 / 0.25) 0 2px 5px 0;
+	color: var(--tl-fg);
 }
 
 .timeline__year {
@@ -79,40 +105,67 @@
 	gap: var(--space-3);
 }
 
+.timeline__icon {
+	flex: none;
+}
+
 .timeline__icon img {
 	display: block;
-	width: 2.5rem;
-	height: 2.5rem;
+	width: 2rem;
+	height: auto;
+	max-height: 4rem;
 	object-fit: contain;
 }
 
-.timeline__text > :last-child {
-	margin-bottom: 0;
+.timeline__text {
+	flex: 1;
+
+	& a {
+		color: inherit;
+		font-weight: var(--fw-bold);
+		text-decoration: none;
+	}
+
+	& > :last-child {
+		margin-bottom: 0;
+	}
 }
 
 @media (min-width: 768px) {
 	.timeline__list::before {
 		left: 50%;
-		margin-left: -1px;
 	}
 
 	.timeline__item {
 		width: 50%;
-		padding: 0 var(--space-5) var(--space-4) 0;
+		padding: 0.55rem 2.2rem;
 	}
 
 	.timeline__item::before {
-		right: -0.5rem;
+		right: -0.7rem;
 		left: auto;
+	}
+
+	.timeline__item::after {
+		right: 1.65rem;
+		left: auto;
+		border-width: 0.55rem 0 0.55rem 0.55rem;
+		border-color: transparent transparent transparent var(--tl);
 	}
 
 	.timeline__item:nth-child(even) {
 		margin-left: 50%;
-		padding: 0 0 var(--space-4) var(--space-5);
 	}
 
 	.timeline__item:nth-child(even)::before {
 		right: auto;
-		left: -0.5rem;
+		left: -0.7rem;
+	}
+
+	.timeline__item:nth-child(even)::after {
+		right: auto;
+		left: 1.65rem;
+		border-width: 0.55rem 0.55rem 0.55rem 0;
+		border-color: transparent var(--tl) transparent transparent;
 	}
 }

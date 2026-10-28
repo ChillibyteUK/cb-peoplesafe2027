@@ -62,6 +62,7 @@ h6 {
 
 p {
 	margin: 0 0 var(--space-3);
+	text-wrap: pretty;
 }
 
 a {
@@ -119,4 +120,9 @@ ol {
 	clip: rect(0, 0, 0, 0) !important;
 	white-space: nowrap !important;
 	border: 0 !important;
+}
+
+/* An in-page link (Quick links, the skip link, an FAQ link) lands its target below the fixed nav, not under it. */
+[id] {
+	scroll-margin-top: var(--scroll-offset);
 }

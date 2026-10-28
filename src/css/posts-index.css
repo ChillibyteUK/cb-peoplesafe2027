@@ -1,0 +1,197 @@
+/*
+ * The Blogs and News listings (archive.php): a search box, category pills and a grid of cards. On md and up the grid
+ * is six columns: a lead card across all six, halves of three, thirds of two. Below md the cards stack, and only the
+ * lead keeps its excerpt.
+ */
+
+.posts-index__search {
+	position: relative;
+	margin-bottom: var(--space-3);
+}
+
+.posts-index__search svg {
+	position: absolute;
+	inset-block-start: 50%;
+	inset-inline-start: var(--space-3);
+	inline-size: 1.1rem;
+	block-size: 1.1rem;
+	translate: 0 -50%;
+	color: var(--col-body-muted);
+	pointer-events: none;
+}
+
+/* By id: the site-wide form rule is more specific than a class. */
+#posts-index-search {
+	inline-size: 100%;
+	padding: var(--space-3) var(--space-3) var(--space-3) calc(var(--space-3) * 2 + 1.1rem);
+	border: 1px solid var(--col-blue-300);
+	border-radius: var(--radius-pill);
+	background-color: var(--col-white);
+	color: var(--col-body);
+	font: inherit;
+}
+
+#posts-index-search:focus-visible {
+	outline: 2px solid var(--col-primary);
+	outline-offset: 2px;
+}
+
+.posts-index__grid {
+	display: grid;
+	gap: var(--space-5) var(--space-4);
+	margin-top: var(--space-4);
+}
+
+.posts-index__grid[aria-busy="true"] {
+	opacity: 0.5;
+	transition: opacity var(--transition);
+}
+
+.posts-index__empty {
+	margin-top: var(--space-4);
+	text-align: center;
+}
+
+.posts-index__more {
+	display: block;
+	margin: var(--space-5) auto 0;
+}
+
+.posts-index__more[hidden] {
+	display: none;
+}
+
+.post-card__link {
+	display: block;
+	color: inherit;
+	text-decoration: none;
+}
+
+.post-card__media {
+	position: relative;
+	overflow: hidden;
+	aspect-ratio: 16 / 9;
+	border-radius: var(--radius-lg);
+	background-color: var(--col-blue-200);
+}
+
+.post-card__media img {
+	display: block;
+	inline-size: 100%;
+	block-size: 100%;
+	object-fit: cover;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.post-card__media img {
+		transition: transform 300ms ease;
+	}
+
+	.post-card__link:hover .post-card__media img {
+		transform: scale(1.04);
+	}
+}
+
+.post-card__badge {
+	position: absolute;
+	inset-block-end: 0;
+	inset-inline-start: 0;
+	padding: var(--space-1) var(--space-3);
+	border-radius: 0 var(--radius-lg) 0 0;
+	background-color: var(--col-primary);
+	color: var(--col-black);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-bold);
+}
+
+.post-card__meta {
+	margin: var(--space-3) 0 0;
+	color: color-mix(in srgb, var(--col-black) 60%, var(--col-white));
+	font-size: var(--fs-small);
+}
+
+.post-card__title {
+	margin: var(--space-1) 0 0;
+	font-size: var(--fs-h3);
+	text-wrap: balance;
+}
+
+.post-card__excerpt {
+	margin: var(--space-2) 0 0;
+}
+
+.post-card__link:focus-visible {
+	outline: 2px solid var(--col-navy-400);
+	outline-offset: 4px;
+}
+
+/* The words a search matched. */
+.post-card mark {
+	padding: 0 0.1em;
+	border-radius: 0.15em;
+	background-color: var(--col-yellow-100);
+	color: inherit;
+}
+
+/* Below md only the lead card keeps its excerpt; a search result keeps it, since that is where the match shows. */
+@media (max-width: 767px) {
+	.post-card:not(.post-card--lead):not(.post-card--match) .post-card__excerpt {
+		display: none;
+	}
+}
+
+@media (min-width: 768px) {
+	.posts-index__grid {
+		grid-template-columns: repeat(6, 1fr);
+	}
+
+	.post-card--lead {
+		grid-column: span 6;
+	}
+
+	.post-card--half {
+		grid-column: span 3;
+	}
+
+	.post-card--standard {
+		grid-column: span 2;
+	}
+}
+
+/* The lead card: a wide image, then the title and the excerpt side by side. */
+@media (min-width: 992px) {
+	.post-card--lead .post-card__media {
+		aspect-ratio: 21 / 9;
+	}
+
+	.post-card--lead .post-card__body {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--space-2) var(--space-4);
+		align-items: start;
+	}
+
+	.post-card--lead .post-card__meta {
+		grid-column: 1 / -1;
+	}
+
+	.post-card--lead .post-card__title,
+	.post-card--lead .post-card__excerpt {
+		margin-top: 0;
+	}
+
+	.post-card--lead .post-card__title {
+		font-size: var(--fs-h2);
+	}
+}
+
+/* A case study's card image is a logo: shown whole on white, not cropped. */
+.post-card__media--logo {
+	background-color: var(--col-white);
+	box-shadow: inset 0 0 0 1px var(--col-blue-300);
+}
+
+.post-card__media--logo img {
+	padding: var(--space-3);
+	object-fit: contain;
+}
