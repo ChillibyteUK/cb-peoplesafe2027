@@ -3432,3 +3432,14 @@ a.caption-slider__card:hover {
 	box-shadow: var(--shadow-in);
 }
 
+/* A title over the widget, and the widget beside text in a column (the Pricing page): centred, with room above. */
+.trustpilot__title {
+	margin-bottom: var(--space-2);
+	font-weight: var(--fw-bold);
+	text-align: center;
+}
+
+.wp-block-column > .trustpilot {
+	padding-block: var(--space-5) 0;
+}
+

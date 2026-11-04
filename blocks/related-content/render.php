@@ -60,6 +60,11 @@ if ( ! $cb_items ) {
 }
 
 $cb_default_title = ( 1 === count( $cb_types ) && isset( $cb_allowed_types[ $cb_types[0] ] ) ) ? $cb_allowed_types[ $cb_types[0] ] : __( 'Related content', 'cb-peoplesafe2027' );
+
+// Chosen posts are related, not the latest.
+if ( 'curated' === $cb_source && array( 'post' ) === array_values( $cb_types ) ) {
+	$cb_default_title = __( 'Related posts', 'cb-peoplesafe2027' );
+}
 $cb_heading       = ! empty( $attributes['title'] ) ? $attributes['title'] : $cb_default_title;
 $cb_four_up       = array( 'product' ) === array_values( $cb_types );
 

@@ -31,8 +31,10 @@ add_filter(
 );
 $cb_first        = isset( $GLOBALS['post'] ) ? $GLOBALS['post'] : null;
 $GLOBALS['post'] = null; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- put back below.
-echo do_blocks( '<!-- wp:cb-peoplesafe2027/hero ' . wp_json_encode( array( 'title' => $cb_title, 'intro' => $cb_hub ? cb_peoplesafe2027_rich_paragraphs( cb_peoplesafe2027_get_setting( 'knowledge_hub_intro' ) ) : ( 'infographics' === $cb_base ? cb_peoplesafe2027_get_setting( 'infographics_intro' ) : '' ) ) ) . ' /-->' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- block output.
+echo do_blocks( '<!-- wp:cb-peoplesafe2027/hero ' . wp_json_encode( array( 'title' => $cb_title ) ) . ' /-->' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- block output.
 $GLOBALS['post'] = $cb_first; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
+echo cb_peoplesafe2027_listing_intro_html( $cb_hub ? 'knowledge-hub' : $cb_base ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- block output.
 if ( $cb_hub ) {
 	cb_peoplesafe2027_render_knowledge_hub( cb_peoplesafe2027_request_region() );
 	get_footer();
@@ -75,6 +77,7 @@ $cb_list = in_array( $cb_base, array( 'whitepapers', 'brochures' ), true ); // T
 								<?php } ?>
 								<?php if ( 'video' === $cb_base ) { ?>
 									<span class="case-hub__play" aria-hidden="true"></span>
+									<?php echo cb_peoplesafe2027_video_duration_badge( get_the_ID() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the function. ?>
 								<?php } ?>
 							</div>
 							<div class="case-hub__card-title"><?php the_title(); ?></div>

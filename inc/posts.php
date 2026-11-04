@@ -241,58 +241,10 @@ function cb_peoplesafe2027_listing_schema( $graph, $context ) {
 add_filter( 'wpseo_schema_graph', 'cb_peoplesafe2027_listing_schema', 12, 2 );
 
 /**
- * Give the Blogs and News listings their own Yoast title, description and canonical address. Yoast treats /news/ as
- * the News category's archive; the address that is really listed is /uk/news/ (or /uk/blogs/), so that is the canonical.
- * The title and description come from Site-Wide Settings; a blank field keeps Yoast's.
- *
- * @param string $value  Yoast's value.
- * @param string $suffix seo_title or seo_description.
- * @return string
+ * The Blogs and News listings' canonical address: Yoast treats /news/ as the News category's archive, but the address that
+ * is really listed is /uk/news/ (or /uk/blogs/). Their title and description come from the Listing intros
+ * (inc/listing-intros.php).
  */
-function cb_peoplesafe2027_stream_seo( $value, $suffix ) {
-	$stream = get_query_var( 'cb_post_stream' );
-
-	if ( is_singular() || ! $stream ) {
-		return $value;
-	}
-
-	$setting = cb_peoplesafe2027_get_setting( $stream . '_' . $suffix, '' );
-
-	if ( $setting ) {
-		return $setting;
-	}
-
-	// Yoast's own title for these listings is its home or category archive title; a plain one reads better.
-	if ( 'seo_title' === $suffix ) {
-		return ( 'news' === $stream ? __( 'News', 'cb-peoplesafe2027' ) : __( 'Blogs', 'cb-peoplesafe2027' ) ) . ' - ' . get_bloginfo( 'name' );
-	}
-
-	return $value;
-}
-add_filter(
-	'wpseo_title',
-	function ( $title ) {
-		return cb_peoplesafe2027_stream_seo( $title, 'seo_title' );
-	}
-);
-add_filter(
-	'wpseo_opengraph_title',
-	function ( $title ) {
-		return cb_peoplesafe2027_stream_seo( $title, 'seo_title' );
-	}
-);
-add_filter(
-	'wpseo_metadesc',
-	function ( $desc ) {
-		return cb_peoplesafe2027_stream_seo( $desc, 'seo_description' );
-	}
-);
-add_filter(
-	'wpseo_opengraph_desc',
-	function ( $desc ) {
-		return cb_peoplesafe2027_stream_seo( $desc, 'seo_description' );
-	}
-);
 add_filter(
 	'wpseo_canonical',
 	function ( $canonical ) {

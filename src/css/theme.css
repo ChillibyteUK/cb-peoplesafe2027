@@ -20,4 +20,5 @@
 @import "single.css";
 @import "posts-index.css";
 @import "knowledge-hub.css";
+@import "partners.css";
 @import "blocks.css"; /* generated — concatenation of src/blocks/*.css, see src/build/generate-utilities.js */

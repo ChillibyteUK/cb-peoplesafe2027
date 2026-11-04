@@ -125,6 +125,16 @@ function cb_peoplesafe2027_register_post_types() {
 			'taxes'    => array( 'landing_type' ),
 			'supports' => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
 		),
+		'listing_intro' => array(
+			'plural'   => 'Listing intros',
+			'single'   => 'Listing intro',
+			'icon'     => 'dashicons-text-page',
+			'rewrite'  => false,
+			'archive'  => false,
+			'public'   => false, // No address of its own: its blocks and SEO fields belong to a listing such as /uk/accreditations/.
+			'taxes'    => array(),
+			'supports' => array( 'title', 'editor', 'revisions' ),
+		),
 		'person'       => array(
 			'plural'   => 'People',
 			'single'   => 'Person',
@@ -268,3 +278,17 @@ function cb_peoplesafe2027_resource_type_body_class( $classes ) {
 	return $classes;
 }
 add_filter( 'body_class', 'cb_peoplesafe2027_resource_type_body_class' );
+
+/**
+ * Listing intros have no address, so Yoast would leave them out. They hold the SEO title and description for a listing
+ * such as /uk/accreditations/, so Yoast's box is added to them (they stay out of the sitemap: they are not public).
+ *
+ * @param string[] $types Post types Yoast offers its box on.
+ * @return string[]
+ */
+function cb_peoplesafe2027_yoast_listing_intro( $types ) {
+	$types['listing_intro'] = 'listing_intro';
+
+	return $types;
+}
+add_filter( 'wpseo_accessible_post_types', 'cb_peoplesafe2027_yoast_listing_intro' );

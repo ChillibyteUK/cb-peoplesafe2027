@@ -1,10 +1,10 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
-import { SelectControl } from '@wordpress/components';
+import { SelectControl, TextControl } from '@wordpress/components';
 import EditorBlockShell from '../../_shared/EditorBlockShell';
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
-	const { widget, card } = attributes;
+	const { widget, card, title } = attributes;
 	const blockProps = useBlockProps( { className: 'container cb-peoplesafe2027-editor-block' } );
 	const configured = window.cbPeoplesafe2027Trustpilot || [];
 	const options = [ { label: __( 'First widget in the settings', 'cb-peoplesafe2027' ), value: '' }, ...configured ];
@@ -21,6 +21,12 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						? __( 'The widgets are defined under Site-Wide Settings, Trustpilot.', 'cb-peoplesafe2027' )
 						: __( 'No widgets are set up yet. Add them under Site-Wide Settings, Trustpilot.', 'cb-peoplesafe2027' )
 				}
+			/>
+			<TextControl
+				label={ __( 'Title (optional)', 'cb-peoplesafe2027' ) }
+				value={ title }
+				onChange={ ( value ) => setAttributes( { title: value } ) }
+				help={ __( 'A short line above the widget, for example "Find us on Trustpilot".', 'cb-peoplesafe2027' ) }
 			/>
 			<SelectControl
 				label={ __( 'Card', 'cb-peoplesafe2027' ) }

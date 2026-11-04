@@ -3723,6 +3723,15 @@ select {
 	object-fit: contain;
 }
 
+/* A listing's intro (a Listing intro's blocks, under the Hero): left-aligned text a readable width, with room below. */
+.listing-intro {
+	padding-bottom: var(--space-4);
+}
+
+.listing-intro .container > :is(p, ul, ol, h2, h3) {
+	max-inline-size: 60rem;
+}
+
 /*
  * The Knowledge Hub page (inc/knowledge-hub.php): a search box over everything, a grid of tiles (one for each kind of
  * content, with how many there are), the latest, and a row of the newest of the main kinds. The cards are the
@@ -3955,6 +3964,85 @@ select {
 @media (min-width: 1200px) {
 	.knowledge-hub__cards {
 		grid-template-columns: repeat(4, 1fr);
+	}
+}
+
+/* A video's length, bottom right of its image. In a curved card it sits above the curve. */
+.video-duration {
+	position: absolute;
+	inset-block-end: var(--space-2);
+	inset-inline-end: var(--space-2);
+	padding: 0.1rem var(--space-2);
+	border-radius: var(--radius-sm);
+	background-color: rgb(0 0 0 / 0.75);
+	color: var(--col-white);
+	font-size: var(--fs-small);
+	font-variant-numeric: tabular-nums;
+	line-height: 1.4;
+}
+
+.hub-card .video-duration {
+	inset-block-end: calc(15% + var(--space-1));
+}
+
+/*
+ * Partnerships and accreditations (archive-partner.php). Partnerships use the case studies' logo cards. An accreditation
+ * is its logo, its name and a line about it, in a grid of three on desktop.
+ */
+
+.partners__heading {
+	margin-bottom: var(--space-3);
+}
+
+.partners__accreditations {
+	display: grid;
+	gap: var(--space-5) var(--space-4);
+	margin: var(--space-4) 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.accreditation {
+	text-align: center;
+}
+
+.accreditation__image {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	block-size: 10rem;
+	margin-bottom: var(--space-3);
+}
+
+.accreditation__image img {
+	display: block;
+	max-inline-size: 100%;
+	max-block-size: 100%;
+	inline-size: auto;
+	block-size: auto;
+	object-fit: contain;
+}
+
+.accreditation__title {
+	margin-bottom: var(--space-2);
+	font-size: var(--fs-h4);
+}
+
+.accreditation__intro {
+	margin: 0;
+	font-size: var(--fs-small);
+	text-wrap: pretty;
+}
+
+@media (min-width: 768px) {
+	.partners__accreditations {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (min-width: 992px) {
+	.partners__accreditations {
+		grid-template-columns: repeat(3, 1fr);
 	}
 }
 
@@ -7390,6 +7478,18 @@ a.caption-slider__card:hover {
 	border-radius: var(--radius-lg);
 	box-shadow: var(--shadow-in);
 }
+
+/* A title over the widget, and the widget beside text in a column (the Pricing page): centred, with room above. */
+.trustpilot__title {
+	margin-bottom: var(--space-2);
+	font-weight: var(--fw-bold);
+	text-align: center;
+}
+
+.wp-block-column > .trustpilot {
+	padding-block: var(--space-5) 0;
+}
+
 /* generated — concatenation of src/blocks/*.css, see src/build/generate-utilities.js */
 
 /*# sourceMappingURL=theme.css.map */

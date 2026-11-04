@@ -4,11 +4,12 @@
 	"name": "cb-peoplesafe2027/trustpilot-widget",
 	"title": "Trustpilot widget",
 	"category": "cb-peoplesafe2027",
-	"description": "A Trustpilot TrustBox. The widgets (template, token, size) are set once under Site-Wide Settings, Trustpilot; this block only picks one.",
+	"description": "A Trustpilot TrustBox. The widgets (template, token, size) are set once under Site-Wide Settings, Trustpilot; this block picks one, and can put a short title above it.",
 	"icon": "star-filled",
 	"attributes": {
 		"widget": { "type": "string", "default": "" },
-		"card": { "type": "string", "default": "" }
+		"card": { "type": "string", "default": "" },
+		"title": { "type": "string", "default": "" }
 	},
 	"supports": {
 		"anchor": true,

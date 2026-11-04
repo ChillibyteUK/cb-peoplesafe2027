@@ -49,4 +49,6 @@ require_once CB_PEOPLESAFE2027_DIR . '/inc/people.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/posts.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/share.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/posts-index.php';
+require_once CB_PEOPLESAFE2027_DIR . '/inc/partners.php';
+require_once CB_PEOPLESAFE2027_DIR . '/inc/listing-intros.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/knowledge-hub.php';

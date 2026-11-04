@@ -232,3 +232,21 @@
 		grid-template-columns: repeat(4, 1fr);
 	}
 }
+
+/* A video's length, bottom right of its image. In a curved card it sits above the curve. */
+.video-duration {
+	position: absolute;
+	inset-block-end: var(--space-2);
+	inset-inline-end: var(--space-2);
+	padding: 0.1rem var(--space-2);
+	border-radius: var(--radius-sm);
+	background-color: rgb(0 0 0 / 0.75);
+	color: var(--col-white);
+	font-size: var(--fs-small);
+	font-variant-numeric: tabular-nums;
+	line-height: 1.4;
+}
+
+.hub-card .video-duration {
+	inset-block-end: calc(15% + var(--space-1));
+}

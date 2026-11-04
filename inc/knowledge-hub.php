@@ -108,6 +108,7 @@ function cb_peoplesafe2027_hub_card( $post_id, $key ) {
 			<?php echo get_the_post_thumbnail( $post_id, 'large', array( 'alt' => '', 'loading' => 'lazy' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- core image markup. ?>
 			<?php if ( 'video' === $key ) { ?>
 				<span class="case-hub__play" aria-hidden="true"></span>
+				<?php echo cb_peoplesafe2027_video_duration_badge( $post_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the function. ?>
 			<?php } ?>
 		</div>
 		<div class="hub-card__body">
@@ -243,26 +244,6 @@ function cb_peoplesafe2027_render_knowledge_hub( $region ) {
 function cb_peoplesafe2027_is_knowledge_hub() {
 	return is_post_type_archive( 'resource' ) && 'resources' === get_query_var( 'cb_term_base' );
 }
-
-/**
- * Title and description for the hub: from Site-Wide Settings, or a plain title.
- */
-add_filter(
-	'wpseo_title',
-	function ( $title ) {
-		if ( ! cb_peoplesafe2027_is_knowledge_hub() ) {
-			return $title;
-		}
-
-		return cb_peoplesafe2027_get_setting( 'knowledge_hub_seo_title', __( 'Knowledge Hub', 'cb-peoplesafe2027' ) . ' - ' . get_bloginfo( 'name' ) );
-	}
-);
-add_filter(
-	'wpseo_metadesc',
-	function ( $desc ) {
-		return cb_peoplesafe2027_is_knowledge_hub() ? cb_peoplesafe2027_get_setting( 'knowledge_hub_seo_description', $desc ) : $desc;
-	}
-);
 
 /**
  * Schema for the hub: a CollectionPage whose list is the kinds of content, each with its address.

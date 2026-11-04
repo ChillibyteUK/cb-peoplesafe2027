@@ -195,3 +195,12 @@
 	padding: var(--space-3);
 	object-fit: contain;
 }
+
+/* A listing's intro (a Listing intro's blocks, under the Hero): left-aligned text a readable width, with room below. */
+.listing-intro {
+	padding-bottom: var(--space-4);
+}
+
+.listing-intro .container > :is(p, ul, ol, h2, h3) {
+	max-inline-size: 60rem;
+}

@@ -20,10 +20,8 @@ $cb_here     = preg_replace( '#/page/\d+/$#', '/', $cb_here );
 
 if ( $cb_stories ) {
 	$cb_title = __( 'Real life stories', 'cb-peoplesafe2027' );
-	$cb_intro = cb_peoplesafe2027_get_setting( 'stories_intro' );
 } else {
 	$cb_title = __( 'Case studies', 'cb-peoplesafe2027' );
-	$cb_intro = cb_peoplesafe2027_get_setting( 'case_studies_intro' );
 }
 
 // On an archive the global post is the first one listed, and the Hero falls back to the current post's title,
@@ -36,8 +34,10 @@ add_filter(
 );
 $cb_first        = isset( $GLOBALS['post'] ) ? $GLOBALS['post'] : null;
 $GLOBALS['post'] = null; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- put back below.
-echo do_blocks( '<!-- wp:cb-peoplesafe2027/hero ' . wp_json_encode( array( 'title' => $cb_title, 'intro' => $cb_intro ) ) . ' /-->' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- block output.
+echo do_blocks( '<!-- wp:cb-peoplesafe2027/hero ' . wp_json_encode( array( 'title' => $cb_title ) ) . ' /-->' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- block output.
 $GLOBALS['post'] = $cb_first; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
+echo cb_peoplesafe2027_listing_intro_html( $cb_stories ? 'stories' : 'case-studies' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- block output.
 
 $cb_video = $cb_stories && ! $cb_incident ? cb_peoplesafe2027_get_setting( 'stories_video_url' ) : '';
 

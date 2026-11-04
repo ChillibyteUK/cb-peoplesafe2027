@@ -32,6 +32,8 @@ $cb_first        = isset( $GLOBALS['post'] ) ? $GLOBALS['post'] : null;
 $GLOBALS['post'] = null; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- put back below.
 echo do_blocks( '<!-- wp:cb-peoplesafe2027/hero ' . wp_json_encode( array( 'title' => $cb_title ) ) . ' /-->' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- block output.
 $GLOBALS['post'] = $cb_first; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
+echo cb_peoplesafe2027_listing_intro_html( $cb_stream ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- block output.
 ?>
 <section
 	class="case-hub posts-index"

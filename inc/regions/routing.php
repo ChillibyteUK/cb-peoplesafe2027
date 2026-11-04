@@ -334,6 +334,13 @@ function cb_peoplesafe2027_routing_archives( $query ) {
 		$query->set( 'posts_per_page', 12 );
 	}
 
+	// Partnerships and accreditations are short lists in a set order: all of them, on one page.
+	if ( $term_base && 'partner' === $type && ! $query->get( 'partner' ) ) {
+		$query->set( 'posts_per_page', -1 );
+		$query->set( 'orderby', 'menu_order' );
+		$query->set( 'order', 'ASC' );
+	}
+
 	if ( $term_base && 'resource' === $type && ! $query->get( 'resource' ) ) {
 		$query->set( 'posts_per_page', 12 );
 		$query->set(

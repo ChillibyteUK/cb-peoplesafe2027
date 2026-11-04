@@ -222,3 +222,34 @@ function cb_peoplesafe2027_video_schema( $graph, $context ) {
 	return $graph;
 }
 add_filter( 'wpseo_schema_graph', 'cb_peoplesafe2027_video_schema', 10, 2 );
+
+/**
+ * A video's length as it is shown on a card: 1:48, or 1:02:09 over an hour. Empty when it is not known (it is saved
+ * with the video, in cb_video_duration).
+ *
+ * @param int $post_id Resource ID.
+ * @return string
+ */
+function cb_peoplesafe2027_video_duration_label( $post_id ) {
+	$seconds = (int) get_post_meta( $post_id, 'cb_video_duration', true );
+
+	if ( $seconds < 1 ) {
+		return '';
+	}
+
+	return $seconds >= HOUR_IN_SECONDS
+		? sprintf( '%d:%02d:%02d', intdiv( $seconds, 3600 ), intdiv( $seconds % 3600, 60 ), $seconds % 60 )
+		: sprintf( '%d:%02d', intdiv( $seconds, 60 ), $seconds % 60 );
+}
+
+/**
+ * The duration badge for a video's card image, or an empty string.
+ *
+ * @param int $post_id Resource ID.
+ * @return string HTML.
+ */
+function cb_peoplesafe2027_video_duration_badge( $post_id ) {
+	$label = cb_peoplesafe2027_video_duration_label( $post_id );
+
+	return $label ? '<span class="video-duration"><span class="visually-hidden">' . esc_html__( 'Length', 'cb-peoplesafe2027' ) . ' </span>' . esc_html( $label ) . '</span>' : '';
+}

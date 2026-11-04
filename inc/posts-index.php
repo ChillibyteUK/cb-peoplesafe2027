@@ -236,6 +236,7 @@ function cb_peoplesafe2027_post_card( $post_id, $variant = 'standard', $context 
 				<?php if ( $badge ) { ?>
 					<span class="post-card__badge"><?php echo esc_html( $badge ); ?></span>
 				<?php } ?>
+				<?php echo 'resource' === $type ? cb_peoplesafe2027_video_duration_badge( $post_id ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the function. ?>
 			</div>
 			<div class="post-card__body">
 				<p class="post-card__meta"><?php echo esc_html( get_the_date( 'j M Y', $post_id ) ); ?><?php echo 'post' === $type ? ' &middot; ' . esc_html( sprintf( /* translators: %d: minutes */ __( '%d min read', 'cb-peoplesafe2027' ), $minutes ) ) : ''; ?></p>

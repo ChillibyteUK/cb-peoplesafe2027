@@ -50,6 +50,9 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'trustp
 ?>
 <div <?php echo $cb_wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
 	<div class="container">
+		<?php if ( ! empty( $attributes['title'] ) ) { ?>
+			<p class="trustpilot__title"><?php echo esc_html( $attributes['title'] ); ?></p>
+		<?php } ?>
 		<div class="<?php echo esc_attr( $cb_card_class ); ?>">
 		<div
 			class="trustpilot-widget"
