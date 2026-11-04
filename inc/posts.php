@@ -144,11 +144,35 @@ function cb_peoplesafe2027_author_schema( $graph, $context ) {
 		$piece['jobTitle'] = $role;
 	}
 
+	$linkedin = (string) get_post_meta( $person->ID, 'cb_linkedin', true );
+
+	if ( $linkedin ) {
+		$piece['sameAs'] = array( $linkedin );
+	}
+
 	$graph[] = $piece;
 
 	return $graph;
 }
 add_filter( 'wpseo_schema_graph', 'cb_peoplesafe2027_author_schema', 11, 2 );
+
+/**
+ * Yoast points the WebPage piece at an author it does not output (author archives are not used), leaving an author
+ * reference with an empty @id. Drop any such empty reference; the article's own author is the real one.
+ *
+ * @param array[] $graph Yoast's schema pieces.
+ * @return array[]
+ */
+function cb_peoplesafe2027_drop_empty_author_refs( $graph ) {
+	foreach ( $graph as $key => $piece ) {
+		if ( isset( $piece['author'] ) && is_array( $piece['author'] ) && isset( $piece['author']['@id'] ) && '' === trim( (string) $piece['author']['@id'] ) ) {
+			unset( $graph[ $key ]['author'] );
+		}
+	}
+
+	return $graph;
+}
+add_filter( 'wpseo_schema_graph', 'cb_peoplesafe2027_drop_empty_author_refs', 12 );
 
 /**
  * Reading time of a post in whole minutes (at least one), from its written text. Blocks that draw their own content
