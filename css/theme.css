@@ -4933,13 +4933,36 @@ a.caption-slider__card:hover {
 		display: block;
 	}
 
+	/*
+	 * With an image the section has no vertical padding, so the image sits flush with the top and bottom of the
+	 * band (the section is as tall as the image or the text, whichever is taller). The text column keeps the
+	 * spacing instead.
+	 */
+	.cta-banner--has-image {
+		align-items: stretch;
+		padding-block: 0;
+	}
+
+	.cta-banner--has-image .cta-banner__grid {
+		align-items: stretch;
+	}
+
+	.cta-banner--has-image .cta-banner__media {
+		align-self: end;
+	}
+
+	.cta-banner--has-image .cta-banner__content {
+		align-self: center;
+		padding-block: var(--space-5);
+	}
+
 	.cta-banner__image {
 		display: block;
 		width: 100%;
 		height: auto;
-		max-height: 18rem;
+		max-height: 28rem;
 		object-fit: contain;
-		object-position: left;
+		object-position: left bottom;
 	}
 
 	/* No image: the text still sits in the right-hand seven twelfths. */
