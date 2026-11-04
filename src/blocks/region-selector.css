@@ -60,19 +60,12 @@
 }
 
 .region-selector__text {
-	display: grid;
 	flex: 1;
-	gap: 0.125rem;
 }
 
 .region-selector__country {
 	font-size: var(--fs-h4);
 	font-weight: var(--fw-bold);
-}
-
-.region-selector__name {
-	color: var(--col-body-muted);
-	font-size: var(--fs-small);
 }
 
 .region-selector__arrow {

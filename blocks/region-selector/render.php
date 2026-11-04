@@ -13,12 +13,6 @@ defined( 'ABSPATH' ) || exit;
 
 $cb_heading = isset( $attributes['heading'] ) ? $attributes['heading'] : '';
 $cb_intro   = isset( $attributes['intro'] ) ? $attributes['intro'] : '';
-$cb_countries = array(
-	'uk' => __( 'United Kingdom', 'cb-peoplesafe2027' ),
-	'us' => __( 'United States', 'cb-peoplesafe2027' ),
-	'au' => __( 'Australia', 'cb-peoplesafe2027' ),
-	'ca' => __( 'Canada', 'cb-peoplesafe2027' ),
-);
 $cb_regions = function_exists( 'cb_peoplesafe2027_region_selector_items' ) ? cb_peoplesafe2027_region_selector_items() : array();
 
 if ( empty( $cb_regions ) ) {
@@ -41,7 +35,7 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'region
 					<?php
 					$cb_available = ! isset( $cb_region['available'] ) || $cb_region['available'];
 					$cb_flag      = function_exists( 'cb_peoplesafe2027_flag_url' ) ? cb_peoplesafe2027_flag_url( $cb_region['locale'] ) : '';
-					$cb_country   = isset( $cb_countries[ $cb_region['slug'] ] ) ? $cb_countries[ $cb_region['slug'] ] : $cb_region['name'];
+					$cb_country   = cb_peoplesafe2027_region_country_name( $cb_region['slug'], $cb_region['name'] );
 					$cb_inner     = '';
 
 					ob_start();
@@ -52,7 +46,6 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'region
 					?>
 					<span class="region-selector__text">
 						<span class="region-selector__country"><?php echo esc_html( $cb_country ); ?></span>
-						<span class="region-selector__name"><?php echo esc_html( $cb_region['name'] ); ?></span>
 					</span>
 					<?php
 					if ( $cb_available ) {

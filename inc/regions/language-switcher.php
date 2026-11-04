@@ -18,6 +18,24 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
+ * A region's country name, for the Root hub cards and as text for screen readers in the switcher.
+ *
+ * @param string $slug Region slug (uk, us, au, ca).
+ * @param string $fallback Used for any other slug.
+ * @return string
+ */
+function cb_peoplesafe2027_region_country_name( $slug, $fallback = '' ) {
+	$names = array(
+		'uk' => __( 'United Kingdom', 'cb-peoplesafe2027' ),
+		'us' => __( 'United States', 'cb-peoplesafe2027' ),
+		'au' => __( 'Australia', 'cb-peoplesafe2027' ),
+		'ca' => __( 'Canada', 'cb-peoplesafe2027' ),
+	);
+
+	return isset( $names[ $slug ] ) ? $names[ $slug ] : $fallback;
+}
+
+/**
  * URL of a region's flag, from its locale, or an empty string when the theme
  * has no flag for it.
  *
@@ -191,7 +209,7 @@ function cb_peoplesafe2027_language_switcher() {
 			<span class="visually-hidden">
 				<?php
 				/* translators: %s: current region name */
-				echo esc_html( sprintf( __( 'Region: %s. Change region', 'cb-peoplesafe2027' ), $current['name'] ) );
+				echo esc_html( sprintf( __( 'Region: %s. Change region', 'cb-peoplesafe2027' ), cb_peoplesafe2027_region_country_name( $current['slug'], $current['name'] ) ) );
 				?>
 			</span>
 			<svg class="language-switcher__chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M1 1l4 4 4-4" /></svg>
@@ -202,12 +220,14 @@ function cb_peoplesafe2027_language_switcher() {
 					<?php if ( $item['available'] ) { ?>
 						<a class="language-switcher__link" href="<?php echo esc_url( $item['url'] ); ?>" hreflang="<?php echo esc_attr( $item['locale'] ); ?>" lang="<?php echo esc_attr( $item['locale'] ); ?>"<?php echo $item['current'] ? ' aria-current="true"' : ''; ?>>
 							<?php cb_peoplesafe2027_flag_img( $item['flag'] ); ?>
-							<span><?php echo esc_html( $item['name'] ); ?></span>
+							<span aria-hidden="true"><?php echo esc_html( strtoupper( $item['slug'] ) ); ?></span>
+							<span class="visually-hidden"><?php echo esc_html( cb_peoplesafe2027_region_country_name( $item['slug'], $item['name'] ) ); ?></span>
 						</a>
 					<?php } else { ?>
 						<span class="language-switcher__link language-switcher__link--disabled" aria-disabled="true" lang="<?php echo esc_attr( $item['locale'] ); ?>">
 							<?php cb_peoplesafe2027_flag_img( $item['flag'] ); ?>
-							<span><?php echo esc_html( $item['name'] ); ?></span>
+							<span aria-hidden="true"><?php echo esc_html( strtoupper( $item['slug'] ) ); ?></span>
+							<span class="visually-hidden"><?php echo esc_html( cb_peoplesafe2027_region_country_name( $item['slug'], $item['name'] ) ); ?></span>
 							<span class="language-switcher__soon"><?php esc_html_e( 'Coming soon', 'cb-peoplesafe2027' ); ?></span>
 						</span>
 					<?php } ?>
