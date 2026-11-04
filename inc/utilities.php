@@ -171,7 +171,7 @@ function cb_peoplesafe2027_get_breadcrumbs( $post_id = 0 ) {
 				$filter = $term && ! is_wp_error( $term ) ? html_entity_decode( $term->name ) : '';
 			}
 
-			if ( '' !== $label && ( is_post_type_archive( array( 'case_study', 'resource' ) ) || get_query_var( 'cb_post_stream' ) ) ) {
+			if ( '' !== $label && ( is_post_type_archive( array( 'case_study', 'resource', 'legislation' ) ) || get_query_var( 'cb_post_stream' ) ) ) {
 				$breadcrumbs[] = array(
 					'label' => __( 'Knowledge Hub', 'cb-peoplesafe2027' ),
 					'url'   => trailingslashit( $breadcrumbs[0]['url'] ) . 'resources/',
@@ -230,7 +230,7 @@ function cb_peoplesafe2027_get_breadcrumbs( $post_id = 0 ) {
 		if ( $parent && $parent !== $home && 0 === strpos( $parent, $home ) ) {
 			$object = get_post_type_object( $type );
 
-			if ( in_array( $type, array( 'case_study', 'resource' ), true ) ) {
+			if ( in_array( $type, array( 'case_study', 'resource', 'legislation' ), true ) ) {
 				$breadcrumbs[] = array(
 					'label' => __( 'Knowledge Hub', 'cb-peoplesafe2027' ),
 					'url'   => trailingslashit( $breadcrumbs[0]['url'] ) . 'resources/',

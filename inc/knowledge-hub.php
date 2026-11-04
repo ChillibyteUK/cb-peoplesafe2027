@@ -21,6 +21,7 @@ function cb_peoplesafe2027_hub_types() {
 	return array(
 		'blogs'        => array( __( 'Blogs', 'cb-peoplesafe2027' ), 'blogs/', 'post', '' ),
 		'news'         => array( __( 'News', 'cb-peoplesafe2027' ), 'news/', 'post', '' ),
+		'legislation'  => array( __( 'Legislation', 'cb-peoplesafe2027' ), 'legislation/', 'legislation', '' ),
 		'guides'       => array( __( 'Guides', 'cb-peoplesafe2027' ), 'guides/', 'resource', 'guide' ),
 		'whitepapers'  => array( __( 'Whitepapers', 'cb-peoplesafe2027' ), 'whitepapers/', 'resource', 'whitepaper' ),
 		'brochures'    => array( __( 'Brochures', 'cb-peoplesafe2027' ), 'brochures/', 'resource', 'brochure' ),
@@ -129,7 +130,7 @@ function cb_peoplesafe2027_hub_card( $post_id, $key ) {
 function cb_peoplesafe2027_hub_latest_ids( $region, $count ) {
 	$found = array();
 
-	foreach ( array( 'blogs', 'news', 'guides', 'whitepapers' ) as $key ) {
+	foreach ( array( 'blogs', 'news', 'legislation', 'guides', 'whitepapers' ) as $key ) {
 		$args           = cb_peoplesafe2027_hub_query_args( $key, $region, $count );
 		$args['fields'] = 'ids';
 
@@ -322,3 +323,15 @@ add_filter(
 		return $classes;
 	}
 );
+
+/**
+ * The Knowledge Hub pages its own sections, not the archive query behind it, so Yoast's rel="next" would point at a
+ * /page/2/ that does not exist.
+ *
+ * @param string $url The adjacent page's URL.
+ * @return string
+ */
+function cb_peoplesafe2027_hub_no_adjacent_rel( $url ) {
+	return ( function_exists( 'cb_peoplesafe2027_current_listing' ) && 'knowledge-hub' === cb_peoplesafe2027_current_listing() ) ? '' : $url;
+}
+add_filter( 'wpseo_adjacent_rel_url', 'cb_peoplesafe2027_hub_no_adjacent_rel' );

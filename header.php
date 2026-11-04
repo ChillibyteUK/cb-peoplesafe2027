@@ -19,8 +19,8 @@
 
 <!-- HEADER-NAV:START -->
 <?php
-// The root hub (region chooser) shows the logo only.
-$cb_logo_only = is_singular( 'root_hub' );
+// The root hub (region chooser) and a minimal landing page show the logo only.
+$cb_logo_only = cb_peoplesafe2027_logo_only();
 $cb_nav       = $cb_logo_only ? array() : cb_peoplesafe2027_nav_parts();
 ?>
 <header id="masthead" class="site-header">

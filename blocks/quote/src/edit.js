@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
 import { Button, TextareaControl, TextControl } from '@wordpress/components';
+import CtaButtonsField from '../../_shared/CtaButtonsField';
 import EditorBlockShell from '../../_shared/EditorBlockShell';
 import ImagePicker from '../../_shared/ImagePicker';
 import useRowMotion from '../../_shared/useRowMotion';
@@ -8,7 +9,7 @@ import useRowMotion from '../../_shared/useRowMotion';
 const EMPTY_QUOTE = { quote: '', attribution: '', logo: 0, logoUrl: '', image: 0, imageUrl: '' };
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
-	const { quotes } = attributes;
+	const { quotes, preTitle, title, intro, buttons } = attributes;
 	const blockProps = useBlockProps( { className: 'container cb-peoplesafe2027-editor-block' } );
 	const rows = quotes || [];
 
@@ -29,6 +30,22 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
 	return (
 		<EditorBlockShell blockProps={ blockProps } clientId={ clientId } title="Quote" textDomain="cb-peoplesafe2027">
+			<div style={ { display: 'flex', flexWrap: 'wrap', gap: '12px' } }>
+				<div style={ { flex: '1 1 0%' } }>
+					<TextControl label={ __( 'Pre-title (optional)', 'cb-peoplesafe2027' ) } value={ preTitle } onChange={ ( value ) => setAttributes( { preTitle: value } ) } />
+				</div>
+				<div style={ { flex: '2 1 0%' } }>
+					<TextControl label={ __( 'Title (optional)', 'cb-peoplesafe2027' ) } value={ title } onChange={ ( value ) => setAttributes( { title: value } ) } />
+				</div>
+			</div>
+			<TextareaControl
+				label={ __( 'Text (optional)', 'cb-peoplesafe2027' ) }
+				rows={ 3 }
+				value={ intro }
+				onChange={ ( value ) => setAttributes( { intro: value } ) }
+				help={ __( 'With a pre-title, title, text or button, they sit in a column beside the quotes.', 'cb-peoplesafe2027' ) }
+			/>
+			<CtaButtonsField value={ buttons } onChange={ ( rows ) => setAttributes( { buttons: rows } ) } />
 			<div className="cb-peoplesafe2027-faq-rows">
 				<label className="cb-peoplesafe2027-editor-field__label">{ __( 'Quotes', 'cb-peoplesafe2027' ) }</label>
 				{ rows.map( ( row, index ) => (

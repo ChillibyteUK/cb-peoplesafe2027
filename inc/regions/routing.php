@@ -334,6 +334,11 @@ function cb_peoplesafe2027_routing_archives( $query ) {
 		$query->set( 'posts_per_page', 12 );
 	}
 
+	// The Legislation listing loads more nine at a time, like Blogs and News.
+	if ( 'legislation' === $type && $query->is_post_type_archive() ) {
+		$query->set( 'posts_per_page', CB_PEOPLESAFE2027_POSTS_PER_BATCH );
+	}
+
 	// Partnerships and accreditations are short lists in a set order: all of them, on one page.
 	if ( $term_base && 'partner' === $type && ! $query->get( 'partner' ) ) {
 		$query->set( 'posts_per_page', -1 );

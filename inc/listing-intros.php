@@ -22,6 +22,7 @@ function cb_peoplesafe2027_listings() {
 		'knowledge-hub' => __( 'Knowledge Hub', 'cb-peoplesafe2027' ),
 		'blogs'         => __( 'Blogs', 'cb-peoplesafe2027' ),
 		'news'          => __( 'News', 'cb-peoplesafe2027' ),
+		'legislation'   => __( 'Legislation', 'cb-peoplesafe2027' ),
 		'guides'        => __( 'Guides', 'cb-peoplesafe2027' ),
 		'whitepapers'   => __( 'Whitepapers', 'cb-peoplesafe2027' ),
 		'brochures'     => __( 'Brochures', 'cb-peoplesafe2027' ),
@@ -48,6 +49,10 @@ function cb_peoplesafe2027_current_listing() {
 
 	if ( $stream ) {
 		return $stream;
+	}
+
+	if ( is_post_type_archive( 'legislation' ) ) {
+		return 'legislation';
 	}
 
 	$base = (string) get_query_var( 'cb_term_base' );

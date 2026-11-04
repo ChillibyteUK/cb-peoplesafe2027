@@ -17,6 +17,7 @@ while ( have_posts() ) {
 	echo do_blocks( '<!-- wp:cb-peoplesafe2027/hero /-->' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- block output.
 	remove_filter( 'post_thumbnail_id', '__return_zero' );
 	the_content();
+	echo cb_peoplesafe2027_more_videos( get_the_ID() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built in the function.
 }
 
 get_footer();

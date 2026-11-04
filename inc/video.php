@@ -253,3 +253,46 @@ function cb_peoplesafe2027_video_duration_badge( $post_id ) {
 
 	return $label ? '<span class="video-duration"><span class="visually-hidden">' . esc_html__( 'Length', 'cb-peoplesafe2027' ) . ' </span>' . esc_html( $label ) . '</span>' : '';
 }
+
+/**
+ * The row of other videos at the end of a video page: three more, newest first, not this one and not hidden ones.
+ *
+ * @param int $post_id The video being viewed.
+ * @return string HTML, or an empty string when this is not a video or there are no others.
+ */
+function cb_peoplesafe2027_more_videos( $post_id ) {
+	if ( ! has_term( 'video', 'resource_type', $post_id ) && ! has_term( 'videos', 'resource_type', $post_id ) ) {
+		return '';
+	}
+
+	$args                   = cb_peoplesafe2027_hub_query_args( 'video', cb_peoplesafe2027_request_region(), 3 );
+	$args['fields']         = 'ids';
+	$args['post__not_in']   = array( $post_id );
+	$ids                    = ( new WP_Query( $args ) )->posts;
+
+	if ( ! $ids ) {
+		return '';
+	}
+
+	$types = cb_peoplesafe2027_hub_types();
+
+	ob_start();
+	?>
+	<section class="knowledge-hub__row more-videos">
+		<div class="container">
+			<div class="knowledge-hub__row-header">
+				<h2 class="knowledge-hub__heading"><?php esc_html_e( 'More videos', 'cb-peoplesafe2027' ); ?></h2>
+				<a class="knowledge-hub__all" href="<?php echo esc_url( cb_peoplesafe2027_region_url( cb_peoplesafe2027_request_region() ) . $types['video'][1] ); ?>"><?php esc_html_e( 'View all', 'cb-peoplesafe2027' ); ?> <span class="visually-hidden"><?php esc_html_e( 'videos', 'cb-peoplesafe2027' ); ?></span> &rarr;</a>
+			</div>
+			<div class="knowledge-hub__cards knowledge-hub__cards--three">
+				<?php
+				foreach ( $ids as $id ) {
+					echo cb_peoplesafe2027_hub_card( $id, 'video' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built in cb_peoplesafe2027_hub_card().
+				}
+				?>
+			</div>
+		</div>
+	</section>
+	<?php
+	return ob_get_clean();
+}

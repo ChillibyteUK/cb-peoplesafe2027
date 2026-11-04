@@ -13,8 +13,8 @@
 $cb_region = function_exists( 'pll_current_language' ) && pll_current_language() ? pll_current_language() : '';
 $cb_home   = $cb_region && function_exists( 'cb_peoplesafe2027_region_url' ) ? cb_peoplesafe2027_region_url( $cb_region ) : home_url( '/' );
 
-// The root hub (region chooser) shows the logo only in the header, and no menus here.
-$cb_menus = ! is_singular( 'root_hub' );
+// The root hub (region chooser) and a minimal landing page show the logo only in the header, and no menus here.
+$cb_menus = ! cb_peoplesafe2027_logo_only();
 ?>
 </main>
 

@@ -1303,7 +1303,7 @@ button.site-nav__toggle {
 	top: 100%;
 	right: 0;
 	left: auto;
-	min-width: 12rem;
+	min-width: 15rem;
 	margin: var(--space-1) 0 0;
 	padding: var(--space-1);
 	background-color: var(--col-body-bg);
@@ -1335,6 +1335,36 @@ button.site-nav__toggle {
 /* A region with no equivalent of this page links to its home page. */
 .language-switcher__item.is-fallback .language-switcher__link {
 	color: var(--col-body-muted);
+}
+
+/* A region with no pages yet: not a link, faded, with a Coming soon label. */
+.language-switcher__link--disabled {
+	cursor: not-allowed;
+}
+
+.language-switcher__link--disabled:hover {
+	background-color: transparent;
+}
+
+.language-switcher__link--disabled .flag,
+.language-switcher__link--disabled > span:not(.language-switcher__soon) {
+	opacity: 0.55;
+}
+
+.language-switcher__link--disabled > span:not(.language-switcher__soon) {
+	white-space: nowrap;
+}
+
+.language-switcher__link--disabled .flag {
+	filter: grayscale(1);
+}
+
+.language-switcher__soon {
+	margin-inline-start: auto;
+	color: var(--col-body-muted);
+	font-size: var(--fs-xs, 0.75rem);
+	font-weight: var(--fw-bold);
+	white-space: nowrap;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3965,6 +3995,10 @@ select {
 	.knowledge-hub__cards {
 		grid-template-columns: repeat(4, 1fr);
 	}
+
+	.knowledge-hub__cards--three {
+		grid-template-columns: repeat(3, 1fr);
+	}
 }
 
 /* A video's length, bottom right of its image. In a curved card it sits above the curve. */
@@ -6158,6 +6192,184 @@ a.caption-slider__card:hover {
 		object-fit: contain;
 		object-position: right bottom;
 	}
+}
+
+/*
+ * With an intro (pre-title, title, text, button) the block is two columns from lg: the intro (5/12) beside the
+ * quotes (7/12). The pre-title matches Text and media's.
+ */
+.quote__layout {
+	display: grid;
+	gap: var(--space-4);
+	align-items: center;
+}
+
+.quote__intro p {
+	text-wrap: pretty;
+}
+
+.quote__pretitle {
+	margin-bottom: var(--space-2);
+	color: var(--col-blue-400);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-bold);
+}
+
+@media (min-width: 992px) {
+	.quote--with-intro .quote__layout {
+		grid-template-columns: 5fr 7fr;
+		gap: var(--space-6);
+	}
+
+	.quote--with-intro .quote__text p {
+		font-size: var(--fs-h5);
+	}
+}
+
+/* --- src/blocks/region-selector.css --- */
+/*
+ * Region selector (the Root hub at /). A centred heading and intro over a grid of cards, one a region:
+ * flag, country, language and an arrow. Two across from sm, four from xl.
+ */
+
+.region-selector {
+	padding-block: var(--space-7, 5rem);
+	text-align: center;
+}
+
+.region-selector__heading {
+	margin-bottom: var(--space-3);
+	text-wrap: balance;
+}
+
+.region-selector__intro {
+	max-width: 40rem;
+	margin: 0 auto var(--space-5);
+	text-wrap: pretty;
+}
+
+.region-selector__list {
+	display: grid;
+	gap: var(--space-3);
+	margin: var(--space-5) 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.region-selector__intro + .region-selector__list {
+	margin-top: 0;
+}
+
+.region-selector__link {
+	display: flex;
+	align-items: center;
+	gap: var(--space-3);
+	padding: var(--space-4);
+	border-radius: var(--radius-lg);
+	background-color: var(--col-white);
+	box-shadow: var(--shadow-in);
+	color: inherit;
+	text-align: left;
+	text-decoration: none;
+	transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.region-selector__link:hover,
+.region-selector__link:focus-visible {
+	box-shadow: var(--shadow-out);
+	transform: translateY(-2px);
+}
+
+.region-selector__flag {
+	flex: none;
+	width: 3rem;
+	height: auto;
+	border-radius: var(--radius-sm, 4px);
+	box-shadow: 0 0 0 1px rgb(0 0 0 / 10%);
+}
+
+.region-selector__text {
+	display: grid;
+	flex: 1;
+	gap: 0.125rem;
+}
+
+.region-selector__country {
+	font-size: var(--fs-h4);
+	font-weight: var(--fw-bold);
+}
+
+.region-selector__name {
+	color: var(--col-body-muted);
+	font-size: var(--fs-small);
+}
+
+.region-selector__arrow {
+	color: var(--col-orange-400, var(--col-blue-400));
+	font-size: 1.5rem;
+	transition: transform var(--transition);
+}
+
+.region-selector__link:hover .region-selector__arrow,
+.region-selector__link:focus-visible .region-selector__arrow {
+	transform: translateX(0.25rem);
+}
+
+@media (min-width: 576px) {
+	.region-selector__list {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (min-width: 1200px) {
+	.region-selector__list {
+		grid-template-columns: repeat(4, 1fr);
+	}
+
+	.region-selector__link {
+		flex-direction: column;
+		gap: var(--space-2);
+		padding-block: var(--space-5);
+		text-align: center;
+	}
+
+	.region-selector__flag {
+		width: 4rem;
+	}
+
+	.region-selector__arrow {
+		display: none;
+	}
+}
+
+/* A region with no pages yet: not a link, faded, with a Coming soon label. */
+.region-selector__link--disabled {
+	cursor: not-allowed;
+	box-shadow: none;
+	background-color: transparent;
+	outline: 1px dashed var(--col-body-muted);
+	outline-offset: -1px;
+}
+
+.region-selector__link--disabled:hover {
+	box-shadow: none;
+	transform: none;
+}
+
+.region-selector__link--disabled .region-selector__flag,
+.region-selector__link--disabled .region-selector__text {
+	opacity: 0.55;
+	filter: grayscale(1);
+}
+
+.region-selector__soon {
+	flex: none;
+	padding: 0.125rem 0.625rem;
+	border-radius: 999px;
+	background-color: var(--col-white);
+	color: var(--col-body-muted);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-bold);
 }
 
 /* --- src/blocks/related-content.css --- */

@@ -52,3 +52,4 @@ require_once CB_PEOPLESAFE2027_DIR . '/inc/posts-index.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/partners.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/listing-intros.php';
 require_once CB_PEOPLESAFE2027_DIR . '/inc/knowledge-hub.php';
+require_once CB_PEOPLESAFE2027_DIR . '/inc/landing-pages.php';

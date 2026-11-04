@@ -29,10 +29,31 @@ if ( $cb_is_slider ) {
 	cb_peoplesafe2027_enqueue_slider();
 }
 
-$cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'quote' ) );
+$cb_pre_title = isset( $attributes['preTitle'] ) ? $attributes['preTitle'] : '';
+$cb_title     = isset( $attributes['title'] ) ? $attributes['title'] : '';
+$cb_intro     = isset( $attributes['intro'] ) ? $attributes['intro'] : '';
+$cb_buttons   = isset( $attributes['buttons'] ) ? $attributes['buttons'] : array();
+$cb_has_intro = $cb_pre_title || $cb_title || trim( $cb_intro ) || $cb_buttons;
+
+$cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'quote' . ( $cb_has_intro ? ' quote--with-intro' : '' ) ) );
 ?>
 <section <?php echo $cb_wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
 	<div class="container">
+		<div class="quote__layout">
+			<?php if ( $cb_has_intro ) { ?>
+				<div class="quote__intro" data-animate="fade-right">
+					<?php if ( $cb_pre_title ) { ?>
+						<div class="quote__pretitle"><?php echo esc_html( $cb_pre_title ); ?></div>
+					<?php } ?>
+					<?php if ( $cb_title ) { ?>
+						<h2 class="quote__title"><?php echo esc_html( $cb_title ); ?></h2>
+					<?php } ?>
+					<?php if ( trim( $cb_intro ) ) { ?>
+						<p><?php echo esc_html( $cb_intro ); ?></p>
+					<?php } ?>
+					<?php cb_peoplesafe2027_cta_buttons( $cb_buttons ); ?>
+				</div>
+			<?php } ?>
 		<div class="slider"<?php echo $cb_is_slider ? ' data-slider data-slider-label="' . esc_attr__( 'Customer quotes', 'cb-peoplesafe2027' ) . '"' : ''; ?> data-animate="fade-up">
 			<div class="slider__viewport">
 				<div class="slider__track">
@@ -71,6 +92,7 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'quote'
 					<?php } ?>
 				</div>
 			</div>
+		</div>
 		</div>
 	</div>
 </section>

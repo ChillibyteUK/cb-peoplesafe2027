@@ -123,7 +123,7 @@ function cb_peoplesafe2027_register_post_types() {
 			'rewrite'  => false, // Same level as pages: routing.php.
 			'archive'  => false,
 			'taxes'    => array( 'landing_type' ),
-			'supports' => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
+			'supports' => array( 'title', 'editor', 'thumbnail', 'page-attributes', 'revisions' ), // Built with blocks, or from a Page HTML field (inc/landing-pages.php).
 		),
 		'listing_intro' => array(
 			'plural'   => 'Listing intros',

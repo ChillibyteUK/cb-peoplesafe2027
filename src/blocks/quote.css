@@ -122,3 +122,35 @@
 		object-position: right bottom;
 	}
 }
+
+/*
+ * With an intro (pre-title, title, text, button) the block is two columns from lg: the intro (5/12) beside the
+ * quotes (7/12). The pre-title matches Text and media's.
+ */
+.quote__layout {
+	display: grid;
+	gap: var(--space-4);
+	align-items: center;
+}
+
+.quote__intro p {
+	text-wrap: pretty;
+}
+
+.quote__pretitle {
+	margin-bottom: var(--space-2);
+	color: var(--col-blue-400);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-bold);
+}
+
+@media (min-width: 992px) {
+	.quote--with-intro .quote__layout {
+		grid-template-columns: 5fr 7fr;
+		gap: var(--space-6);
+	}
+
+	.quote--with-intro .quote__text p {
+		font-size: var(--fs-h5);
+	}
+}

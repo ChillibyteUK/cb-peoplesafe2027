@@ -4,9 +4,13 @@
 	"name": "cb-peoplesafe2027/quote",
 	"title": "Quote",
 	"category": "cb-peoplesafe2027",
-	"description": "One or more customer quotes, each with an attribution, an optional logo and an optional photo. Two or more quotes become a slider.",
+	"description": "One or more customer quotes, each with an attribution, an optional logo and an optional photo. Two or more quotes become a slider. An optional pre-title, title, text and button sit in a column beside the quotes.",
 	"icon": "format-quote",
 	"attributes": {
+		"preTitle": { "type": "string", "default": "" },
+		"title": { "type": "string", "default": "" },
+		"intro": { "type": "string", "default": "" },
+		"buttons": { "type": "array", "default": [] },
 		"quotes": { "type": "array", "default": [] }
 	},
 	"supports": {

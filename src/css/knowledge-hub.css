@@ -231,6 +231,10 @@
 	.knowledge-hub__cards {
 		grid-template-columns: repeat(4, 1fr);
 	}
+
+	.knowledge-hub__cards--three {
+		grid-template-columns: repeat(3, 1fr);
+	}
 }
 
 /* A video's length, bottom right of its image. In a curved card it sits above the curve. */

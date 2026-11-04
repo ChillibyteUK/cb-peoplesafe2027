@@ -129,7 +129,7 @@ needs no editing when a child is added, moved or renamed.
 
 Every slider uses one shared wrapper (`src/js/slider.js`, built to `js/slider.min.js`) around Embla, which is vendored into `js/vendor/` (DEC-029). A block prints `<div class="slider" data-slider data-slider-label="...">` with a `.slider__viewport`, `.slider__track` and `.slider__slide` children, and calls `cb_peoplesafe2027_enqueue_slider()` from its `render.php`, so the code loads only on pages that have a slider. The wrapper adds the arrows, the dots, the carousel and slide ARIA, keyboard arrows, and `inert` on slides out of view. Slides per view and the gap are CSS (`--slides-per-view`, `--slider-gap` on the `.slider`, set per breakpoint). There is no autoplay, and movement is off for visitors who prefer reduced motion.
 
-`blocks/quote` is one or more quotes (quote, attribution, optional logo, optional photo). One quote is a static panel; two or more become a slider. The panel's gradient circle cycles blue, orange, pink by position. It replaces the legacy big-quote, big-quote-slider, big-quote-slider-2024 and case-study-quotes-2024 blocks.
+`blocks/quote` is one or more quotes (quote, attribution, optional logo, optional photo). One quote is a static panel; two or more become a slider. The panel's gradient circle cycles blue, orange, pink by position. It replaces the legacy big-quote, big-quote-slider, big-quote-slider-2024 and case-study-quotes-2024 blocks. It also has an optional intro (pre-title, title, text, buttons): when any is filled in the block is two columns from lg, the intro (5/12) beside the quotes (7/12), as on the home page's "Hear directly from our customers" (the old site's case study quotes block).
 
 ### Related content
 
@@ -215,9 +215,31 @@ The core List block has five styles: Ticks, Ticks orange, Ticks two columns, Two
 - Share (`inc/share.php`, `src/js/share.js`): a Share button in the post's meta row opens the site's native dialog with X, LinkedIn, Facebook, WhatsApp, email, Copy link and, on phones, the device's own share sheet. Each network is a plain link to its share address: no plugin and nothing loaded from them until chosen. `cb_peoplesafe2027_share_button()` and `cb_peoplesafe2027_share_dialog( $url, $title )` can go on any template.
 - Schema (`inc/posts.php`): BlogPosting or NewsArticle with the section, author and time required; the author as a Person; CollectionPage and ItemList on the listings. The News listing is made indexable and given its own canonical address (Yoast treats it as the News category). The listings' SEO titles and descriptions are on their Listing intros.
 
+### Landing pages
+
+A **Landing page** (`landing_page`, at `/uk/{slug}/` like a page) is a campaign or standalone page (`inc/landing-pages.php`, `single-landing_page.php`, `page-templates/landing-*.php`). How it is built is its **Template**, the native choice in the editor sidebar (and the Page Attributes box):
+
+| Template | Built with | Around it |
+|---|---|---|
+| Default template | Blocks (the block editor, printed like `page.php`) | Site header and footer |
+| Landing page: blocks, minimal header and footer | Blocks | Logo-only header, intro and small print in the footer (the root hub's, through `cb_peoplesafe2027_logo_only()`) |
+| Landing page: custom HTML | The page's HTML, in a plain code box | Site header and footer |
+| Landing page: custom HTML, minimal header and footer | HTML | Minimal header and footer |
+| Landing page: custom HTML, full document | HTML | Nothing: the saved HTML is the whole response (no site head, header, footer, scripts or tracking), so a complete .html file can be supplied |
+
+A custom HTML page's HTML is its normal content (so it has normal revisions), edited in a plain box with no block editor, visual editor or media button (a page with a custom HTML template opens that way after it is saved; switch the template back to return to blocks). It is output exactly as saved, through `get_post_field`, so `the_content` filters (paragraph tags, shortcodes) do not touch it. A "Load from an .html file" control above the box reads a file into it in the browser (nothing is uploaded). Nothing parses or cleans the HTML; WordPress's own rule applies on save: only users with `unfiltered_html` keep scripts and styles, and for anyone else they are stripped. The supplier removes the html, head and body tags and any header or footer first, except for the full document template. Landing pages are hidden from search engines unless Yoast's "Allow search engines to show this page" is set to Yes on the page. The Readiness checklist (`/uk/readiness-checklist/`, custom HTML with the minimal header and footer) is the first entry, made from the old theme's `reasonable-steps-check.html`.
+
+### Legislation
+
+A Legislation post type (`legislation`, `/uk/legislation/`) is listed by `archive.php` like the News listing (search, Load more, no category pills) and shown by `single-legislation.php`: the Hero with the featured image, a meta row (date, reading time, Share), Quick links when there are two or more h2s, the article, related content at full width and the newsletter signup. It has a tile and a Listing intro on the Knowledge Hub, is a stream in the `cb/v1/posts` search, and has a Knowledge Hub crumb. `checks/build_legislation.py` imported the six articles.
+
+### More videos
+
+A video page (`single-resource.php`) ends with a row of three other videos (`cb_peoplesafe2027_more_videos()` in `inc/video.php`: newest first, not this one, not those hidden from listings), drawn with the Knowledge Hub's curved card, play button and duration (`.knowledge-hub__cards--three`).
+
 ### Listing intros
 
-A listing page (the Knowledge Hub, Blogs, News, Guides, Whitepapers, Brochures, Infographics, Videos, Case studies, Real life stories, Partnerships, Accreditations) has no page to edit, so each has a **Listing intro** (its own post type, no address): the intro is written in the block editor, and Yoast's box on it holds the SEO title and description. The listing draws its Hero, then the intro's blocks (`.listing-intro`, left-aligned), then the grid (`cb_peoplesafe2027_listing_intro_html()`), and takes its search result title and description from the entry (`inc/listing-intros.php`; with no SEO title it falls back to "Listing name - site name"). The Listing box on an entry says which listing it is for (`cb_listing`, copied to translations by Polylang), and the Listing column in the list links to the page. A new listing needs a key in `cb_peoplesafe2027_listings()`. Yoast would leave a non-public type out, so `inc/posttypes.php` adds it to Yoast's list; it stays out of the sitemap. `checks/migrate_listing_intros.py` made the first entries from the old Site-Wide Settings fields.
+A listing page (the Knowledge Hub, Blogs, News, Legislation, Guides, Whitepapers, Brochures, Infographics, Videos, Case studies, Real life stories, Partnerships, Accreditations) has no page to edit, so each has a **Listing intro** (its own post type, no address): the intro is written in the block editor, and Yoast's box on it holds the SEO title and description. The listing draws its Hero, then the intro's blocks (`.listing-intro`, left-aligned), then the grid (`cb_peoplesafe2027_listing_intro_html()`), and takes its search result title and description from the entry (`inc/listing-intros.php`; with no SEO title it falls back to "Listing name - site name"). The Listing box on an entry says which listing it is for (`cb_listing`, copied to translations by Polylang), and the Listing column in the list links to the page. A new listing needs a key in `cb_peoplesafe2027_listings()`. Yoast would leave a non-public type out, so `inc/posttypes.php` adds it to Yoast's list; it stays out of the sitemap. `checks/migrate_listing_intros.py` made the first entries from the old Site-Wide Settings fields.
 
 ### Knowledge Hub
 
@@ -311,6 +333,7 @@ with the theme.
 2. Activate this theme and the `cbp-peoplesafe` plugin.
 3. Add a Root hub item (wp-admin, Root hub) and publish it. No WP-CLI is
    needed. Settings, Regions picks which one shows when there are several.
+   The Root hub shows the Region selector block: the heading (an h1, optional intro) over a card for each region with its flag, country and language (`blocks/region-selector`, `src/blocks/region-selector.css`); four across from xl, two across from sm, stacked below.
 4. Save Settings, Permalinks once.
 5. Assign the menu to the Primary location in the default region.
 

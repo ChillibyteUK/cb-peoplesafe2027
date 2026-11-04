@@ -46,7 +46,7 @@ function cb_peoplesafe2027_flag_img( $url ) {
 /**
  * Regions for the switcher, one entry per region.
  *
- * @return array[] Each entry has slug, name, locale, flag, url, current and fallback.
+ * @return array[] Each entry has slug, name, locale, flag, url, current, fallback and available.
  */
 function cb_peoplesafe2027_language_switcher_items() {
 	if ( ! function_exists( 'pll_the_languages' ) ) {
@@ -71,6 +71,7 @@ function cb_peoplesafe2027_language_switcher_items() {
 			'url'      => $lang['url'],
 			'current'  => ! empty( $lang['current_lang'] ),
 			'fallback' => ! empty( $lang['no_translation'] ),
+			'available' => ! empty( $lang['current_lang'] ) || cb_peoplesafe2027_region_has_content( $slug ),
 		);
 	}
 
@@ -83,10 +84,41 @@ function cb_peoplesafe2027_language_switcher_items() {
 }
 
 /**
+ * Whether a region has pages of its own: more than its home page alone is published in that language.
+ *
+ * @param string $slug Region slug.
+ * @return bool
+ */
+function cb_peoplesafe2027_region_has_content( $slug ) {
+	$cached = get_transient( 'cb_region_has_content_' . $slug );
+
+	if ( false !== $cached ) {
+		return '1' === $cached;
+	}
+
+	$query = new WP_Query(
+		array(
+			'post_type'      => 'page',
+			'post_status'    => 'publish',
+			'lang'           => $slug,
+			'fields'         => 'ids',
+			'posts_per_page' => 2,
+			'no_found_rows'  => true,
+		)
+	);
+
+	$has = count( $query->posts ) > 1;
+
+	set_transient( 'cb_region_has_content_' . $slug, $has ? '1' : '0', HOUR_IN_SECONDS );
+
+	return $has;
+}
+
+/**
  * Regions for the Root hub's region selector block: each links to that
  * region's home page, whatever the current page is.
  *
- * @return array[] Each entry has slug, name, locale and url.
+ * @return array[] Each entry has slug, name, locale, url and available.
  */
 function cb_peoplesafe2027_region_selector_items() {
 	$items = array();
@@ -103,7 +135,15 @@ function cb_peoplesafe2027_region_selector_items() {
 			'name'   => $language->name,
 			'locale' => str_replace( '_', '-', $language->locale ),
 			'url'    => cb_peoplesafe2027_region_url( $slug ),
+			'available' => cb_peoplesafe2027_region_has_content( $slug ),
 		);
+	}
+
+	// If no region has content (a new site), list them all as links rather than a page of dead ends.
+	if ( ! array_filter( wp_list_pluck( $items, 'available' ) ) ) {
+		foreach ( $items as $key => $item ) {
+			$items[ $key ]['available'] = true;
+		}
 	}
 
 	/**
@@ -159,10 +199,18 @@ function cb_peoplesafe2027_language_switcher() {
 		<ul class="dropdown-menu language-switcher__menu" id="language-switcher-menu">
 			<?php foreach ( $items as $item ) { ?>
 				<li class="language-switcher__item<?php echo $item['current'] ? ' is-current' : ''; ?><?php echo $item['fallback'] ? ' is-fallback' : ''; ?>">
-					<a class="language-switcher__link" href="<?php echo esc_url( $item['url'] ); ?>" hreflang="<?php echo esc_attr( $item['locale'] ); ?>" lang="<?php echo esc_attr( $item['locale'] ); ?>"<?php echo $item['current'] ? ' aria-current="true"' : ''; ?>>
-						<?php cb_peoplesafe2027_flag_img( $item['flag'] ); ?>
-						<span><?php echo esc_html( $item['name'] ); ?></span>
-					</a>
+					<?php if ( $item['available'] ) { ?>
+						<a class="language-switcher__link" href="<?php echo esc_url( $item['url'] ); ?>" hreflang="<?php echo esc_attr( $item['locale'] ); ?>" lang="<?php echo esc_attr( $item['locale'] ); ?>"<?php echo $item['current'] ? ' aria-current="true"' : ''; ?>>
+							<?php cb_peoplesafe2027_flag_img( $item['flag'] ); ?>
+							<span><?php echo esc_html( $item['name'] ); ?></span>
+						</a>
+					<?php } else { ?>
+						<span class="language-switcher__link language-switcher__link--disabled" aria-disabled="true" lang="<?php echo esc_attr( $item['locale'] ); ?>">
+							<?php cb_peoplesafe2027_flag_img( $item['flag'] ); ?>
+							<span><?php echo esc_html( $item['name'] ); ?></span>
+							<span class="language-switcher__soon"><?php esc_html_e( 'Coming soon', 'cb-peoplesafe2027' ); ?></span>
+						</span>
+					<?php } ?>
 				</li>
 			<?php } ?>
 		</ul>

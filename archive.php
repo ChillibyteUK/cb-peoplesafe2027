@@ -1,6 +1,6 @@
 <?php
 /**
- * Blogs and news listings: /uk/blogs/ and /uk/news/.
+ * Blogs, news and legislation listings: /uk/blogs/, /uk/news/ and /uk/legislation/.
  *
  * A Hero, then a search box and (blogs) category pills over a grid of cards: a lead card, two halves, then thirds.
  * Search, the pills and Load more fetch more cards from cb/v1/posts (src/js/posts-index.js); without JavaScript the
@@ -11,11 +11,12 @@
 
 get_header();
 
+$cb_legislation = is_post_type_archive( 'legislation' );
 $cb_news     = 'news' === get_query_var( 'cb_post_stream' );
-$cb_stream   = $cb_news ? 'news' : 'blogs';
-$cb_title    = $cb_news ? __( 'News', 'cb-peoplesafe2027' ) : __( 'Blogs', 'cb-peoplesafe2027' );
+$cb_stream   = $cb_legislation ? 'legislation' : ( $cb_news ? 'news' : 'blogs' );
+$cb_title    = cb_peoplesafe2027_listings()[ $cb_stream ];
 $cb_region   = cb_peoplesafe2027_request_region();
-$cb_filter   = ! $cb_news && isset( $_GET['category'] ) ? sanitize_title( wp_unslash( $_GET['category'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- a public filter, no state changes.
+$cb_filter   = 'blogs' === $cb_stream && isset( $_GET['category'] ) ? sanitize_title( wp_unslash( $_GET['category'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- a public filter, no state changes.
 $cb_here     = trailingslashit( preg_replace( '#/page/\d+/?$#', '/', strtok( isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '', '?' ) ) );
 $cb_total    = (int) $GLOBALS['wp_query']->found_posts;
 $cb_loaded   = (int) $GLOBALS['wp_query']->post_count + (int) ( max( 1, (int) get_query_var( 'paged' ) ) - 1 ) * CB_PEOPLESAFE2027_POSTS_PER_BATCH;
@@ -48,10 +49,10 @@ echo cb_peoplesafe2027_listing_intro_html( $cb_stream ); // phpcs:ignore WordPre
 	<div class="container">
 		<div class="posts-index__search">
 			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7.5"/><path d="m16.5 16.5 4.5 4.5"/></svg>
-			<label class="visually-hidden" for="posts-index-search"><?php echo esc_html( $cb_news ? __( 'Search news', 'cb-peoplesafe2027' ) : __( 'Search blogs', 'cb-peoplesafe2027' ) ); ?></label>
+			<label class="visually-hidden" for="posts-index-search"><?php echo esc_html( sprintf( /* translators: %s: what is searched, for example blogs */ __( 'Search %s', 'cb-peoplesafe2027' ), mb_strtolower( $cb_title ) ) ); ?></label>
 			<input id="posts-index-search" type="search" placeholder="<?php esc_attr_e( 'Search by keyword', 'cb-peoplesafe2027' ); ?>" autocomplete="off" data-posts-search>
 		</div>
-		<?php if ( ! $cb_news ) { ?>
+		<?php if ( 'blogs' === $cb_stream ) { ?>
 			<nav class="case-hub__filters" aria-label="<?php esc_attr_e( 'Filter by category', 'cb-peoplesafe2027' ); ?>">
 				<span class="case-hub__filters-label"><?php esc_html_e( 'Category', 'cb-peoplesafe2027' ); ?></span>
 				<a class="case-hub__filter<?php echo $cb_filter ? '' : ' is-active'; ?>" href="<?php echo esc_url( $cb_here ); ?>" data-posts-filter data-category=""><?php esc_html_e( 'All', 'cb-peoplesafe2027' ); ?></a>
@@ -82,7 +83,7 @@ echo cb_peoplesafe2027_listing_intro_html( $cb_stream ); // phpcs:ignore WordPre
 					'mid_size'           => 2,
 					'prev_text'          => '&larr; ' . __( 'Previous', 'cb-peoplesafe2027' ),
 					'next_text'          => __( 'Next', 'cb-peoplesafe2027' ) . ' &rarr;',
-					'screen_reader_text' => $cb_news ? __( 'News pagination', 'cb-peoplesafe2027' ) : __( 'Blogs pagination', 'cb-peoplesafe2027' ),
+					'screen_reader_text' => sprintf( /* translators: %s: Blogs, News or Legislation */ __( '%s pagination', 'cb-peoplesafe2027' ), $cb_title ),
 				)
 			);
 			?>

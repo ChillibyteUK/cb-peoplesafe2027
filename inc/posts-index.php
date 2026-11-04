@@ -183,6 +183,10 @@ function cb_peoplesafe2027_content_kind( $post_id ) {
 		return cb_peoplesafe2027_is_news_post( get_post( $post_id ) ) ? __( 'News', 'cb-peoplesafe2027' ) : __( 'Blog', 'cb-peoplesafe2027' );
 	}
 
+	if ( 'legislation' === $type ) {
+		return __( 'Legislation', 'cb-peoplesafe2027' );
+	}
+
 	$taxonomy = array(
 		'resource'   => 'resource_type',
 		'case_study' => 'case_study_type',
@@ -239,7 +243,7 @@ function cb_peoplesafe2027_post_card( $post_id, $variant = 'standard', $context 
 				<?php echo 'resource' === $type ? cb_peoplesafe2027_video_duration_badge( $post_id ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the function. ?>
 			</div>
 			<div class="post-card__body">
-				<p class="post-card__meta"><?php echo esc_html( get_the_date( 'j M Y', $post_id ) ); ?><?php echo 'post' === $type ? ' &middot; ' . esc_html( sprintf( /* translators: %d: minutes */ __( '%d min read', 'cb-peoplesafe2027' ), $minutes ) ) : ''; ?></p>
+				<p class="post-card__meta"><?php echo esc_html( get_the_date( 'j M Y', $post_id ) ); ?><?php echo in_array( $type, array( 'post', 'legislation' ), true ) ? ' &middot; ' . esc_html( sprintf( /* translators: %d: minutes */ __( '%d min read', 'cb-peoplesafe2027' ), $minutes ) ) : ''; ?></p>
 				<h2 class="post-card__title"><?php echo cb_peoplesafe2027_highlight( wp_strip_all_tags( get_the_title( $post_id ) ), $terms ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped piece by piece in the function. ?></h2>
 				<?php if ( $excerpt ) { ?>
 					<p class="post-card__excerpt"><?php echo cb_peoplesafe2027_highlight( $excerpt, $terms ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped piece by piece in the function. ?></p>
@@ -288,7 +292,7 @@ function cb_peoplesafe2027_post_cards( $posts, $lead, $context, $terms = array()
  */
 function cb_peoplesafe2027_posts_index_args( $stream, $region, $category = '', $search = '' ) {
 	$args = array(
-		'post_type'           => 'all' === $stream ? array( 'post', 'resource', 'case_study' ) : 'post',
+		'post_type'           => 'all' === $stream ? array( 'post', 'resource', 'case_study', 'legislation' ) : ( 'legislation' === $stream ? 'legislation' : 'post' ),
 		'post_status'         => 'publish',
 		'ignore_sticky_posts' => true,
 		'lang'                => $region,
@@ -296,7 +300,7 @@ function cb_peoplesafe2027_posts_index_args( $stream, $region, $category = '', $
 
 	$news_term = cb_peoplesafe2027_region_term_id( cb_peoplesafe2027_news_category_slug(), 'category', $region );
 
-	if ( $news_term && 'all' !== $stream ) {
+	if ( $news_term && in_array( $stream, array( 'blogs', 'news' ), true ) ) {
 		$args[ 'news' === $stream ? 'category__in' : 'category__not_in' ] = array( $news_term );
 	}
 
@@ -328,7 +332,7 @@ add_action(
 				'args'                => array(
 					'stream'   => array(
 						'type'    => 'string',
-						'enum'    => array( 'blogs', 'news', 'all' ),
+						'enum'    => array( 'blogs', 'news', 'legislation', 'all' ),
 						'default' => 'blogs',
 					),
 					'region'   => array(
@@ -375,7 +379,7 @@ function cb_peoplesafe2027_rest_posts( WP_REST_Request $request ) {
 		$region = pll_default_language();
 	}
 
-	$stream = in_array( $request->get_param( 'stream' ), array( 'news', 'all' ), true ) ? $request->get_param( 'stream' ) : 'blogs';
+	$stream = in_array( $request->get_param( 'stream' ), array( 'news', 'legislation', 'all' ), true ) ? $request->get_param( 'stream' ) : 'blogs';
 	$search = mb_substr( trim( (string) $request->get_param( 'q' ) ), 0, 100 );
 	$offset = (int) $request->get_param( 'offset' );
 	$query  = new WP_Query(
