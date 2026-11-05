@@ -66,7 +66,7 @@ while ( have_posts() ) {
 				?>
 			</span></li>
 			<?php if ( $cb_author ) { ?>
-				<li class="post-meta__item"><?php echo cb_peoplesafe2027_meta_icon( 'user' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed SVG. ?><span><?php echo esc_html( $cb_author->post_title ); ?></span></li>
+				<li class="post-meta__item"><?php echo cb_peoplesafe2027_meta_icon( 'user' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed SVG. ?><span><a href="<?php echo esc_url( get_permalink( $cb_author ) ); ?>"><?php echo esc_html( $cb_author->post_title ); ?></a></span></li>
 			<?php } ?>
 			<li class="post-meta__item post-meta__item--share"><?php echo cb_peoplesafe2027_share_button(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the function. ?></li>
 		</ul>

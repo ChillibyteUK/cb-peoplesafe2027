@@ -134,6 +134,7 @@ function cb_peoplesafe2027_author_schema( $graph, $context ) {
 	$piece = array(
 		'@type'    => 'Person',
 		'@id'      => trailingslashit( $context->site_url ) . '#/schema/person/author-' . $person->ID,
+		'url'      => get_permalink( $person ),
 		'name'     => $person->post_title,
 		'worksFor' => array( '@id' => trailingslashit( $context->site_url ) . '#organization' ),
 	);
@@ -370,3 +371,55 @@ add_filter(
 		return $robots;
 	}
 );
+
+/**
+ * Posts list: show the Person author in place of the WordPress user, which posts do not use.
+ *
+ * @param array $columns List-table columns.
+ * @return array
+ */
+function cb_peoplesafe2027_post_author_column( $columns ) {
+	$out = array();
+	foreach ( $columns as $key => $label ) {
+		if ( 'author' === $key ) {
+			$out['cb_author'] = $label;
+		} else {
+			$out[ $key ] = $label;
+		}
+	}
+	return $out;
+}
+add_filter( 'manage_post_posts_columns', 'cb_peoplesafe2027_post_author_column' );
+
+/**
+ * Posts list: the Person author's name, linked to its edit screen.
+ *
+ * @param string $column  Column key.
+ * @param int    $post_id Post ID.
+ * @return void
+ */
+function cb_peoplesafe2027_post_author_column_content( $column, $post_id ) {
+	if ( 'cb_author' !== $column ) {
+		return;
+	}
+	$person = cb_peoplesafe2027_post_author( $post_id );
+	if ( ! $person ) {
+		echo '&mdash;';
+		return;
+	}
+	printf( '<a href="%s">%s</a>', esc_url( (string) get_edit_post_link( $person->ID ) ), esc_html( get_the_title( $person ) ) );
+}
+add_action( 'manage_post_posts_custom_column', 'cb_peoplesafe2027_post_author_column_content', 10, 2 );
+
+/**
+ * Posts list: give the Person author column the width the standard Author column has.
+ *
+ * @return void
+ */
+function cb_peoplesafe2027_post_author_column_width() {
+	$screen = get_current_screen();
+	if ( $screen && 'edit-post' === $screen->id ) {
+		echo '<style>.wp-list-table .column-cb_author{width:12%;}</style>';
+	}
+}
+add_action( 'admin_head', 'cb_peoplesafe2027_post_author_column_width' );

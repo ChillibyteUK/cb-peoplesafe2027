@@ -139,9 +139,11 @@ function cb_peoplesafe2027_register_post_types() {
 			'plural'   => 'People',
 			'single'   => 'Person',
 			'icon'     => 'dashicons-admin-users',
-			'rewrite'  => false,
+			'rewrite'  => array(
+				'slug'       => 'author', // An author's page (single-person.php): their details and their posts.
+				'with_front' => false,
+			),
 			'archive'  => false,
-			'public'   => false, // Attribution only: no URLs, no archive (DEC-014).
 			'taxes'    => array( 'team' ),
 			'supports' => array( 'title', 'editor', 'thumbnail' ), // The editor holds the bio; the role is a field (inc/people.php).
 		),

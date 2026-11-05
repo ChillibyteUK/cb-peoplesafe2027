@@ -33,7 +33,7 @@ tracker.
 
 Registered in `inc/posttypes.php` and `inc/taxonomies.php` from one table each
 (add a row for a new one): Products, Case studies, Resources, Legislation,
-Partners, Careers, Landing pages and People (non-public), with their taxonomies
+Partners, Careers, Landing pages and People (public only as author pages), with their taxonomies
 (`resource_type`, `jurisdiction` and the filters). Resources, Case studies, Partners and Landing pages
 register with `rewrite => false` because `routing.php` builds their paths (a term
 can give an item its own path base: see `cb_peoplesafe2027_term_routes()`).
@@ -464,3 +464,7 @@ Load order for these is alphabetical by filename, not registration order.
 
 `rm_block.sh` removes a block: the whole `blocks/{slug}` directory plus its
 `src/blocks/{slug}.css` if present. Again, no registration to undo.
+
+## Author pages
+
+A post's author is a Person (the Author box on the post, `cb_author`). On a single post the author's name links to `/author/{name}/` (`single-person.php`): the person's photo, role, bio (the Person's editor content) and LinkedIn in a Hero, over a numbered grid of their posts in the visitor's region. A Person who has written nothing has no page (404, and is left out of the sitemap); the Person schema piece carries the page's `url`. After changing the rewrite, save Settings > Permalinks once (or `wp rewrite flush`).

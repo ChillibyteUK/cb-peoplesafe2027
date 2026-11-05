@@ -53,3 +53,54 @@ function cb_peoplesafe2027_people_save_fields( $post_id ) {
 	update_post_meta( $post_id, 'cb_linkedin', isset( $_POST['cb_linkedin'] ) ? esc_url_raw( wp_unslash( $_POST['cb_linkedin'] ) ) : '' );
 }
 add_action( 'save_post_person', 'cb_peoplesafe2027_people_save_fields' );
+
+/**
+ * The people who have written at least one post: only they have an author page.
+ *
+ * @return int[]
+ */
+function cb_peoplesafe2027_author_ids() {
+	global $wpdb;
+
+	return array_map( 'intval', (array) $wpdb->get_col( "SELECT DISTINCT meta_value FROM {$wpdb->postmeta} WHERE meta_key = 'cb_author' AND meta_value <> '' AND meta_value <> '0'" ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- a short list, read on a person's page and for the sitemap.
+}
+
+/**
+ * A person who has written nothing has no page.
+ *
+ * @return void
+ */
+function cb_peoplesafe2027_people_no_empty_pages() {
+	if ( is_singular( 'person' ) && ! in_array( get_queried_object_id(), cb_peoplesafe2027_author_ids(), true ) ) {
+		global $wp_query;
+		$wp_query->set_404();
+		status_header( 404 );
+		nocache_headers();
+	}
+}
+add_action( 'template_redirect', 'cb_peoplesafe2027_people_no_empty_pages' );
+
+/**
+ * Keep people without posts out of the Yoast sitemap.
+ *
+ * @return int[]
+ */
+function cb_peoplesafe2027_people_sitemap_exclude() {
+	$exclude = array();
+
+	foreach ( get_posts(
+		array(
+			'post_type'      => 'person',
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+			'post_status'    => 'publish',
+		)
+	) as $person_id ) {
+		if ( ! in_array( (int) $person_id, cb_peoplesafe2027_author_ids(), true ) ) {
+			$exclude[] = (int) $person_id;
+		}
+	}
+
+	return $exclude;
+}
+add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', 'cb_peoplesafe2027_people_sitemap_exclude' );
