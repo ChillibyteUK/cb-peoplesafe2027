@@ -21,17 +21,20 @@
   --col-neutral: #f1f7f8;
   --col-surface: #fafafa;
   --col-border: #cccccc;
+  --col-grey-300: #d4d4d4; /* 1px outline of component boxes (hsl 0 0% 83%) */
+  --col-grey-600: #525252; /* body text (hsl 0 0% 32%) */
   --col-blue-200: #d5e1e5;
   --col-blue-300: #c6d9df; /* the soft border of cards */
   --col-yellow-400: #ffb422;
   --col-yellow-600: #996500; /* the brand yellow darkened for text links */
   --col-orange-400: #df4305;
+  --col-orange-200: #ffded1; /* tab pill, selected and hover (hsl 17 100% 91%) */
+  --col-orange-500: #e13805; /* tab pill, selected border (hsl 14 96% 45%) */
   --col-pink-400: #de007d;
-  --col-blue-400: #0484a0;
+  --col-blue-400: #04839f; /* eyebrows (hsl 191 95% 32%); 4.4:1 on white, so keep eyebrows bold */
   --col-teal-400: #06bea9;
-  --col-navy-400: #043950;
-  --col-navy-900: #0a0f1c; /* the footer: near black, with the pattern a shade lighter */
-
+  --col-navy-400: #04374e; /* headings, nav, footer (hsl 198 90% 16%) */
+  
   /* Tints — carried over from the earlier palette; remove at the end if unused */
   --col-yellow-100: #ffe4bd;
   --col-orange-100: #fdc9b4;
@@ -40,10 +43,11 @@
 
   /* Colour roles (aliases, not in the editor palette) */
   --col-primary: var(--col-yellow-400);
-  --col-body: var(--col-black);
-  --col-body-muted: var(--col-greyish);
+  --col-body: var(--col-grey-600);
+  --col-body-muted: var(--col-grey-600);
+  --col-heading: var(--col-navy-400);
   --col-body-bg: var(--col-white);
-  --col-link: var(--col-yellow-600); /* 5.0:1 on white, 4.6:1 on the page background (AA needs 4.5:1), and 4.2:1 against black body text so links stand out without an underline (1.4.1 needs 3:1) */
+  --col-link: var(--col-yellow-600); /* 5.0:1 on white (AA needs 4.5:1). Only 1.6:1 against the grey body text, so links in running text are always underlined (WCAG 1.4.1 needs 3:1 for colour alone; DEC-040) */
   --col-link-hover: var(--col-black);
 
   /* Overlays */
@@ -104,19 +108,15 @@
   /* Radii */
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
-  --radius-card: 0.75rem; /* 13.5px: the logo cards */
-  --radius-lg: 1rem;
+  --radius-card: 0.889rem; /* 16px: every component box */
+  --radius-lg: var(--radius-card);
   --radius-xl: 1.25rem;
   --radius-pill: 100vw;
   --radius-circle: 50%;
 
   /* Shadows */
-  --shadow-out: rgb(0 0 0 / 0.1) 0 20px 25px -5px, rgb(0 0 0 / 0.04) 0 10px 10px -5px;
-  --shadow-in: rgb(0 0 0 / 0.1) 0 4px 6px -1px, rgb(0 0 0 / 0.06) 0 2px 4px -1px;
-  --shadow-card: rgb(0 0 0 / 0.16) 0 3px 6px, rgb(0 0 0 / 0.23) 0 3px 6px;
-  --shadow-card-hover: rgb(0 0 0 / 0.19) 0 10px 20px, rgb(0 0 0 / 0.23) 0 6px 6px;
+  --shadow-button: rgb(0 0 0 / 0.06) 0 0 0 1px, rgb(0 0 0 / 0.04) 0 1px 3px, rgb(0 0 0 / 0.06) 0 6px 16px -6px; /* the secondary button's subtle shadow */
   --shadow-button-hover: rgb(60 64 67 / 0.3) 0 4px 4px 0, rgb(60 64 67 / 0.15) 0 2px 6px 2px;
-  --shadow-lift: rgb(0 0 0 / 0.25) 0 14px 28px, rgb(0 0 0 / 0.22) 0 10px 10px;
 
   /* Motion */
   --transition: 250ms ease-in-out;
@@ -124,6 +124,7 @@
   --transition-slow: 400ms ease-in-out;
 
   /* Borders */
+  --card-border: 1px solid var(--col-grey-300); /* component boxes: a grey outline instead of a shadow */
   --border-width: 2px;
   --border-width-thick: 4px;
 
@@ -139,7 +140,7 @@
   --button-padding-block: var(--space-2);
   --button-padding-inline: var(--space-3);
   --button-border: var(--border-width);
-  --button-radius: var(--radius-sm);
+  --button-radius: 0.444rem; /* 8px */
   --button-font-size: var(--fs-base);
 
   /* Layout */

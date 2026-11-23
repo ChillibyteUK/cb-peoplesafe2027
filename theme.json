@@ -42,6 +42,18 @@
           "origin": "theme"
         },
         {
+          "name": "grey-300",
+          "slug": "grey-300",
+          "color": "#d4d4d4",
+          "origin": "theme"
+        },
+        {
+          "name": "grey-600",
+          "slug": "grey-600",
+          "color": "#525252",
+          "origin": "theme"
+        },
+        {
           "name": "blue-200",
           "slug": "blue-200",
           "color": "#d5e1e5",
@@ -72,6 +84,18 @@
           "origin": "theme"
         },
         {
+          "name": "orange-200",
+          "slug": "orange-200",
+          "color": "#ffded1",
+          "origin": "theme"
+        },
+        {
+          "name": "orange-500",
+          "slug": "orange-500",
+          "color": "#e13805",
+          "origin": "theme"
+        },
+        {
           "name": "pink-400",
           "slug": "pink-400",
           "color": "#de007d",
@@ -80,7 +104,7 @@
         {
           "name": "blue-400",
           "slug": "blue-400",
-          "color": "#0484a0",
+          "color": "#04839f",
           "origin": "theme"
         },
         {
@@ -92,13 +116,7 @@
         {
           "name": "navy-400",
           "slug": "navy-400",
-          "color": "#043950",
-          "origin": "theme"
-        },
-        {
-          "name": "navy-900",
-          "slug": "navy-900",
-          "color": "#0a0f1c",
+          "color": "#04374e",
           "origin": "theme"
         },
         {

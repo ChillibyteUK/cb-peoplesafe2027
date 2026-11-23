@@ -45,7 +45,7 @@
 	inline-size: 100%;
 	block-size: 100%;
 	min-block-size: inherit;
-	border-radius: var(--radius-sm);
+	border-radius: var(--radius-card);
 	object-fit: cover;
 }
 
@@ -56,7 +56,7 @@
 	align-items: center;
 	justify-content: center;
 	padding: var(--space-3);
-	border-radius: var(--radius-sm);
+	border-radius: var(--radius-card);
 	background-color: var(--col-white);
 	text-align: center;
 }
@@ -152,7 +152,7 @@
 	gap: var(--space-2);
 	height: 100%;
 	padding: var(--space-3);
-	border: var(--border-width) solid var(--col-blue-300);
+	border: var(--card-border);
 	border-radius: var(--radius-card);
 	background: var(--col-white);
 	color: inherit;
@@ -160,12 +160,12 @@
 	text-decoration: none;
 	transition:
 		border-color var(--transition),
-		box-shadow var(--transition);
+		border-color var(--transition);
 }
 
 a.caption-slider__card:hover {
 	border-color: var(--col-orange-400);
-	box-shadow: var(--shadow-in);
+	border-color: var(--col-navy-400);
 	color: inherit;
 }
 
@@ -244,7 +244,7 @@ a.caption-slider__card:hover {
 	overflow: clip;
 	border-radius: var(--radius-lg);
 	background-color: var(--card-bg);
-	box-shadow: var(--shadow-in);
+	border: var(--card-border);
 	color: var(--card-fg);
 }
 
@@ -338,7 +338,7 @@ a.caption-slider__card:hover {
 .case-hub__tile {
 	display: block;
 	padding: var(--space-2) var(--space-3);
-	border: 1px solid var(--col-blue-300);
+	border: var(--card-border);
 	border-radius: var(--radius-pill);
 	background-color: var(--col-white);
 	color: var(--col-body);
@@ -360,15 +360,15 @@ a.caption-slider__card:hover {
 .case-hub__card {
 	position: relative;
 	overflow: hidden;
-	border-radius: var(--radius-sm);
+	border-radius: var(--radius-card);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-card);
-	transition: transform var(--transition), box-shadow var(--transition);
+	border: var(--card-border);
+	transition: transform var(--transition), border-color var(--transition);
 }
 
 .case-hub__card:hover,
 .case-hub__card:focus-within {
-	box-shadow: var(--shadow-card-hover);
+	border-color: var(--col-navy-400);
 	transform: translateY(-0.3rem);
 }
 
@@ -458,7 +458,7 @@ a.caption-slider__card:hover {
 	padding: var(--space-4);
 	border-radius: var(--radius-card);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-in);
+	border: var(--card-border);
 
 	& > :last-child {
 		margin-bottom: 0;
@@ -591,8 +591,8 @@ a.caption-slider__card:hover {
 	block-size: 3.5rem;
 	translate: -50% -50%;
 	border-radius: var(--radius-circle);
+	border: var(--card-border);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-out);
 	transition: scale var(--transition);
 }
 
@@ -716,6 +716,7 @@ a.caption-slider__card:hover {
 }
 
 .case-story-pair__story {
+	--heading-colour: currentcolor;
 	block-size: 100%;
 	padding: var(--space-4);
 	border-radius: var(--radius-card);
@@ -776,6 +777,7 @@ a.caption-slider__card:hover {
  */
 
 .cta-banner {
+	--heading-colour: currentcolor;
 	position: relative;
 	display: flex;
 	align-items: center;
@@ -1459,9 +1461,9 @@ a.caption-slider__card:hover {
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
-	border-radius: var(--radius-sm);
+	border-radius: var(--radius-card);
 	background-color: var(--col-primary);
-	box-shadow: var(--shadow-in);
+	border: var(--card-border);
 }
 
 .image-columns--cards .image-columns__media {
@@ -1507,6 +1509,7 @@ a.caption-slider__card:hover {
 }
 
 .login-cards__card {
+	--heading-colour: currentcolor;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -1582,7 +1585,7 @@ a.caption-slider__card:hover {
 	display: grid;
 	place-items: center;
 	aspect-ratio: 1;
-	border: var(--border-width) solid var(--col-blue-300);
+	border: var(--card-border);
 	border-radius: var(--radius-card);
 	background: var(--col-white);
 }
@@ -1632,6 +1635,7 @@ a.caption-slider__card:hover {
 }
 
 .newsletter-signup__box {
+	--heading-colour: currentcolor;
 	display: grid;
 	gap: var(--space-4);
 	padding: var(--space-5);
@@ -1730,7 +1734,7 @@ a.caption-slider__card:hover {
 	--tile-fg: var(--col-white);
 
 	padding: var(--space-3);
-	border-radius: var(--radius-sm);
+	border-radius: var(--radius-card);
 	background-color: var(--tile-bg);
 	color: var(--tile-fg);
 	text-align: center;
@@ -1873,7 +1877,7 @@ a.caption-slider__card:hover {
 
 .pullquote--light .pullquote__panel {
 	--pq-bg: var(--col-white);
-	box-shadow: var(--shadow-in);
+	border: var(--card-border);
 }
 
 .pullquote__panel::before {
@@ -1932,10 +1936,11 @@ a.caption-slider__card:hover {
 }
 
 .pushthrough__box {
+	--heading-colour: var(--pt-text);
 	display: grid;
 	gap: var(--space-3);
 	padding: var(--space-5);
-	border-radius: var(--radius-sm);
+	border-radius: var(--radius-card);
 	background-color: var(--pt-bg);
 	color: var(--pt-text);
 }
@@ -2046,7 +2051,7 @@ a.caption-slider__card:hover {
 	margin: 0;
 	border-radius: var(--radius-lg);
 	background: var(--col-white);
-	box-shadow: var(--shadow-out);
+	border: var(--card-border);
 }
 
 .quote__card::before {
@@ -2209,16 +2214,16 @@ a.caption-slider__card:hover {
 	padding: var(--space-4);
 	border-radius: var(--radius-lg);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-in);
+	border: var(--card-border);
 	color: inherit;
 	text-align: left;
 	text-decoration: none;
-	transition: box-shadow var(--transition), transform var(--transition);
+	transition: border-color var(--transition), transform var(--transition);
 }
 
 .region-selector__link:hover,
 .region-selector__link:focus-visible {
-	box-shadow: var(--shadow-out);
+	border-color: var(--col-navy-400);
 	transform: translateY(-2px);
 }
 
@@ -2340,13 +2345,13 @@ a.caption-slider__card:hover {
 	overflow: clip;
 	border-radius: var(--radius-lg);
 	background: var(--col-white);
-	box-shadow: var(--shadow-in);
-	transition: box-shadow var(--transition);
+	border: var(--card-border);
+	transition: border-color var(--transition);
 }
 
 .related-card:hover,
 .related-card:focus-within {
-	box-shadow: var(--shadow-card-hover);
+	border-color: var(--col-navy-400);
 }
 
 .related-card__image {
@@ -2441,12 +2446,12 @@ a.caption-slider__card:hover {
 	overflow: clip;
 	border-radius: var(--radius-lg);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-out);
+	border: var(--card-border);
 	color: var(--col-black);
 	text-decoration: none;
 	transition:
 		transform var(--transition),
-		box-shadow var(--transition);
+		border-color var(--transition);
 }
 
 .sector-cards__card[hidden] {
@@ -2455,7 +2460,7 @@ a.caption-slider__card:hover {
 
 .sector-cards__card:hover,
 .sector-cards__card:focus-visible {
-	box-shadow: var(--shadow-in);
+	border-color: var(--col-navy-400);
 	color: var(--col-black);
 	transform: translateY(2px);
 }
@@ -2531,7 +2536,7 @@ a.caption-slider__card:hover {
 .service-status__message {
 	margin-bottom: var(--space-5);
 	padding: var(--space-4);
-	border: 1px solid var(--col-blue-300);
+	border: var(--card-border);
 	border-radius: var(--radius-card);
 	background-color: var(--col-neutral);
 
@@ -2647,11 +2652,11 @@ a.caption-slider__card:hover {
 }
 
 .side-tabs__tab {
+	--heading-colour: currentcolor;
 	interpolate-size: allow-keywords;
 	border: var(--border-width) solid var(--col-navy-400);
-	border-radius: var(--radius-md);
+	border-radius: var(--radius-card);
 	background-color: var(--col-navy-400);
-	box-shadow: var(--shadow-out);
 	color: var(--col-white);
 	transition:
 		background-color var(--transition),
@@ -2742,7 +2747,7 @@ a.caption-slider__card:hover {
 		border-radius: var(--radius-lg);
 		overflow: hidden;
 		background-color: var(--col-surface);
-		box-shadow: var(--shadow-out);
+		border: var(--card-border);
 		opacity: 0;
 		transition: opacity 300ms ease-in-out;
 	}
@@ -2916,6 +2921,7 @@ a.caption-slider__card:hover {
 }
 
 .team--cards .team__details {
+	--heading-colour: currentcolor;
 	position: absolute;
 	inset: auto 0 0;
 	padding: var(--space-5) var(--space-3) var(--space-3);
@@ -3042,7 +3048,7 @@ a.caption-slider__card:hover {
 	margin-inline: auto;
 	border-radius: var(--radius-lg);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-out);
+	border: var(--card-border);
 }
 
 .text-and-media__below {
@@ -3053,7 +3059,7 @@ a.caption-slider__card:hover {
 .text-and-media__transcript {
 	margin-top: var(--space-4);
 	padding: var(--space-4);
-	border-radius: var(--radius-md);
+	border-radius: var(--radius-card);
 	background-color: var(--col-white);
 }
 
@@ -3129,7 +3135,7 @@ a.caption-slider__card:hover {
 }
 
 .video-facade {
-	box-shadow: var(--shadow-out);
+	border: var(--card-border);
 	position: relative;
 	padding: 0;
 	overflow: hidden;
@@ -3151,8 +3157,8 @@ a.caption-slider__card:hover {
 	height: 4rem;
 	translate: -50% -50%;
 	border-radius: var(--radius-circle);
+	border: var(--card-border);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-out);
 	transition: scale var(--transition);
 }
 
@@ -3359,9 +3365,8 @@ a.caption-slider__card:hover {
 
 .timeline__card {
 	padding: 1.1rem 1.7rem;
-	border-radius: 0.33rem;
+	border-radius: var(--radius-card);
 	background-color: var(--tl);
-	box-shadow: rgb(0 0 0 / 0.25) 0 2px 5px 0;
 	color: var(--tl-fg);
 }
 
@@ -3463,25 +3468,27 @@ a.caption-slider__card:hover {
 	gap: var(--space-3);
 	width: 100%;
 	padding: var(--space-2);
-	border: 4px solid var(--col-white);
-	border-radius: var(--radius-lg);
+	border: var(--card-border);
+	border-radius: var(--radius-card);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-out);
 	color: inherit;
 	font: inherit;
 	text-align: start;
 	cursor: pointer;
 	transition:
 		border-color var(--transition),
-		background-color var(--transition),
-		box-shadow var(--transition);
+		background-color var(--transition);
 }
 
-.top-tabs__pill:hover,
+.top-tabs__pill:hover {
+	background-color: var(--col-orange-200);
+}
+
+/* Selected: a 2px orange border; the padding gives up 1px so the pill does not change size. */
 .top-tabs__pill.is-active {
-	border-color: var(--col-orange-400);
-	background-color: color-mix(in srgb, var(--col-orange-400), var(--col-white) 80%);
-	box-shadow: var(--shadow-in);
+	padding: calc(var(--space-2) - 1px);
+	border: 2px solid var(--col-orange-500);
+	background-color: var(--col-orange-200);
 }
 
 .top-tabs__icon {
@@ -3623,7 +3630,7 @@ a.caption-slider__card:hover {
 	padding: var(--space-3);
 	background-color: var(--col-white);
 	border-radius: var(--radius-lg);
-	box-shadow: var(--shadow-in);
+	border: var(--card-border);
 }
 
 /* A title over the widget, and the widget beside text in a column (the Pricing page): centred, with room above. */

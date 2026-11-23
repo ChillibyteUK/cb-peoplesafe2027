@@ -21,7 +21,7 @@
 .service-status__message {
 	margin-bottom: var(--space-5);
 	padding: var(--space-4);
-	border: 1px solid var(--col-blue-300);
+	border: var(--card-border);
 	border-radius: var(--radius-card);
 	background-color: var(--col-neutral);
 

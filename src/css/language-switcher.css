@@ -59,7 +59,6 @@
 	background-color: var(--col-body-bg);
 	border: 1px solid var(--col-border);
 	border-radius: var(--radius-sm);
-	box-shadow: var(--shadow-out);
 	z-index: var(--z-nav);
 }
 

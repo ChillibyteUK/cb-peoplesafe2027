@@ -33,7 +33,7 @@
 	margin: 0;
 	border-radius: var(--radius-lg);
 	background: var(--col-white);
-	box-shadow: var(--shadow-out);
+	border: var(--card-border);
 }
 
 .quote__card::before {

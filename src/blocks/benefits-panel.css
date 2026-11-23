@@ -41,7 +41,7 @@
 	inline-size: 100%;
 	block-size: 100%;
 	min-block-size: inherit;
-	border-radius: var(--radius-sm);
+	border-radius: var(--radius-card);
 	object-fit: cover;
 }
 
@@ -52,7 +52,7 @@
 	align-items: center;
 	justify-content: center;
 	padding: var(--space-3);
-	border-radius: var(--radius-sm);
+	border-radius: var(--radius-card);
 	background-color: var(--col-white);
 	text-align: center;
 }

@@ -30,7 +30,7 @@
 
 .pullquote--light .pullquote__panel {
 	--pq-bg: var(--col-white);
-	box-shadow: var(--shadow-in);
+	border: var(--card-border);
 }
 
 .pullquote__panel::before {

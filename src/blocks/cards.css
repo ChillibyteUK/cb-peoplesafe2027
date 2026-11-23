@@ -27,7 +27,7 @@
 	overflow: clip;
 	border-radius: var(--radius-lg);
 	background-color: var(--card-bg);
-	box-shadow: var(--shadow-in);
+	border: var(--card-border);
 	color: var(--card-fg);
 }
 

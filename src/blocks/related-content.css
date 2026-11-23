@@ -30,13 +30,13 @@
 	overflow: clip;
 	border-radius: var(--radius-lg);
 	background: var(--col-white);
-	box-shadow: var(--shadow-in);
-	transition: box-shadow var(--transition);
+	border: var(--card-border);
+	transition: border-color var(--transition);
 }
 
 .related-card:hover,
 .related-card:focus-within {
-	box-shadow: var(--shadow-card-hover);
+	border-color: var(--col-navy-400);
 }
 
 .related-card__image {

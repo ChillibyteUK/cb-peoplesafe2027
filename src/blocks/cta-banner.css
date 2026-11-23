@@ -5,6 +5,7 @@
  */
 
 .cta-banner {
+	--heading-colour: currentcolor;
 	position: relative;
 	display: flex;
 	align-items: center;

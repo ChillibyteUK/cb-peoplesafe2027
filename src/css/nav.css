@@ -44,7 +44,6 @@
 	right: 0;
 	background-color: var(--col-body-bg);
 	border-top: 1px solid var(--col-border);
-	box-shadow: var(--shadow-out);
 	padding: var(--space-3);
 	max-height: calc(100vh - 100%);
 	overflow-y: auto;
@@ -63,7 +62,7 @@
 .nav-link {
 	display: block;
 	text-decoration: none;
-	color: var(--col-body);
+	color: var(--col-heading);
 	padding: var(--space-1) 0;
 
 	&.active,
@@ -137,7 +136,6 @@
 		background-color: var(--col-body-bg);
 		border: 1px solid var(--col-border);
 		border-radius: var(--radius-sm);
-		box-shadow: var(--shadow-out);
 		z-index: 10;
 	}
 }

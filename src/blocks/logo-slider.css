@@ -27,7 +27,7 @@
 	display: grid;
 	place-items: center;
 	aspect-ratio: 1;
-	border: var(--border-width) solid var(--col-blue-300);
+	border: var(--card-border);
 	border-radius: var(--radius-card);
 	background: var(--col-white);
 }

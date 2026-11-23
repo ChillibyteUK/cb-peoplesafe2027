@@ -12,6 +12,7 @@
 }
 
 .newsletter-signup__box {
+	--heading-colour: currentcolor;
 	display: grid;
 	gap: var(--space-4);
 	padding: var(--space-5);

@@ -37,11 +37,11 @@
 }
 
 .side-tabs__tab {
+	--heading-colour: currentcolor;
 	interpolate-size: allow-keywords;
 	border: var(--border-width) solid var(--col-navy-400);
-	border-radius: var(--radius-md);
+	border-radius: var(--radius-card);
 	background-color: var(--col-navy-400);
-	box-shadow: var(--shadow-out);
 	color: var(--col-white);
 	transition:
 		background-color var(--transition),
@@ -132,7 +132,7 @@
 		border-radius: var(--radius-lg);
 		overflow: hidden;
 		background-color: var(--col-surface);
-		box-shadow: var(--shadow-out);
+		border: var(--card-border);
 		opacity: 0;
 		transition: opacity 300ms ease-in-out;
 	}

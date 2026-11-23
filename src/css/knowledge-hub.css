@@ -158,13 +158,13 @@
 	overflow: clip;
 	border-radius: var(--radius-lg);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-in);
-	transition: box-shadow var(--transition);
+	border: var(--card-border);
+	transition: border-color var(--transition);
 }
 
 .hub-card:hover,
 .hub-card:focus-within {
-	box-shadow: var(--shadow-card-hover);
+	border-color: var(--col-navy-400);
 }
 
 .hub-card__media {

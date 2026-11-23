@@ -150,7 +150,7 @@ button.site-nav__toggle {
 	padding-inline: var(--space-3);
 	padding-bottom: 0.75rem;
 	white-space: nowrap;
-	color: var(--col-black);
+	color: var(--col-heading);
 	font-size: var(--fs-small);
 	font-weight: var(--fw-700);
 	text-align: center;
@@ -188,15 +188,15 @@ button.site-nav__toggle {
 	margin-left: var(--panel-left, 0);
 	border-radius: var(--radius-lg);
 	overflow: clip;
+	border: var(--card-border);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-out);
 
 	&.active {
 		display: block;
 	}
 
 	a {
-		color: var(--col-black);
+		color: var(--col-heading);
 		text-decoration: none;
 	}
 
@@ -589,7 +589,7 @@ button.site-nav__toggle {
 			display: block;
 			padding: var(--space-3);
 			border-bottom: 1px solid var(--col-border);
-			color: var(--col-black);
+			color: var(--col-heading);
 			font-size: var(--fs-small);
 			font-weight: var(--fw-700);
 		}

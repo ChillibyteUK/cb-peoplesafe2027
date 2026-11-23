@@ -38,16 +38,16 @@
 	padding: var(--space-4);
 	border-radius: var(--radius-lg);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-in);
+	border: var(--card-border);
 	color: inherit;
 	text-align: left;
 	text-decoration: none;
-	transition: box-shadow var(--transition), transform var(--transition);
+	transition: border-color var(--transition), transform var(--transition);
 }
 
 .region-selector__link:hover,
 .region-selector__link:focus-visible {
-	box-shadow: var(--shadow-out);
+	border-color: var(--col-navy-400);
 	transform: translateY(-2px);
 }
 

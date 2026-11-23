@@ -21,17 +21,20 @@
   --col-neutral: #f1f7f8;
   --col-surface: #fafafa;
   --col-border: #cccccc;
+  --col-grey-300: #d4d4d4; /* 1px outline of component boxes (hsl 0 0% 83%) */
+  --col-grey-600: #525252; /* body text (hsl 0 0% 32%) */
   --col-blue-200: #d5e1e5;
   --col-blue-300: #c6d9df; /* the soft border of cards */
   --col-yellow-400: #ffb422;
   --col-yellow-600: #996500; /* the brand yellow darkened for text links */
   --col-orange-400: #df4305;
+  --col-orange-200: #ffded1; /* tab pill, selected and hover (hsl 17 100% 91%) */
+  --col-orange-500: #e13805; /* tab pill, selected border (hsl 14 96% 45%) */
   --col-pink-400: #de007d;
-  --col-blue-400: #0484a0;
+  --col-blue-400: #04839f; /* eyebrows (hsl 191 95% 32%); 4.4:1 on white, so keep eyebrows bold */
   --col-teal-400: #06bea9;
-  --col-navy-400: #043950;
-  --col-navy-900: #0a0f1c; /* the footer: near black, with the pattern a shade lighter */
-
+  --col-navy-400: #04374e; /* headings, nav, footer (hsl 198 90% 16%) */
+  
   /* Tints — carried over from the earlier palette; remove at the end if unused */
   --col-yellow-100: #ffe4bd;
   --col-orange-100: #fdc9b4;
@@ -40,10 +43,11 @@
 
   /* Colour roles (aliases, not in the editor palette) */
   --col-primary: var(--col-yellow-400);
-  --col-body: var(--col-black);
-  --col-body-muted: var(--col-greyish);
+  --col-body: var(--col-grey-600);
+  --col-body-muted: var(--col-grey-600);
+  --col-heading: var(--col-navy-400);
   --col-body-bg: var(--col-white);
-  --col-link: var(--col-yellow-600); /* 5.0:1 on white, 4.6:1 on the page background (AA needs 4.5:1), and 4.2:1 against black body text so links stand out without an underline (1.4.1 needs 3:1) */
+  --col-link: var(--col-yellow-600); /* 5.0:1 on white (AA needs 4.5:1). Only 1.6:1 against the grey body text, so links in running text are always underlined (WCAG 1.4.1 needs 3:1 for colour alone; DEC-040) */
   --col-link-hover: var(--col-black);
 
   /* Overlays */
@@ -104,19 +108,15 @@
   /* Radii */
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
-  --radius-card: 0.75rem; /* 13.5px: the logo cards */
-  --radius-lg: 1rem;
+  --radius-card: 0.889rem; /* 16px: every component box */
+  --radius-lg: var(--radius-card);
   --radius-xl: 1.25rem;
   --radius-pill: 100vw;
   --radius-circle: 50%;
 
   /* Shadows */
-  --shadow-out: rgb(0 0 0 / 0.1) 0 20px 25px -5px, rgb(0 0 0 / 0.04) 0 10px 10px -5px;
-  --shadow-in: rgb(0 0 0 / 0.1) 0 4px 6px -1px, rgb(0 0 0 / 0.06) 0 2px 4px -1px;
-  --shadow-card: rgb(0 0 0 / 0.16) 0 3px 6px, rgb(0 0 0 / 0.23) 0 3px 6px;
-  --shadow-card-hover: rgb(0 0 0 / 0.19) 0 10px 20px, rgb(0 0 0 / 0.23) 0 6px 6px;
+  --shadow-button: rgb(0 0 0 / 0.06) 0 0 0 1px, rgb(0 0 0 / 0.04) 0 1px 3px, rgb(0 0 0 / 0.06) 0 6px 16px -6px; /* the secondary button's subtle shadow */
   --shadow-button-hover: rgb(60 64 67 / 0.3) 0 4px 4px 0, rgb(60 64 67 / 0.15) 0 2px 6px 2px;
-  --shadow-lift: rgb(0 0 0 / 0.25) 0 14px 28px, rgb(0 0 0 / 0.22) 0 10px 10px;
 
   /* Motion */
   --transition: 250ms ease-in-out;
@@ -124,6 +124,7 @@
   --transition-slow: 400ms ease-in-out;
 
   /* Borders */
+  --card-border: 1px solid var(--col-grey-300); /* component boxes: a grey outline instead of a shadow */
   --border-width: 2px;
   --border-width-thick: 4px;
 
@@ -139,7 +140,7 @@
   --button-padding-block: var(--space-2);
   --button-padding-inline: var(--space-3);
   --button-border: var(--border-width);
-  --button-radius: var(--radius-sm);
+  --button-radius: 0.444rem; /* 8px */
   --button-font-size: var(--fs-base);
 
   /* Layout */
@@ -174,18 +175,10 @@ body {
 	margin: 0;
 	font-family: var(--font-family-base);
 	font-size: var(--fs-base);
-	font-weight: var(--fw-light);
+	font-weight: var(--fw-normal);
 	line-height: var(--line-height-base);
 	color: var(--col-body);
-	/* The site background: pale blue-grey with faint diamonds. Wider than the
-	   screen on small devices so the diamonds stay a sensible size. */
-	background: var(--col-neutral) url("../img/background.svg") center top / 200% auto repeat-y;
-}
-
-@media (min-width: 768px) {
-	body {
-		background-size: 100% auto;
-	}
+	background: var(--col-body-bg);
 }
 
 h1,
@@ -195,6 +188,7 @@ h4,
 h5,
 h6 {
 	margin: 0 0 var(--space-3);
+	color: var(--heading-colour, var(--col-heading));
 	font-weight: var(--fw-700);
 	line-height: var(--line-height-heading);
 }
@@ -228,22 +222,20 @@ a {
 	text-decoration: none;
 }
 
-/* Body text is light (300); plain content links are a step heavier. */
-a:not([class]) {
-	font-weight: var(--fw-normal);
-}
-
 /*
- * Underline on hover only for plain content links (no class); the link colour is
- * dark enough to meet AA and to stand out from body text without one. Cards,
- * buttons, nav items, and social/icon links all carry their own class and
- * define their own hover treatment, so they're excluded here rather than
- * needing a `text-decoration: none` override per component.
+ * Plain content links (no class) are always underlined: the link colour is only 1.6:1
+ * against the grey body text, so colour alone cannot mark them as links (WCAG 1.4.1, DEC-040).
+ * Cards, buttons, nav items, and social/icon links all carry their own class and
+ * define their own treatment, so they're excluded here rather than needing a
+ * `text-decoration: none` override per component.
  */
-a:not([class]):hover {
-	color: var(--col-link-hover);
+a:not([class]) {
 	text-decoration: underline;
 	text-underline-offset: 0.2em;
+}
+
+a:not([class]):hover {
+	color: var(--col-link-hover);
 }
 
 img,
@@ -567,7 +559,6 @@ mark.has-inline-color {
 	right: 0;
 	background-color: var(--col-body-bg);
 	border-top: 1px solid var(--col-border);
-	box-shadow: var(--shadow-out);
 	padding: var(--space-3);
 	max-height: calc(100vh - 100%);
 	overflow-y: auto;
@@ -586,7 +577,7 @@ mark.has-inline-color {
 .nav-link {
 	display: block;
 	text-decoration: none;
-	color: var(--col-body);
+	color: var(--col-heading);
 	padding: var(--space-1) 0;
 }
 
@@ -659,7 +650,6 @@ mark.has-inline-color {
 		background-color: var(--col-body-bg);
 		border: 1px solid var(--col-border);
 		border-radius: var(--radius-sm);
-		box-shadow: var(--shadow-out);
 		z-index: 10;
 	}
 }
@@ -817,7 +807,7 @@ button.site-nav__toggle {
 	padding-inline: var(--space-3);
 	padding-bottom: 0.75rem;
 	white-space: nowrap;
-	color: var(--col-black);
+	color: var(--col-heading);
 	font-size: var(--fs-small);
 	font-weight: var(--fw-700);
 	text-align: center;
@@ -850,8 +840,8 @@ button.site-nav__toggle {
 	margin-left: var(--panel-left, 0);
 	border-radius: var(--radius-lg);
 	overflow: clip;
+	border: var(--card-border);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-out);
 }
 
 .site-nav__panel.active {
@@ -859,7 +849,7 @@ button.site-nav__toggle {
 	}
 
 .site-nav__panel a {
-		color: var(--col-black);
+		color: var(--col-heading);
 		text-decoration: none;
 	}
 
@@ -1213,7 +1203,7 @@ button.site-nav__toggle {
 			display: block;
 			padding: var(--space-3);
 			border-bottom: 1px solid var(--col-border);
-			color: var(--col-black);
+			color: var(--col-heading);
 			font-size: var(--fs-small);
 			font-weight: var(--fw-700);
 		}
@@ -1309,7 +1299,6 @@ button.site-nav__toggle {
 	background-color: var(--col-body-bg);
 	border: 1px solid var(--col-border);
 	border-radius: var(--radius-sm);
-	box-shadow: var(--shadow-out);
 	z-index: var(--z-nav);
 }
 
@@ -1497,8 +1486,9 @@ html.lenis body {
  */
 
 .site-footer {
+	--heading-colour: currentcolor;
 	position: relative;
-	background-color: var(--col-navy-900);
+	background-color: var(--col-navy-400);
 	background-image: url("../img/footer-background.svg");
 	background-position: bottom center;
 	background-repeat: no-repeat;
@@ -1738,10 +1728,9 @@ select {
 	max-height: calc(100dvh - 2rem);
 	padding: 0;
 	overflow: auto;
-	border: 0;
+	border: var(--card-border);
 	border-radius: var(--radius-lg);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-lift);
 	color: var(--col-black);
 }
 
@@ -1816,7 +1805,7 @@ select {
 	gap: var(--space-1);
 	inline-size: 100%;
 	padding: var(--space-3) var(--space-2);
-	border: 1px solid var(--col-blue-300);
+	border: var(--card-border);
 	border-radius: var(--radius-md);
 	background-color: var(--col-white);
 	color: var(--col-body);
@@ -1840,9 +1829,9 @@ select {
 
 /*
  * Buttons: one system. Base .button plus a variant:
- *   .button--primary        yellow fill, black text, orange wipes in on hover
- *   .button--outline        black border and text, orange on hover
- *   .button--outline-white  white border and text, for dark backgrounds
+ *   .button--primary        yellow fill, navy text, orange wipes in on hover
+ *   .button--outline        secondary: white fill, 1px grey border, navy text, subtle shadow
+ *   .button--outline-white  for dark backgrounds: white text on a 10% white fill
  *   .button--white          white fill, coloured text, for gradient banners
  *                           (set --button-accent on the banner for the text colour)
  *   .button--small          16px, for pagers and tab controls (combine with a variant)
@@ -1895,7 +1884,7 @@ select {
 	background-repeat: no-repeat;
 	background-size: 0% 100%;
 	background-origin: border-box;
-	color: var(--col-black);
+	color: var(--col-navy-400);
 }
 
 .button--primary:hover,
@@ -1906,28 +1895,30 @@ select {
 
 .button--outline,
 .wp-block-button.is-style-outline .wp-block-button__link {
-	background: transparent;
-	border-color: var(--col-black);
-	color: var(--col-black);
+	border-width: 1px;
+	border-color: var(--col-grey-300);
+	background: var(--col-white);
+	box-shadow: var(--shadow-button);
+	color: var(--col-navy-400);
 }
 
 .button--outline:hover,
 .wp-block-button.is-style-outline .wp-block-button__link:hover {
-	background: transparent;
+	background: var(--col-white);
 	border-color: var(--col-orange-400);
 	color: var(--col-orange-400);
 }
 
 .button--outline-white {
-	background: transparent;
-	border-color: var(--col-white);
+	background: rgb(255 255 255 / 0.1);
 	color: var(--col-white);
+	line-height: 1.333;
 	--_focus: var(--col-white);
 }
 
 .button--outline-white:hover {
-	border-color: var(--col-orange-400);
-	color: var(--col-orange-400);
+	background: rgb(255 255 255 / 0.2);
+	color: var(--col-white);
 }
 
 .button--white {
@@ -3318,7 +3309,7 @@ select {
 .knowledge-hub__tile {
 	display: block;
 	padding: var(--space-1) var(--space-3);
-	border: 1px solid var(--col-blue-300);
+	border: var(--card-border);
 	border-radius: var(--radius-pill);
 	background-color: var(--col-white);
 	color: var(--col-body);
@@ -3485,7 +3476,7 @@ select {
 	flex-direction: column;
 	gap: var(--space-1);
 	padding: var(--space-3) var(--space-4);
-	border: 1px solid var(--col-blue-300);
+	border: var(--card-border);
 	border-radius: var(--radius-md);
 	background-color: var(--col-white);
 	color: var(--col-body);
@@ -3922,13 +3913,13 @@ select {
 	overflow: clip;
 	border-radius: var(--radius-lg);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-in);
-	transition: box-shadow var(--transition);
+	border: var(--card-border);
+	transition: border-color var(--transition);
 }
 
 .hub-card:hover,
 .hub-card:focus-within {
-	box-shadow: var(--shadow-card-hover);
+	border-color: var(--col-navy-400);
 }
 
 .hub-card__media {
@@ -4127,7 +4118,7 @@ select {
 	inline-size: 100%;
 	block-size: 100%;
 	min-block-size: inherit;
-	border-radius: var(--radius-sm);
+	border-radius: var(--radius-card);
 	object-fit: cover;
 }
 
@@ -4138,7 +4129,7 @@ select {
 	align-items: center;
 	justify-content: center;
 	padding: var(--space-3);
-	border-radius: var(--radius-sm);
+	border-radius: var(--radius-card);
 	background-color: var(--col-white);
 	text-align: center;
 }
@@ -4234,7 +4225,7 @@ select {
 	gap: var(--space-2);
 	height: 100%;
 	padding: var(--space-3);
-	border: var(--border-width) solid var(--col-blue-300);
+	border: var(--card-border);
 	border-radius: var(--radius-card);
 	background: var(--col-white);
 	color: inherit;
@@ -4242,12 +4233,12 @@ select {
 	text-decoration: none;
 	transition:
 		border-color var(--transition),
-		box-shadow var(--transition);
+		border-color var(--transition);
 }
 
 a.caption-slider__card:hover {
 	border-color: var(--col-orange-400);
-	box-shadow: var(--shadow-in);
+	border-color: var(--col-navy-400);
 	color: inherit;
 }
 
@@ -4326,7 +4317,7 @@ a.caption-slider__card:hover {
 	overflow: clip;
 	border-radius: var(--radius-lg);
 	background-color: var(--card-bg);
-	box-shadow: var(--shadow-in);
+	border: var(--card-border);
 	color: var(--card-fg);
 }
 
@@ -4420,7 +4411,7 @@ a.caption-slider__card:hover {
 .case-hub__tile {
 	display: block;
 	padding: var(--space-2) var(--space-3);
-	border: 1px solid var(--col-blue-300);
+	border: var(--card-border);
 	border-radius: var(--radius-pill);
 	background-color: var(--col-white);
 	color: var(--col-body);
@@ -4442,15 +4433,15 @@ a.caption-slider__card:hover {
 .case-hub__card {
 	position: relative;
 	overflow: hidden;
-	border-radius: var(--radius-sm);
+	border-radius: var(--radius-card);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-card);
-	transition: transform var(--transition), box-shadow var(--transition);
+	border: var(--card-border);
+	transition: transform var(--transition), border-color var(--transition);
 }
 
 .case-hub__card:hover,
 .case-hub__card:focus-within {
-	box-shadow: var(--shadow-card-hover);
+	border-color: var(--col-navy-400);
 	transform: translateY(-0.3rem);
 }
 
@@ -4540,7 +4531,7 @@ a.caption-slider__card:hover {
 	padding: var(--space-4);
 	border-radius: var(--radius-card);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-in);
+	border: var(--card-border);
 }
 
 .case-hub__story > :last-child {
@@ -4673,8 +4664,8 @@ a.caption-slider__card:hover {
 	block-size: 3.5rem;
 	translate: -50% -50%;
 	border-radius: var(--radius-circle);
+	border: var(--card-border);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-out);
 	transition: scale var(--transition);
 }
 
@@ -4797,6 +4788,7 @@ a.caption-slider__card:hover {
 }
 
 .case-story-pair__story {
+	--heading-colour: currentcolor;
 	block-size: 100%;
 	padding: var(--space-4);
 	border-radius: var(--radius-card);
@@ -4857,6 +4849,7 @@ a.caption-slider__card:hover {
  */
 
 .cta-banner {
+	--heading-colour: currentcolor;
 	position: relative;
 	display: flex;
 	align-items: center;
@@ -5540,9 +5533,9 @@ a.caption-slider__card:hover {
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
-	border-radius: var(--radius-sm);
+	border-radius: var(--radius-card);
 	background-color: var(--col-primary);
-	box-shadow: var(--shadow-in);
+	border: var(--card-border);
 }
 
 .image-columns--cards .image-columns__media {
@@ -5588,6 +5581,7 @@ a.caption-slider__card:hover {
 }
 
 .login-cards__card {
+	--heading-colour: currentcolor;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -5663,7 +5657,7 @@ a.caption-slider__card:hover {
 	display: grid;
 	place-items: center;
 	aspect-ratio: 1;
-	border: var(--border-width) solid var(--col-blue-300);
+	border: var(--card-border);
 	border-radius: var(--radius-card);
 	background: var(--col-white);
 }
@@ -5713,6 +5707,7 @@ a.caption-slider__card:hover {
 }
 
 .newsletter-signup__box {
+	--heading-colour: currentcolor;
 	display: grid;
 	gap: var(--space-4);
 	padding: var(--space-5);
@@ -5811,7 +5806,7 @@ a.caption-slider__card:hover {
 	--tile-fg: var(--col-white);
 
 	padding: var(--space-3);
-	border-radius: var(--radius-sm);
+	border-radius: var(--radius-card);
 	background-color: var(--tile-bg);
 	color: var(--tile-fg);
 	text-align: center;
@@ -5954,7 +5949,7 @@ a.caption-slider__card:hover {
 
 .pullquote--light .pullquote__panel {
 	--pq-bg: var(--col-white);
-	box-shadow: var(--shadow-in);
+	border: var(--card-border);
 }
 
 .pullquote__panel::before {
@@ -6013,10 +6008,11 @@ a.caption-slider__card:hover {
 }
 
 .pushthrough__box {
+	--heading-colour: var(--pt-text);
 	display: grid;
 	gap: var(--space-3);
 	padding: var(--space-5);
-	border-radius: var(--radius-sm);
+	border-radius: var(--radius-card);
 	background-color: var(--pt-bg);
 	color: var(--pt-text);
 }
@@ -6127,7 +6123,7 @@ a.caption-slider__card:hover {
 	margin: 0;
 	border-radius: var(--radius-lg);
 	background: var(--col-white);
-	box-shadow: var(--shadow-out);
+	border: var(--card-border);
 }
 
 .quote__card::before {
@@ -6290,16 +6286,16 @@ a.caption-slider__card:hover {
 	padding: var(--space-4);
 	border-radius: var(--radius-lg);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-in);
+	border: var(--card-border);
 	color: inherit;
 	text-align: left;
 	text-decoration: none;
-	transition: box-shadow var(--transition), transform var(--transition);
+	transition: border-color var(--transition), transform var(--transition);
 }
 
 .region-selector__link:hover,
 .region-selector__link:focus-visible {
-	box-shadow: var(--shadow-out);
+	border-color: var(--col-navy-400);
 	transform: translateY(-2px);
 }
 
@@ -6421,13 +6417,13 @@ a.caption-slider__card:hover {
 	overflow: clip;
 	border-radius: var(--radius-lg);
 	background: var(--col-white);
-	box-shadow: var(--shadow-in);
-	transition: box-shadow var(--transition);
+	border: var(--card-border);
+	transition: border-color var(--transition);
 }
 
 .related-card:hover,
 .related-card:focus-within {
-	box-shadow: var(--shadow-card-hover);
+	border-color: var(--col-navy-400);
 }
 
 .related-card__image {
@@ -6522,12 +6518,12 @@ a.caption-slider__card:hover {
 	overflow: clip;
 	border-radius: var(--radius-lg);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-out);
+	border: var(--card-border);
 	color: var(--col-black);
 	text-decoration: none;
 	transition:
 		transform var(--transition),
-		box-shadow var(--transition);
+		border-color var(--transition);
 }
 
 .sector-cards__card[hidden] {
@@ -6536,7 +6532,7 @@ a.caption-slider__card:hover {
 
 .sector-cards__card:hover,
 .sector-cards__card:focus-visible {
-	box-shadow: var(--shadow-in);
+	border-color: var(--col-navy-400);
 	color: var(--col-black);
 	transform: translateY(2px);
 }
@@ -6612,7 +6608,7 @@ a.caption-slider__card:hover {
 .service-status__message {
 	margin-bottom: var(--space-5);
 	padding: var(--space-4);
-	border: 1px solid var(--col-blue-300);
+	border: var(--card-border);
 	border-radius: var(--radius-card);
 	background-color: var(--col-neutral);
 }
@@ -6728,11 +6724,11 @@ a.caption-slider__card:hover {
 }
 
 .side-tabs__tab {
+	--heading-colour: currentcolor;
 	interpolate-size: allow-keywords;
 	border: var(--border-width) solid var(--col-navy-400);
-	border-radius: var(--radius-md);
+	border-radius: var(--radius-card);
 	background-color: var(--col-navy-400);
-	box-shadow: var(--shadow-out);
 	color: var(--col-white);
 	transition:
 		background-color var(--transition),
@@ -6823,7 +6819,7 @@ a.caption-slider__card:hover {
 		border-radius: var(--radius-lg);
 		overflow: hidden;
 		background-color: var(--col-surface);
-		box-shadow: var(--shadow-out);
+		border: var(--card-border);
 		opacity: 0;
 		transition: opacity 300ms ease-in-out;
 	}
@@ -6997,6 +6993,7 @@ a.caption-slider__card:hover {
 }
 
 .team--cards .team__details {
+	--heading-colour: currentcolor;
 	position: absolute;
 	inset: auto 0 0;
 	padding: var(--space-5) var(--space-3) var(--space-3);
@@ -7123,7 +7120,7 @@ a.caption-slider__card:hover {
 	margin-inline: auto;
 	border-radius: var(--radius-lg);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-out);
+	border: var(--card-border);
 }
 
 .text-and-media__below {
@@ -7134,7 +7131,7 @@ a.caption-slider__card:hover {
 .text-and-media__transcript {
 	margin-top: var(--space-4);
 	padding: var(--space-4);
-	border-radius: var(--radius-md);
+	border-radius: var(--radius-card);
 	background-color: var(--col-white);
 }
 
@@ -7210,7 +7207,7 @@ a.caption-slider__card:hover {
 }
 
 .video-facade {
-	box-shadow: var(--shadow-out);
+	border: var(--card-border);
 	position: relative;
 	padding: 0;
 	overflow: hidden;
@@ -7232,8 +7229,8 @@ a.caption-slider__card:hover {
 	height: 4rem;
 	translate: -50% -50%;
 	border-radius: var(--radius-circle);
+	border: var(--card-border);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-out);
 	transition: scale var(--transition);
 }
 
@@ -7440,9 +7437,8 @@ a.caption-slider__card:hover {
 
 .timeline__card {
 	padding: 1.1rem 1.7rem;
-	border-radius: 0.33rem;
+	border-radius: var(--radius-card);
 	background-color: var(--tl);
-	box-shadow: rgb(0 0 0 / 0.25) 0 2px 5px 0;
 	color: var(--tl-fg);
 }
 
@@ -7544,25 +7540,27 @@ a.caption-slider__card:hover {
 	gap: var(--space-3);
 	width: 100%;
 	padding: var(--space-2);
-	border: 4px solid var(--col-white);
-	border-radius: var(--radius-lg);
+	border: var(--card-border);
+	border-radius: var(--radius-card);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-out);
 	color: inherit;
 	font: inherit;
 	text-align: start;
 	cursor: pointer;
 	transition:
 		border-color var(--transition),
-		background-color var(--transition),
-		box-shadow var(--transition);
+		background-color var(--transition);
 }
 
-.top-tabs__pill:hover,
+.top-tabs__pill:hover {
+	background-color: var(--col-orange-200);
+}
+
+/* Selected: a 2px orange border; the padding gives up 1px so the pill does not change size. */
 .top-tabs__pill.is-active {
-	border-color: var(--col-orange-400);
-	background-color: color-mix(in srgb, var(--col-orange-400), var(--col-white) 80%);
-	box-shadow: var(--shadow-in);
+	padding: calc(var(--space-2) - 1px);
+	border: 2px solid var(--col-orange-500);
+	background-color: var(--col-orange-200);
 }
 
 .top-tabs__icon {
@@ -7704,7 +7702,7 @@ a.caption-slider__card:hover {
 	padding: var(--space-3);
 	background-color: var(--col-white);
 	border-radius: var(--radius-lg);
-	box-shadow: var(--shadow-in);
+	border: var(--card-border);
 }
 
 /* A title over the widget, and the widget beside text in a column (the Pricing page): centred, with room above. */

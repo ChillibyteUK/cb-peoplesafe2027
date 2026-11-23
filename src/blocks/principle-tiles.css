@@ -27,7 +27,7 @@
 	--tile-fg: var(--col-white);
 
 	padding: var(--space-3);
-	border-radius: var(--radius-sm);
+	border-radius: var(--radius-card);
 	background-color: var(--tile-bg);
 	color: var(--tile-fg);
 	text-align: center;

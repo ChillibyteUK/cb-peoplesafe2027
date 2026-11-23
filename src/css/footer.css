@@ -4,8 +4,9 @@
  */
 
 .site-footer {
+	--heading-colour: currentcolor;
 	position: relative;
-	background-color: var(--col-navy-900);
+	background-color: var(--col-navy-400);
 	background-image: url("../img/footer-background.svg");
 	background-position: bottom center;
 	background-repeat: no-repeat;

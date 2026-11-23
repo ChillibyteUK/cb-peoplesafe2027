@@ -16,18 +16,10 @@ body {
 	margin: 0;
 	font-family: var(--font-family-base);
 	font-size: var(--fs-base);
-	font-weight: var(--fw-light);
+	font-weight: var(--fw-normal);
 	line-height: var(--line-height-base);
 	color: var(--col-body);
-	/* The site background: pale blue-grey with faint diamonds. Wider than the
-	   screen on small devices so the diamonds stay a sensible size. */
-	background: var(--col-neutral) url("../img/background.svg") center top / 200% auto repeat-y;
-}
-
-@media (min-width: 768px) {
-	body {
-		background-size: 100% auto;
-	}
+	background: var(--col-body-bg);
 }
 
 h1,
@@ -37,6 +29,7 @@ h4,
 h5,
 h6 {
 	margin: 0 0 var(--space-3);
+	color: var(--heading-colour, var(--col-heading));
 	font-weight: var(--fw-700);
 	line-height: var(--line-height-heading);
 }
@@ -70,22 +63,20 @@ a {
 	text-decoration: none;
 }
 
-/* Body text is light (300); plain content links are a step heavier. */
-a:not([class]) {
-	font-weight: var(--fw-normal);
-}
-
 /*
- * Underline on hover only for plain content links (no class); the link colour is
- * dark enough to meet AA and to stand out from body text without one. Cards,
- * buttons, nav items, and social/icon links all carry their own class and
- * define their own hover treatment, so they're excluded here rather than
- * needing a `text-decoration: none` override per component.
+ * Plain content links (no class) are always underlined: the link colour is only 1.6:1
+ * against the grey body text, so colour alone cannot mark them as links (WCAG 1.4.1, DEC-040).
+ * Cards, buttons, nav items, and social/icon links all carry their own class and
+ * define their own treatment, so they're excluded here rather than needing a
+ * `text-decoration: none` override per component.
  */
-a:not([class]):hover {
-	color: var(--col-link-hover);
+a:not([class]) {
 	text-decoration: underline;
 	text-underline-offset: 0.2em;
+}
+
+a:not([class]):hover {
+	color: var(--col-link-hover);
 }
 
 img,

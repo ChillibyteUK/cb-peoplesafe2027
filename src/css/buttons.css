@@ -1,8 +1,8 @@
 /*
  * Buttons: one system. Base .button plus a variant:
- *   .button--primary        yellow fill, black text, orange wipes in on hover
- *   .button--outline        black border and text, orange on hover
- *   .button--outline-white  white border and text, for dark backgrounds
+ *   .button--primary        yellow fill, navy text, orange wipes in on hover
+ *   .button--outline        secondary: white fill, 1px grey border, navy text, subtle shadow
+ *   .button--outline-white  for dark backgrounds: white text on a 10% white fill
  *   .button--white          white fill, coloured text, for gradient banners
  *                           (set --button-accent on the banner for the text colour)
  *   .button--small          16px, for pagers and tab controls (combine with a variant)
@@ -55,7 +55,7 @@
 	background-repeat: no-repeat;
 	background-size: 0% 100%;
 	background-origin: border-box;
-	color: var(--col-black);
+	color: var(--col-navy-400);
 }
 
 .button--primary:hover,
@@ -66,28 +66,30 @@
 
 .button--outline,
 .wp-block-button.is-style-outline .wp-block-button__link {
-	background: transparent;
-	border-color: var(--col-black);
-	color: var(--col-black);
+	border-width: 1px;
+	border-color: var(--col-grey-300);
+	background: var(--col-white);
+	box-shadow: var(--shadow-button);
+	color: var(--col-navy-400);
 }
 
 .button--outline:hover,
 .wp-block-button.is-style-outline .wp-block-button__link:hover {
-	background: transparent;
+	background: var(--col-white);
 	border-color: var(--col-orange-400);
 	color: var(--col-orange-400);
 }
 
 .button--outline-white {
-	background: transparent;
-	border-color: var(--col-white);
+	background: rgb(255 255 255 / 0.1);
 	color: var(--col-white);
+	line-height: 1.333;
 	--_focus: var(--col-white);
 }
 
 .button--outline-white:hover {
-	border-color: var(--col-orange-400);
-	color: var(--col-orange-400);
+	background: rgb(255 255 255 / 0.2);
+	color: var(--col-white);
 }
 
 .button--white {

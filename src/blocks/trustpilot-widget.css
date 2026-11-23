@@ -21,7 +21,7 @@
 	padding: var(--space-3);
 	background-color: var(--col-white);
 	border-radius: var(--radius-lg);
-	box-shadow: var(--shadow-in);
+	border: var(--card-border);
 }
 
 /* A title over the widget, and the widget beside text in a column (the Pricing page): centred, with room above. */

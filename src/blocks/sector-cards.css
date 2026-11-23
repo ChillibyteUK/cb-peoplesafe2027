@@ -25,12 +25,12 @@
 	overflow: clip;
 	border-radius: var(--radius-lg);
 	background-color: var(--col-white);
-	box-shadow: var(--shadow-out);
+	border: var(--card-border);
 	color: var(--col-black);
 	text-decoration: none;
 	transition:
 		transform var(--transition),
-		box-shadow var(--transition);
+		border-color var(--transition);
 }
 
 .sector-cards__card[hidden] {
@@ -39,7 +39,7 @@
 
 .sector-cards__card:hover,
 .sector-cards__card:focus-visible {
-	box-shadow: var(--shadow-in);
+	border-color: var(--col-navy-400);
 	color: var(--col-black);
 	transform: translateY(2px);
 }

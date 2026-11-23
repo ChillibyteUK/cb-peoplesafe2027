@@ -9,10 +9,11 @@
 }
 
 .pushthrough__box {
+	--heading-colour: var(--pt-text);
 	display: grid;
 	gap: var(--space-3);
 	padding: var(--space-5);
-	border-radius: var(--radius-sm);
+	border-radius: var(--radius-card);
 	background-color: var(--pt-bg);
 	color: var(--pt-text);
 }
