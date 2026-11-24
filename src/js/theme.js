@@ -15,6 +15,7 @@ import { initPostToc } from './post-toc';
 import { initShare } from './share';
 import { initPostsIndex } from './posts-index';
 import { initHomeHero } from './home-hero';
+import { initHowSteps } from './how-steps';
 
 document.addEventListener('DOMContentLoaded', () => {
 	initSmoothScroll();
@@ -34,4 +35,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	initShare();
 	initPostsIndex();
 	initHomeHero();
+	initHowSteps();
 });

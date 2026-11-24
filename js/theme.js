@@ -254,6 +254,9 @@
 	 * video loads no third-party iframe until the visitor asks for it.
 	 *
 	 * Markup: <button class="video-facade" data-play="modal|inline" data-embed="https://…" data-title="…">
+	 * Any other button can open the pop-out with data-video-modal (and data-embed,
+	 * data-title): it has no poster to play in place of, so it opens the pop-out
+	 * at every width.
 	 *
 	 * data-play="modal" (the default) opens the video in a pop-out player on
 	 * screens from md up; below md, and with data-play="inline", the video plays
@@ -329,18 +332,25 @@
 	function initVideoFacades() {
 	  ['pointerover', 'focusin'].forEach(type => {
 	    document.addEventListener(type, event => {
-	      const facade = event.target.closest && event.target.closest('.video-facade');
+	      const facade = event.target.closest && event.target.closest('.video-facade, [data-video-modal]');
 	      if (facade) {
 	        warmUp(facade);
 	      }
 	    });
 	  });
 	  document.addEventListener('click', event => {
-	    const facade = event.target.closest('.video-facade');
+	    const facade = event.target.closest('.video-facade, [data-video-modal]');
 	    if (!facade) {
 	      return;
 	    }
-	    if ('inline' !== facade.getAttribute('data-play') && DESKTOP.matches && 'function' === typeof HTMLDialogElement) {
+
+	    // A plain button (data-video-modal) has no poster to play in place of, so it opens the pop-out at every width.
+	    const trigger = facade.hasAttribute('data-video-modal');
+	    if (trigger && 'function' !== typeof HTMLDialogElement) {
+	      window.open(facade.getAttribute('data-embed'), '_blank', 'noopener');
+	      return;
+	    }
+	    if (trigger || 'inline' !== facade.getAttribute('data-play') && DESKTOP.matches && 'function' === typeof HTMLDialogElement) {
 	      modal = modal || buildModal();
 	      modal.querySelector('.video-modal__inner').replaceChildren(createFrame(facade));
 	      modal.setAttribute('aria-label', facade.getAttribute('data-title') || 'Video');
@@ -933,6 +943,59 @@
 	  });
 	}
 
+	/**
+	 * How steps: the staggered reveal.
+	 *
+	 * From lg the numbered timeline draws across and each step's dot and card
+	 * appear as the line reaches them. The line and the cards are timed in CSS
+	 * (src/blocks/how-steps.css, --how-step per step); this only says when to
+	 * start: once the steps scroll into view. Below lg there is no timeline, so
+	 * each card appears as it scrolls into view. Without IntersectionObserver, or
+	 * with reduced motion, nothing is hidden at all.
+	 */
+	function initHowSteps() {
+	  const blocks = document.querySelectorAll('[data-how-steps]');
+	  if (!blocks.length) {
+	    return;
+	  }
+	  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+	    return;
+	  }
+	  const wide = window.matchMedia('(min-width: 992px)');
+	  blocks.forEach(block => {
+	    const list = block.querySelector('.how-steps__steps');
+	    const steps = block.querySelectorAll('.how-steps__step');
+	    if (!list || !steps.length) {
+	      return;
+	    }
+
+	    // Hidden only now that this script is running, so nothing is lost without it.
+	    block.classList.add('is-armed');
+	    const observer = new IntersectionObserver(entries => {
+	      entries.forEach(entry => {
+	        if (!entry.isIntersecting) {
+	          return;
+	        }
+	        observer.unobserve(entry.target);
+	        if (entry.target === list) {
+	          block.classList.add('is-in');
+	          steps.forEach(step => step.classList.add('is-in'));
+	        } else {
+	          entry.target.classList.add('is-in');
+	        }
+	      });
+	    }, {
+	      threshold: wide.matches ? 0.3 : 0.2,
+	      rootMargin: '0px 0px -5% 0px'
+	    });
+	    if (wide.matches) {
+	      observer.observe(list);
+	    } else {
+	      steps.forEach(step => observer.observe(step));
+	    }
+	  });
+	}
+
 	document.addEventListener('DOMContentLoaded', () => {
 	  initSmoothScroll();
 	  initNavToggle();
@@ -951,6 +1014,7 @@
 	  initShare();
 	  initPostsIndex();
 	  initHomeHero();
+	  initHowSteps();
 	});
 
 })();

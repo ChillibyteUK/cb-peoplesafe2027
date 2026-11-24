@@ -4,6 +4,9 @@
  * video loads no third-party iframe until the visitor asks for it.
  *
  * Markup: <button class="video-facade" data-play="modal|inline" data-embed="https://…" data-title="…">
+ * Any other button can open the pop-out with data-video-modal (and data-embed,
+ * data-title): it has no poster to play in place of, so it opens the pop-out
+ * at every width.
  *
  * data-play="modal" (the default) opens the video in a pop-out player on
  * screens from md up; below md, and with data-play="inline", the video plays
@@ -96,7 +99,7 @@ function warmUp(facade) {
 export function initVideoFacades() {
 	['pointerover', 'focusin'].forEach((type) => {
 		document.addEventListener(type, (event) => {
-			const facade = event.target.closest && event.target.closest('.video-facade');
+			const facade = event.target.closest && event.target.closest('.video-facade, [data-video-modal]');
 
 			if (facade) {
 				warmUp(facade);
@@ -105,13 +108,22 @@ export function initVideoFacades() {
 	});
 
 	document.addEventListener('click', (event) => {
-		const facade = event.target.closest('.video-facade');
+		const facade = event.target.closest('.video-facade, [data-video-modal]');
 
 		if (!facade) {
 			return;
 		}
 
-		if ('inline' !== facade.getAttribute('data-play') && DESKTOP.matches && 'function' === typeof HTMLDialogElement) {
+		// A plain button (data-video-modal) has no poster to play in place of, so it opens the pop-out at every width.
+		const trigger = facade.hasAttribute('data-video-modal');
+
+		if (trigger && 'function' !== typeof HTMLDialogElement) {
+			window.open(facade.getAttribute('data-embed'), '_blank', 'noopener');
+
+			return;
+		}
+
+		if (trigger || ('inline' !== facade.getAttribute('data-play') && DESKTOP.matches && 'function' === typeof HTMLDialogElement)) {
 			modal = modal || buildModal();
 			modal.querySelector('.video-modal__inner').replaceChildren(createFrame(facade));
 			modal.setAttribute('aria-label', facade.getAttribute('data-title') || 'Video');
