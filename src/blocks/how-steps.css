@@ -103,7 +103,7 @@
 }
 
 .how-steps__visual {
-	height: 16.667rem;
+	aspect-ratio: 151 / 150; /* the shape of the designed images (604 x 600): shown whole at every width */
 	margin-bottom: var(--space-3);
 	overflow: hidden;
 	border-radius: var(--radius-xl);

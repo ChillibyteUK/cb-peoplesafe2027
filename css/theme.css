@@ -1441,6 +1441,16 @@ button.site-nav__toggle {
 	[data-animate].is-visible {
 		translate: 0 0;
 	}
+
+	/*
+	 * An element waiting to slide in from the right starts a little past its place. On screens where the page
+	 * margin is narrower than that shift (around 1230px wide) it pokes out of the page and adds a horizontal
+	 * scrollbar. Clipping at the page edge stops that; clip, unlike hidden, does not make main a scroll box,
+	 * so sticky items inside it still work.
+	 */
+	main {
+		overflow-x: clip;
+	}
 }
 
 /*
@@ -5615,7 +5625,7 @@ a.caption-slider__card:hover {
 }
 
 .how-steps__visual {
-	height: 16.667rem;
+	aspect-ratio: 151 / 150; /* the shape of the designed images (604 x 600): shown whole at every width */
 	margin-bottom: var(--space-3);
 	overflow: hidden;
 	border-radius: var(--radius-xl);
@@ -6457,6 +6467,7 @@ a.caption-slider__card:hover {
  */
 .quote__layout {
 	display: grid;
+	grid-template-columns: minmax(0, 1fr); /* one column that can shrink, so the slider never widens the page */
 	gap: var(--space-4);
 	align-items: center;
 }

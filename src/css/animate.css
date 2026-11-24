@@ -48,4 +48,14 @@
 	[data-animate].is-visible {
 		translate: 0 0;
 	}
+
+	/*
+	 * An element waiting to slide in from the right starts a little past its place. On screens where the page
+	 * margin is narrower than that shift (around 1230px wide) it pokes out of the page and adds a horizontal
+	 * scrollbar. Clipping at the page edge stops that; clip, unlike hidden, does not make main a scroll box,
+	 * so sticky items inside it still work.
+	 */
+	main {
+		overflow-x: clip;
+	}
 }
