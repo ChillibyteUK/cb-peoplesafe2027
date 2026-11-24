@@ -66,7 +66,8 @@ if ( 'curated' === $cb_source && array( 'post' ) === array_values( $cb_types ) )
 	$cb_default_title = __( 'Related posts', 'cb-peoplesafe2027' );
 }
 $cb_heading       = ! empty( $attributes['title'] ) ? $attributes['title'] : $cb_default_title;
-$cb_four_up       = array( 'product' ) === array_values( $cb_types );
+// Products and posts are four across on a wide screen; the rest are three.
+$cb_four_up       = array( 'product' ) === array_values( $cb_types ) || array( 'post' ) === array_values( $cb_types );
 
 cb_peoplesafe2027_enqueue_slider();
 
@@ -93,10 +94,15 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'relate
 						}
 						?>
 						<div class="slider__slide">
-							<?php $cb_is_product = 'product' === $cb_item->post_type; ?>
-							<article class="related-card<?php echo $cb_is_product ? ' product-cards__card' : ''; ?>">
+							<?php
+							$cb_is_product = 'product' === $cb_item->post_type;
+							$cb_is_post    = 'post' === $cb_item->post_type;
+							$cb_kind       = $cb_is_post ? cb_peoplesafe2027_content_kind( $cb_item->ID ) : '';
+							$cb_media_cls  = $cb_is_product ? 'product-cards__media' : ( $cb_is_post ? 'related-card__media' : '' );
+							?>
+							<article class="related-card<?php echo $cb_is_product ? ' product-cards__card' : ''; ?><?php echo $cb_is_post ? ' related-card--post' : ''; ?>">
 								<?php if ( has_post_thumbnail( $cb_item ) ) { ?>
-									<?php echo $cb_is_product ? '<div class="product-cards__media">' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+									<?php echo $cb_media_cls ? '<div class="' . esc_attr( $cb_media_cls ) . '">' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above. ?>
 									<?php
 									echo get_the_post_thumbnail(
 										$cb_item,
@@ -108,7 +114,10 @@ $cb_wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'relate
 										)
 									); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
 									?>
-									<?php echo $cb_is_product ? '</div>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+									<?php if ( $cb_kind ) { ?>
+										<span class="related-card__pill related-card__pill--<?php echo esc_attr( sanitize_html_class( strtolower( $cb_kind ) ) ); ?>"><?php echo esc_html( $cb_kind ); ?></span>
+									<?php } ?>
+									<?php echo $cb_media_cls ? '</div>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 								<?php } ?>
 								<div class="related-card__inner">
 									<h3 class="related-card__title"><a class="related-card__link" href="<?php echo esc_url( get_permalink( $cb_item ) ); ?>"><?php echo esc_html( get_the_title( $cb_item ) ); ?></a></h3>

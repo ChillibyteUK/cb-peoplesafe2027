@@ -75,6 +75,7 @@
   --fs-title-sm: 1.333rem; /* 24px */
   --fs-title-md: 2.222rem; /* 40px */
   --fs-title-lg: 3.111rem; /* 56px */
+  --fs-hero: clamp(2.5rem, 7vw, 3.333rem); /* 60px: the home hero title */
   --fs-display: clamp(56px, calc(56px + (1vw - 7.68px) * 1.3889), 72px); /* hero title; px so the root size does not scale it */
 
   --fw-300: 300;

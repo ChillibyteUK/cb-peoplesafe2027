@@ -4,7 +4,7 @@
 	"name": "cb-peoplesafe2027/home-hero",
 	"title": "Home hero",
 	"category": "cb-peoplesafe2027",
-	"description": "The animated hero for the region home pages: headline with two animated words, intro, buttons and a device animation. A static image shows on small screens.",
+	"description": "The hero for the region home pages: headline, intro and buttons beside a fading slideshow of photos, with a pause button. On phones the photos sit above the text.",
 	"icon": "cover-image",
 	"attributes": {
 		"title": { "type": "string", "default": "" },
@@ -12,6 +12,7 @@
 		"wordTwo": { "type": "string", "default": "" },
 		"content": { "type": "string", "default": "" },
 		"buttons": { "type": "array", "default": [] },
+		"slides": { "type": "array", "default": [] },
 		"mobileImageId": { "type": "number", "default": 0 },
 		"mobileImageUrl": { "type": "string", "default": "" },
 		"mobileImageAlt": { "type": "string", "default": "" }

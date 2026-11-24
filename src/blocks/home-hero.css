@@ -1,31 +1,63 @@
 /*
- * Home hero. A headline whose last words fade in one after another, and a
- * square stage where eight image layers animate in (a spinning ring of dots,
- * a person, a laptop and three phones). Below 576px the stage is swapped for
- * one still image. With reduced motion the animation is skipped and every
- * layer shows in its final position.
+ * Home hero. A navy band: the headline, intro and buttons on the left, and a
+ * slideshow of photos on the right that fade from one to the next (see
+ * src/js/home-hero.js). A navy gradient fades each photo into the band along its
+ * left edge and a little along its top. A pause button sits at the photo's
+ * bottom right. Each slide can carry up to three event cards that pop up one
+ * after another when the slide appears. Below lg (992px) the photo sits above
+ * the text and fades into it from the bottom, and the event cards are dropped.
+ * With reduced motion nothing moves.
  */
 
 .home-hero {
-	padding-block: var(--space-5);
-	min-height: 33rem;
-	display: flex;
-	align-items: center;
+	--heading-colour: currentcolor;
+	position: relative;
+	isolation: isolate;
+	overflow: clip;
+	background-color: var(--col-navy-400);
+	color: var(--col-white);
+}
+
+/* The photos: a 4:3 panel above the text; a column on the right from lg. */
+.home-hero__slides {
+	position: relative;
+	aspect-ratio: 4 / 3;
+}
+
+.home-hero__slide {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	transition: opacity 1s ease-in-out;
+}
+
+.home-hero__slide.is-active {
+	opacity: 1;
+}
+
+.home-hero__image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: 65% 35%;
+}
+
+/* Fades the photo into the navy band: from the bottom on a phone. */
+.home-hero__slide::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(to bottom, transparent 55%, var(--col-navy-400));
+	pointer-events: none;
 }
 
 .home-hero__inner {
-	display: grid;
-	gap: var(--space-4);
-	align-items: center;
-	width: 100%;
-}
-
-.home-hero__media {
-	grid-row: 1;
+	padding-block: var(--space-3) var(--space-6);
 }
 
 .home-hero__title {
-	font-size: var(--fs-display);
+	margin-bottom: var(--space-3);
+	font-size: var(--fs-hero);
 	text-wrap: balance;
 }
 
@@ -33,185 +65,198 @@
 	display: block;
 }
 
-/* The animated words share one line, wrapping only if the screen is too narrow. */
-.home-hero__words {
-	display: flex;
-	flex-wrap: wrap;
-	column-gap: 0.25em;
-	color: var(--col-blue-400);
-}
-
-.home-hero__words > span {
-	opacity: 0;
-	animation: home-hero-fade 1s ease-in forwards;
-}
-
-.home-hero__words > span:nth-child(1) {
-	animation-delay: 1s;
-}
-
-.home-hero__words > span:nth-child(2) {
-	animation-delay: 2s;
-}
-
 .home-hero__text {
 	margin-bottom: var(--space-4);
+	font-size: var(--fs-lead);
 }
 
-/* Stage: hidden below 576px, where the still image shows instead. */
-.home-hero__anim {
-	display: none;
-	position: relative;
-	aspect-ratio: 1;
-	width: 300px;
-	margin-inline: auto;
-	overflow: clip;
-	isolation: isolate;
+.home-hero__text > :last-child {
+	margin-bottom: 0;
 }
 
-.home-hero__layer {
+/* Pause button: a small round control over the photo. */
+.home-hero__pause {
 	position: absolute;
-	width: 100%;
-	height: 100%;
-	inset: 0;
+	right: var(--space-3);
+	bottom: var(--space-3);
+	z-index: var(--z-raised);
+	display: grid;
+	place-content: center;
+	width: 1.778rem; /* 32px */
+	height: 1.778rem;
+	padding: 0;
+	border: 0;
+	border-radius: var(--radius-circle);
+	background-color: color-mix(in srgb, var(--col-black) 50%, transparent);
+	color: var(--col-white);
+	cursor: pointer;
+	transition: background-color var(--transition);
 }
 
-.home-hero__still {
+.home-hero__pause[hidden] {
+	display: none;
+}
+
+.home-hero__pause:hover {
+	background-color: color-mix(in srgb, var(--col-black) 75%, transparent);
+}
+
+.home-hero__pause:focus-visible {
+	outline: var(--border-width) solid var(--col-white);
+	outline-offset: var(--space-1);
+}
+
+/* Two bars while it plays; a triangle while it is paused. */
+.home-hero__pause-icon {
 	display: block;
-	width: 100%;
-	height: auto;
+	width: 0.55rem;
+	height: 0.6rem;
+	border-inline: 0.2rem solid currentcolor;
 }
 
-@media (min-width: 576px) {
-	.home-hero__anim {
-		display: block;
-	}
+.home-hero__pause[aria-pressed="true"] .home-hero__pause-icon {
+	width: 0;
+	height: 0;
+	border-width: 0.3rem 0 0.3rem 0.5rem;
+	border-style: solid;
+	border-color: transparent transparent transparent currentcolor;
+}
 
-	.home-hero__still {
-		display: none;
-	}
+/* Event cards: large screens only. */
+.home-hero__cards {
+	display: none;
+	margin: 0;
+	padding: 0;
+	list-style: none;
 }
 
 @media (min-width: 992px) {
+	.home-hero {
+		display: flex;
+		align-items: center;
+		min-height: clamp(32rem, calc(100svh - 6rem), 45.5rem); /* up to 820px */
+	}
+
+	.home-hero__slides {
+		position: absolute;
+		inset: 0 0 0 auto;
+		z-index: -1;
+		width: 64%; /* the photo's share of the 1512px design */
+		aspect-ratio: auto;
+	}
+
+	.home-hero__slide::after {
+		background:
+			linear-gradient(
+				to right,
+				var(--col-navy-400) 0%,
+				var(--col-navy-400) 4%,
+				color-mix(in srgb, var(--col-navy-400) 92%, transparent) 11%,
+				color-mix(in srgb, var(--col-navy-400) 55%, transparent) 22%,
+				color-mix(in srgb, var(--col-navy-400) 12%, transparent) 34%,
+				transparent 42%
+			),
+			linear-gradient(to bottom, color-mix(in srgb, var(--col-navy-400) 50%, transparent), transparent 26%);
+	}
+
+	.home-hero__pause {
+		right: 2.3rem;
+		bottom: 1.4rem;
+	}
+
 	.home-hero__inner {
-		grid-template-columns: 2fr 1fr;
-	}
-
-	.home-hero__media {
-		grid-row: auto;
-	}
-
-	.home-hero__anim {
 		width: 100%;
+		padding-block: var(--space-6);
+	}
+
+	.home-hero__content {
+		max-width: 36rem;
+	}
+
+	.home-hero__cards {
+		position: absolute;
+		right: 2.2rem;
+		bottom: 4.4rem;
+		z-index: var(--z-raised);
+		display: grid;
+		gap: 0.667rem; /* 12px */
+		width: 13.78rem; /* 248px */
 	}
 }
 
-.home-hero__layer--circle,
-.home-hero__layer--gradient {
-	z-index: 0;
-}
-
-.home-hero__layer--dots {
-	z-index: 0;
-	animation: home-hero-spin 8s linear infinite;
-}
-
-.home-hero__layer--shakira {
-	z-index: 1;
+.home-hero__card {
+	display: flex;
+	align-items: center;
+	gap: 0.667rem;
+	padding: 0.667rem;
+	border: var(--card-border);
+	border-radius: var(--radius-card);
+	background-color: var(--col-white);
+	color: var(--col-body);
 	opacity: 0;
-	animation: home-hero-person 750ms ease-in forwards;
 }
 
-.home-hero__layer--laptop {
-	z-index: 6;
-	opacity: 0;
-	animation: home-hero-laptop 1s ease-in forwards;
+.home-hero__slide.is-active .home-hero__card {
+	animation: home-hero-card 500ms ease-out both;
+	animation-delay: calc(600ms + var(--i, 0) * 450ms);
 }
 
-.home-hero__layer--phone1,
-.home-hero__layer--phone2,
-.home-hero__layer--phone3 {
-	opacity: 0;
-	animation: home-hero-phone 750ms ease-in forwards;
+.home-hero__card-icon {
+	display: grid;
+	flex: none;
+	place-content: center;
+	width: 2rem; /* 36px */
+	height: 2rem;
+	border-radius: var(--radius-circle);
+	background-color: var(--col-blue-400);
+	color: var(--col-white);
 }
 
-.home-hero__layer--phone1 {
-	z-index: 5;
-	animation-delay: 1s;
+.home-hero__card--navy .home-hero__card-icon {
+	background-color: var(--col-navy-400);
 }
 
-.home-hero__layer--phone2 {
-	z-index: 4;
-	animation-delay: 2s;
+.home-hero__card--teal .home-hero__card-icon {
+	background-color: var(--col-teal-400);
 }
 
-.home-hero__layer--phone3 {
-	z-index: 3;
-	animation-delay: 3s;
+.home-hero__card-text {
+	display: grid;
+	min-width: 0;
 }
 
-@keyframes home-hero-fade {
-	to {
-		opacity: 1;
-	}
+.home-hero__card-title {
+	color: var(--col-navy-400);
+	font-size: 0.778rem; /* 14px */
+	line-height: 1.43;
 }
 
-@keyframes home-hero-spin {
-	to {
-		rotate: 360deg;
-	}
+.home-hero__card-meta {
+	font-size: var(--fs-tiny);
+	line-height: 1.5;
 }
 
-@keyframes home-hero-person {
+@keyframes home-hero-card {
 	from {
 		opacity: 0;
-		scale: 0.8;
-		translate: 10% 10%;
+		translate: 0 0.8rem;
+		scale: 0.96;
 	}
 
 	to {
 		opacity: 1;
+		translate: 0 0;
 		scale: 1;
-		translate: 0 0;
-	}
-}
-
-@keyframes home-hero-laptop {
-	from {
-		opacity: 0;
-		translate: 110% 10%;
-	}
-
-	to {
-		opacity: 1;
-		translate: 0 0;
-	}
-}
-
-@keyframes home-hero-phone {
-	from {
-		opacity: 0;
-		translate: 25% 5%;
-	}
-
-	to {
-		opacity: 1;
-		translate: 0 0;
 	}
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.home-hero__words > span,
-	.home-hero__layer--shakira,
-	.home-hero__layer--laptop,
-	.home-hero__layer--phone1,
-	.home-hero__layer--phone2,
-	.home-hero__layer--phone3 {
-		opacity: 1;
-		animation: none;
+	.home-hero__slide {
+		transition: none;
 	}
 
-	.home-hero__layer--dots {
+	.home-hero__slide.is-active .home-hero__card {
+		opacity: 1;
 		animation: none;
 	}
 }

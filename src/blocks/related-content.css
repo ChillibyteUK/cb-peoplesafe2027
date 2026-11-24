@@ -1,7 +1,7 @@
 /*
  * Related content. A centred title over a row of cards in the shared slider
  * (src/css/slider.css): one card on a phone, two from md, three from lg, or
- * four from lg when every card is a product. The cards stretch to one height.
+ * four from xl when every card is a product or every card is a post. The cards stretch to one height.
  */
 
 .related-content {
@@ -44,6 +44,63 @@
 	width: 100%;
 	aspect-ratio: 16 / 10;
 	object-fit: cover;
+}
+
+/*
+ * A post card's image has a curved bottom edge, as in the design: the part of a
+ * circle (340px across on a 280px card) that sits inside the box. The mask is an
+ * SVG path scaled to the card's width, and the category pill sits over the
+ * image's top left.
+ */
+.related-card__media {
+	position: relative;
+	aspect-ratio: 280 / 230;
+	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 280 230'%3E%3Cpath fill='%23fff' d='M0 0H280V156.4A170 170 0 0 1 0 156.4Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+
+/* The photo fills the box without setting its size, so a tall or square photo cannot stretch the card. */
+.related-card__media .related-card__image {
+	position: absolute;
+	inset: 0;
+	height: 100%;
+	aspect-ratio: auto;
+}
+
+/* A post card's text is smaller and a little roomier than the other cards', as in the design. */
+.related-card--post .related-card__inner {
+	padding: 1.333rem 1.167rem 1.556rem;
+}
+
+.related-card--post .related-card__title {
+	font-size: var(--fs-base);
+	line-height: 1.389;
+}
+
+.related-card--post .related-card__excerpt {
+	font-size: var(--fs-tiny);
+	line-height: 1.667;
+}
+
+.related-card__pill {
+	position: absolute;
+	top: 1.333rem; /* 24px */
+	left: 1.278rem; /* 23px */
+	padding: 0.2rem 0.667rem;
+	border-radius: var(--radius-pill);
+	background-color: var(--col-navy-400);
+	color: var(--col-white);
+	font-size: var(--fs-tiny);
+	font-weight: var(--fw-bold);
+	line-height: 1.667;
+	text-transform: uppercase;
+}
+
+.related-card__pill--news {
+	background-color: var(--col-orange-400);
+}
+
+.related-card__pill--blog {
+	background-color: var(--col-blue-400);
 }
 
 .related-card__inner {

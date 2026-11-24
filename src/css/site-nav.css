@@ -1,5 +1,5 @@
 /*
- * Site navigation (header). Fixed over the page, white once scrolled. From the
+ * Site navigation (header). Fixed over the page, on a slightly see-through blurred white bar. From the
  * xl breakpoint down (1199px) it is a burger and a full-screen list of links;
  * above that the links open the panels in .site-nav__menus. Markup is built by
  * inc/nav-render.php, behaviour is src/js/site-nav.js.
@@ -18,13 +18,11 @@
 		position: fixed;
 		inset: 0 0 auto;
 		height: 98px;
-		background-color: transparent;
-		transition: background-color var(--transition);
+		/* Slightly see-through and blurred, so the page shows faintly behind the links and they stay readable over any photo. */
+		background-color: color-mix(in srgb, var(--col-white) 85%, transparent);
+		-webkit-backdrop-filter: blur(12px);
+		backdrop-filter: blur(12px);
 		z-index: var(--z-overlay);
-	}
-
-	&.scrolled::before {
-		background-color: var(--col-white);
 	}
 }
 

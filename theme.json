@@ -213,6 +213,11 @@
           "size": "3.111rem"
         },
         {
+          "name": "hero",
+          "slug": "hero",
+          "size": "clamp(2.5rem, 7vw, 3.333rem)"
+        },
+        {
           "name": "display",
           "slug": "display",
           "size": "clamp(56px, calc(56px + (1vw - 7.68px) * 1.3889), 72px)"

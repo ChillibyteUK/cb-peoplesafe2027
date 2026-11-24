@@ -14,6 +14,7 @@ import { initFormFrames } from './form-frame';
 import { initPostToc } from './post-toc';
 import { initShare } from './share';
 import { initPostsIndex } from './posts-index';
+import { initHomeHero } from './home-hero';
 
 document.addEventListener('DOMContentLoaded', () => {
 	initSmoothScroll();
@@ -32,4 +33,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	initPostToc();
 	initShare();
 	initPostsIndex();
+	initHomeHero();
 });
