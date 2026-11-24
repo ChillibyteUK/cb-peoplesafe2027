@@ -2014,6 +2014,168 @@ a.caption-slider__card:hover {
 	}
 }
 
+/* --- src/blocks/product-bento.css --- */
+/*
+ * Product bento. A title, intro and buttons over a bento grid of white cards on
+ * a light band. Each card is a short statement (bold lead in navy, the rest
+ * lighter) over an image. From lg the grid is six columns: a half card takes
+ * three, a third card two, so two halves or three thirds fill a row. Below lg
+ * the cards stack. The image is shown whole at every width (never cropped); it
+ * carries its own soft background, so the card needs none beyond a faint dot
+ * pattern. A card with a link is one big link, with an arrow in its corner.
+ */
+
+.product-bento {
+	padding-block: var(--block-padding);
+	background-color: var(--col-surface);
+}
+
+.product-bento__header {
+	display: grid;
+	justify-items: start;
+	gap: var(--space-4);
+	max-width: 41rem;
+	margin-bottom: var(--space-6);
+}
+
+.product-bento__title {
+	margin: 0;
+}
+
+.product-bento__lead {
+	font-size: var(--fs-lead);
+
+	& > :last-child {
+		margin-bottom: 0;
+	}
+}
+
+.product-bento__grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: var(--space-4);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	@media (min-width: 992px) {
+		grid-template-columns: repeat(6, minmax(0, 1fr));
+	}
+}
+
+.product-bento__card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	border: var(--card-border);
+	border-radius: var(--radius-xl);
+	background-color: var(--col-white);
+
+	@media (min-width: 992px) {
+		&.product-bento__card--half {
+			grid-column: span 3;
+		}
+
+		&.product-bento__card--third {
+			grid-column: span 2;
+		}
+	}
+}
+
+/* The faint dot pattern behind the card, fading out towards the edges. */
+.product-bento__card::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background-image: radial-gradient(circle, color-mix(in srgb, var(--col-navy-400) 16%, transparent) 1px, transparent 1.5px);
+	background-size: 0.778rem 0.778rem;
+	mask-image: radial-gradient(ellipse at 50% 60%, #000 20%, transparent 70%);
+	pointer-events: none;
+}
+
+.product-bento__card.has-link:hover,
+.product-bento__card.has-link:focus-within {
+	border-color: var(--col-navy-400);
+}
+
+.product-bento__card-header {
+	position: relative;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: var(--space-4);
+	padding: var(--space-5) var(--space-5) var(--space-3);
+}
+
+.product-bento__card-title {
+	max-width: 24.9rem; /* 448px */
+	margin: 0;
+	color: color-mix(in srgb, var(--col-navy-400) 65%, var(--col-white)); /* the lighter, blue-grey part */
+	font-size: var(--fs-h4);
+	font-weight: 400;
+	line-height: 1.5;
+
+	& strong,
+	& b {
+		color: var(--col-navy-400);
+		font-weight: 700;
+	}
+}
+
+.product-bento__card-link {
+	color: inherit;
+	text-decoration: none;
+
+	/* The whole card is the link. */
+	&::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: var(--z-raised);
+	}
+
+	&:focus-visible {
+		outline: none;
+	}
+}
+
+.product-bento__card:has(.product-bento__card-link:focus-visible) {
+	outline: var(--border-width) solid var(--col-blue-400);
+	outline-offset: 2px;
+}
+
+.product-bento__arrow {
+	display: grid;
+	flex: none;
+	place-items: center;
+	width: 2rem; /* 36px */
+	height: 2rem;
+	border: var(--card-border);
+	border-radius: var(--radius-circle);
+	background-color: var(--col-white);
+	color: var(--col-navy-400);
+	transition:
+		border-color 150ms ease-out,
+		color 150ms ease-out;
+}
+
+.product-bento__card.has-link:hover .product-bento__arrow {
+	border-color: var(--col-orange-400);
+	color: var(--col-orange-400);
+}
+
+.product-bento__visual {
+	position: relative;
+	margin-top: auto;
+}
+
+.product-bento__image {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
 /* --- src/blocks/product-cards.css --- */
 /*
  * Product cards. Filter buttons over a grid of cards, one per product: the
