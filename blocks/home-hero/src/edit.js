@@ -9,7 +9,7 @@ import useRowMotion from '../../_shared/useRowMotion';
 
 const MAX_SLIDES = 5;
 const MAX_CARDS = 3;
-const EMPTY_SLIDE = { image: 0, imageUrl: '', cards: [] };
+const EMPTY_SLIDE = { image: 0, imageUrl: '', video: '', cards: [] };
 const EMPTY_CARD = { icon: 'tick', tone: 'blue', title: '', text: '' };
 
 const ICONS = [
@@ -98,14 +98,24 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					>
 						<span className="cb-peoplesafe2027-repeater-field__number">{ index + 1 }</span>
 						<div className="cb-peoplesafe2027-faq-rows__fields">
-							<div className="cb-peoplesafe2027-editor-field">
-								<span className="cb-peoplesafe2027-editor-field__label">{ __( 'Photo', 'cb-peoplesafe2027' ) }</span>
-								<ImagePicker
-									id={ row.image }
-									url={ row.imageUrl }
-									onSelect={ ( media ) => updateRow( index, { image: media.id, imageUrl: media.url } ) }
-									onRemove={ () => updateRow( index, { image: 0, imageUrl: '' } ) }
-								/>
+							<div style={ { display: 'flex', flexWrap: 'wrap', gap: '12px' } }>
+								<div className="cb-peoplesafe2027-editor-field" style={ { flex: '1 1 0%' } }>
+									<span className="cb-peoplesafe2027-editor-field__label">{ __( 'Photo', 'cb-peoplesafe2027' ) }</span>
+									<ImagePicker
+										id={ row.image }
+										url={ row.imageUrl }
+										onSelect={ ( media ) => updateRow( index, { image: media.id, imageUrl: media.url } ) }
+										onRemove={ () => updateRow( index, { image: 0, imageUrl: '' } ) }
+									/>
+								</div>
+								<div style={ { flex: '1 1 0%' } }>
+									<TextControl
+										label={ __( 'Vimeo video (optional)', 'cb-peoplesafe2027' ) }
+										value={ row.video || '' }
+										onChange={ ( value ) => updateRow( index, { video: value } ) }
+										help={ __( 'A Vimeo ID (e.g. 1225646327) or link. If set, it plays in place of the photo: muted, looping and without cookies.', 'cb-peoplesafe2027' ) }
+									/>
+								</div>
 							</div>
 							<div className="cb-peoplesafe2027-editor-field">
 								<span className="cb-peoplesafe2027-editor-field__label">{ __( 'Event cards on this photo (up to 3)', 'cb-peoplesafe2027' ) }</span>

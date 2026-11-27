@@ -29,9 +29,29 @@
 	inset: 0;
 	opacity: 0;
 	transition: opacity 1s ease-in-out;
+	container-type: size;
+	overflow: clip; /* the cover-sized video is wider than the slide */
 }
 
 .home-hero__slide.is-active {
+	opacity: 1;
+}
+
+/* A Vimeo background video, sized to cover the slide like the photo does. */
+.home-hero__video {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: max(100cqw, 177.78cqh);
+	height: max(100cqh, 56.25cqw);
+	border: 0;
+	transform: translate(-50%, -50%);
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 0.6s ease-in;
+}
+
+.home-hero__video.is-playing {
 	opacity: 1;
 }
 

@@ -883,7 +883,46 @@
 	 *         and button[data-home-hero-pause] with data-label-pause / data-label-play.
 	 */
 	const INTERVAL = 7000;
+
+	/**
+	 * Fades each Vimeo background video in once it is actually playing, so the
+	 * slide's photo (its poster) covers the player's start-up. Listens for the
+	 * player's own postMessage "play" event; a timeout reveals it regardless.
+	 */
+	function revealVideos() {
+	  document.querySelectorAll('.home-hero__video').forEach(frame => {
+	    const reveal = () => frame.classList.add('is-playing');
+	    window.addEventListener('message', event => {
+	      if (event.source !== frame.contentWindow || typeof event.data !== 'string') {
+	        return;
+	      }
+	      try {
+	        const data = JSON.parse(event.data);
+	        if (data.event === 'play' || data.event === 'playProgress') {
+	          reveal();
+	        }
+	      } catch (e) {
+	        // Not a player message.
+	      }
+	    });
+	    const listen = () => {
+	      ['play', 'playProgress'].forEach(name => {
+	        frame.contentWindow.postMessage(JSON.stringify({
+	          method: 'addEventListener',
+	          value: name
+	        }), 'https://player.vimeo.com');
+	      });
+	    };
+
+	    // A deferred video gets its src later, so this runs on each load rather than once up front.
+	    frame.addEventListener('load', () => {
+	      listen();
+	      window.setTimeout(reveal, 8000);
+	    });
+	  });
+	}
 	function initHomeHero() {
+	  revealVideos();
 	  document.querySelectorAll('[data-home-hero]').forEach(root => {
 	    const slides = Array.from(root.querySelectorAll('.home-hero__slide'));
 	    const button = root.querySelector('[data-home-hero-pause]');
@@ -905,14 +944,40 @@
 	      index = next;
 	      slides[index].classList.add('is-active');
 	      slides[index].removeAttribute('aria-hidden');
+	      sync();
+	    }
+	    const command = (frame, method) => {
+	      if (frame.src) {
+	        frame.contentWindow.postMessage(JSON.stringify({
+	          method
+	        }), 'https://player.vimeo.com');
+	      }
+	    };
+
+	    // Only the showing slide's video plays, and only while the slideshow runs; the next one is loaded ahead of its turn.
+	    function sync() {
+	      const running = !paused && inView && !document.hidden;
+	      slides.forEach((slide, i) => {
+	        const frame = slide.querySelector('.home-hero__video');
+	        if (!frame) {
+	          return;
+	        }
+	        if (!frame.src && (i === index || i === (index + 1) % slides.length)) {
+	          frame.src = frame.dataset.src;
+	          frame.addEventListener('load', sync);
+	        }
+	        command(frame, i === index && running ? 'play' : 'pause');
+	      });
 	    }
 	    function update() {
+	      sync();
 	      window.clearInterval(timer);
 	      timer = null;
 	      if (!paused && !held && inView && !document.hidden) {
 	        timer = window.setInterval(() => show((index + 1) % slides.length), INTERVAL);
 	      }
 	    }
+	    sync();
 	    button.hidden = false;
 	    button.addEventListener('click', () => {
 	      paused = !paused;

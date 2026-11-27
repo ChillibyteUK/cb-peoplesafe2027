@@ -6,7 +6,7 @@
  * photos on the right that fades from one to the next (src/js/home-hero.js),
  * with a pause button. A navy gradient fades the photo into the page on its
  * left edge. Below lg the photos sit above the text and fade into it from the
- * bottom. A block saved before slideshows existed shows its old single image.
+ * bottom. A slide with a Vimeo link plays that video (muted, looping, dnt) over its photo, which stays as the poster while the player loads. A block saved before slideshows existed shows its old single image.
  *
  * @package cb-peoplesafe2027
  */
@@ -32,7 +32,25 @@ $cb_tones = array( 'blue', 'navy', 'teal' );
 $cb_slides = array();
 
 foreach ( isset( $attributes['slides'] ) ? (array) $attributes['slides'] : array() as $cb_row ) {
-	if ( empty( $cb_row['image'] ) ) {
+	$cb_video = '';
+
+	if ( ! empty( $cb_row['video'] ) ) {
+		// A Vimeo link becomes a background player: muted, looping, autoplaying, and dnt=1 so it sets no cookies.
+		$cb_link = trim( (string) $cb_row['video'] );
+
+		// A bare ID (123456789, or 123456789/abcdef1234 for an unlisted video) is accepted as well as a full link.
+		if ( preg_match( '#^\d+(/[a-f0-9]+)?$#i', $cb_link ) ) {
+			$cb_link = 'https://vimeo.com/' . $cb_link;
+		}
+
+		$cb_embed = cb_peoplesafe2027_get_vimeo_embed_url( $cb_link );
+
+		if ( '' !== $cb_embed ) {
+			$cb_video = preg_replace( '/\?.*?(&h=[a-f0-9]+)?$/i', '?autoplay=1&muted=1&loop=1&background=1&dnt=1$1', $cb_embed );
+		}
+	}
+
+	if ( empty( $cb_row['image'] ) && '' === $cb_video ) {
 		continue;
 	}
 
@@ -54,7 +72,8 @@ foreach ( isset( $attributes['slides'] ) ? (array) $attributes['slides'] : array
 	}
 
 	$cb_slides[] = array(
-		'id'    => (int) $cb_row['image'],
+		'id'    => empty( $cb_row['image'] ) ? 0 : (int) $cb_row['image'],
+		'video' => $cb_video,
 		'cards' => array_slice( $cb_cards, 0, 3 ),
 	);
 }
@@ -85,18 +104,25 @@ $cb_wrapper_attributes = get_block_wrapper_attributes(
 				?>
 				<div class="home-hero__slide<?php echo $cb_first ? ' is-active' : ''; ?>"<?php echo $cb_first ? '' : ' aria-hidden="true"'; ?>>
 					<?php
-					echo wp_get_attachment_image( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-						$cb_slide['id'],
-						'full',
-						false,
-						array(
-							'class'         => 'home-hero__image',
-							'sizes'         => '(min-width: 992px) 64vw, 100vw',
-							'loading'       => $cb_first ? 'eager' : 'lazy',
-							'fetchpriority' => $cb_first ? 'high' : 'low',
-						)
-					);
+					// The photo, if there is one, shows at once and as the video's poster: the video fades in over it once it is playing.
+					if ( $cb_slide['id'] ) {
+						echo wp_get_attachment_image( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							$cb_slide['id'],
+							'full',
+							false,
+							array(
+								'class'         => 'home-hero__image',
+								'sizes'         => '(min-width: 992px) 64vw, 100vw',
+								'loading'       => $cb_first ? 'eager' : 'lazy',
+								'fetchpriority' => $cb_first ? 'high' : 'low',
+							)
+						);
+					}
 					?>
+					<?php if ( $cb_slide['video'] ) { ?>
+						<?php // Only the first video loads at once; the slideshow script loads each of the others just before its turn and pauses it when it is not showing. ?>
+						<iframe class="home-hero__video" <?php echo $cb_first || 1 === count( $cb_slides ) ? 'src' : 'data-src'; ?>="<?php echo esc_url( $cb_slide['video'] ); ?>" title="" allow="autoplay; fullscreen" tabindex="-1" aria-hidden="true"></iframe>
+					<?php } ?>
 					<?php if ( $cb_slide['cards'] ) { ?>
 						<ul class="home-hero__cards">
 							<?php foreach ( $cb_slide['cards'] as $cb_position => $cb_card ) { ?>
