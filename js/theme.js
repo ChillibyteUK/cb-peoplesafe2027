@@ -890,7 +890,18 @@
 	 * player's own postMessage "play" event; a timeout reveals it regardless.
 	 */
 	function revealVideos() {
+	  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	  document.querySelectorAll('.home-hero__video').forEach(frame => {
+	    const slide = frame.closest('.home-hero__slide');
+
+	    // Reduced motion: the photo stays and the video never loads. A slide with no photo keeps its video, as there is nothing else to show.
+	    if (reduced && slide.querySelector('.home-hero__image')) {
+	      frame.remove();
+	      return;
+	    }
+	    if (slide.classList.contains('is-active')) {
+	      frame.src = frame.dataset.src;
+	    }
 	    const reveal = () => frame.classList.add('is-playing');
 	    window.addEventListener('message', event => {
 	      if (event.source !== frame.contentWindow || typeof event.data !== 'string') {

@@ -120,8 +120,8 @@ $cb_wrapper_attributes = get_block_wrapper_attributes(
 					}
 					?>
 					<?php if ( $cb_slide['video'] ) { ?>
-						<?php // Only the first video loads at once; the slideshow script loads each of the others just before its turn and pauses it when it is not showing. ?>
-						<iframe class="home-hero__video" <?php echo $cb_first || 1 === count( $cb_slides ) ? 'src' : 'data-src'; ?>="<?php echo esc_url( $cb_slide['video'] ); ?>" title="" allow="autoplay; fullscreen" tabindex="-1" aria-hidden="true"></iframe>
+						<?php // No src here: the script loads the first video, and each other just before its turn, and pauses it when not showing. With reduced motion it loads none and the photo stays. ?>
+						<iframe class="home-hero__video" data-src="<?php echo esc_url( $cb_slide['video'] ); ?>" title="" allow="autoplay; fullscreen" tabindex="-1" aria-hidden="true"></iframe>
 					<?php } ?>
 					<?php if ( $cb_slide['cards'] ) { ?>
 						<ul class="home-hero__cards">
